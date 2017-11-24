@@ -22,21 +22,21 @@ hist_list = []
 hist_list.append(h_mulead_pt)
 hist_list.append(h_mulead_eta)
 hist_list.append(h_mulead_phi)
-hist_list.append(h_mulead_trkd0)
+#hist_list.append(h_mulead_trkd0)
 hist_list.append(h_mulead_trkd0sig)
-hist_list.append(h_mulead_trkz0)
-hist_list.append(h_mulead_trkz0sintheta)
-hist_list.append(h_mulead_ptvarcone30)
+#hist_list.append(h_mulead_trkz0)
+#hist_list.append(h_mulead_trkz0sintheta)
+#hist_list.append(h_mulead_ptvarcone30)
 
 
 # -------
 # MET
 # -------
-hist_list.append(h_met_clus_et)
+#hist_list.append(h_met_clus_et)
 #hist_list.append(h_met_clus_phi)
-#hist_list.append(h_met_trk_et)
+hist_list.append(h_met_trk_et)
 #hist_list.append(h_met_trk_phi)
-hist_list.append(h_met_clus_sumet)
+#hist_list.append(h_met_clus_sumet)
 #hist_list.append(h_met_trk_sumet)
 
 # -------

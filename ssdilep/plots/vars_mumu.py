@@ -134,17 +134,32 @@ muons_chargeprod = Var(name = 'muons_chargeprod',
               log     = False,
               )
 
+muons_dR = Var(name = 'muons_dR',
+              path    = 'event',
+              xmin    = 0,
+              xmax    = 6,
+              rebin   = 2,
+              log     = False,
+              )
+
+muons_pTH = Var(name = 'muons_pTH',
+              path    = 'event',
+              xmin    = 0,
+              xmax    = 600,
+              rebin   = 20,
+              log     = False,
+              )
 
 ## Single muon variables
 ## ---------------------------------------
 mulead_pt = Var(name = 'mulead_pt',
               path   = 'muons',
               xmin   = 0.,
-              xmax   = 400.,
-              #xmax   = 120.,
+              xmax   = 600.,
+              #xmax   = 400.,
               #rebin  = 20,
               rebin  = 5,
-              log    = False,
+              log    = True,
               )
 
 musublead_pt = Var(name = 'musublead_pt',
@@ -253,6 +268,14 @@ musublead_trkz0sintheta = Var(name = 'musublead_trkz0sintheta',
               log     = False,
               )
 
+musublead_ptvarcone30 = Var(name = 'musublead_ptvarcone30',
+              path   = 'muons',
+              xmin   = 0.,
+              xmax   = 1.2,
+              rebin  = 20,
+              log    = False,
+              )
+
 # isolation
 mulead_topoetcone20 = Var(name = 'mulead_topoetcone20',
               path   = 'muons',
@@ -326,14 +349,14 @@ tag_pt = Var(name = 'tag_pt',
               path   = 'muons',
               xmin   = 0.,
               xmax   = 400.,
-              rebin  = 10,
+              rebin  = 20,
               log    = False,
               )
 probe_pt = Var(name = 'probe_pt',
               path   = 'muons',
               xmin   = 0.,
               xmax   = 400.,
-              rebin  = 10,
+              rebin  = 20,
               log    = False,
               )
 probe_ptiso = Var(name = 'probe_ptiso',
@@ -350,12 +373,19 @@ probe_ujet_pt = Var(name = 'probe_ujet_pt',
               rebin  = 10,
               log    = False,
               )
+probe_ptvarcone30 = Var(name = 'probe_ptvarcone30',
+              path   = 'muons',
+              xmin   = 0.,
+              xmax   = 1.2,
+              rebin  = 20,
+              log    = False,
+              )
 
 # jets
 jetlead_pt = Var(name = 'jetlead_pt',
               path    = 'jets',
               xmin    = 0.,
-              xmax    = 300.,
+              xmax    = 600.,
               rebin   = 5,
               log     = True,
               )
@@ -366,9 +396,9 @@ jetlead_pt = Var(name = 'jetlead_pt',
 met_clus_et = Var(name = 'met_clus_et',
               path    = 'met',
               xmin    = 0.,
-              xmax    = 200.,
+              xmax    = 300.,
               rebin   = 10,
-              log     = False,
+              log     = True,
               )
 
 met_clus_phi = Var(name = 'met_clus_phi',
@@ -382,9 +412,9 @@ met_clus_phi = Var(name = 'met_clus_phi',
 met_trk_et = Var(name = 'met_trk_et',
               path    = 'met',
               xmin    = 0.,
-              xmax    = 200.,
-              rebin   = 20,
-              log     = False,
+              xmax    = 300.,
+              rebin   = 10,
+              log     = True,
               )
 
 met_trk_phi = Var(name = 'met_trk_phi',
@@ -441,18 +471,20 @@ vars_list.append(met_clus_et)
 vars_list.append(met_clus_phi)
 vars_list.append(met_clus_sumet)
 #"""
+#vars_list.append(met_trk_et)
 
 
 # -------------
 # tag-and-probe
 # -------------
-#"""
+"""
 vars_list.append(tag_pt)
 vars_list.append(probe_pt)
 vars_list.append(probe_ptiso)
 vars_list.append(probe_ptiso)
 vars_list.append(probe_ujet_pt)
-#"""
+vars_list.append(probe_ptvarcone30)
+"""
 
 
 # ---------------------
@@ -467,7 +499,7 @@ vars_list.append(jetlead_pt)
 # ---------------------
 # for validation
 # ---------------------
-#"""
+"""
 vars_list.append(musublead_pt)
 vars_list.append(musublead_eta)
 vars_list.append(musublead_phi)
@@ -475,13 +507,16 @@ vars_list.append(musublead_trkd0)
 vars_list.append(musublead_trkd0sig)
 vars_list.append(musublead_trkz0)
 vars_list.append(musublead_trkz0sintheta)
+vars_list.append(musublead_ptvarcone30)
 
 vars_list.append(muons_mTtot)
 vars_list.append(muons_mVis)
 vars_list.append(muons_dphi)
 vars_list.append(muons_deta)
+vars_list.append(muons_dR)
+vars_list.append(muons_pTH)
 vars_list.append(muons_chargeprod)
-#"""
+"""
 
 
 # ---------------------

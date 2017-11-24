@@ -121,6 +121,26 @@ h_muons_mVis  = Hist1D( hname  = "h_muons_mVis",
                               vexpr  = "self.store['mVis']/GeV",
                             )
 
+h_muons_pTH  = Hist1D( hname  = "h_muons_pTH",
+                              xtitle = "p_T(SS_{lead}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "event",
+                              vexpr  = "self.store['muons_pTH']/GeV",
+                              )
+
+h_muons_dR  = Hist1D( hname  = "h_muons_dR",
+                              xtitle = "#DeltaR(SS_{lead})",
+                              ytitle = "Events", 
+                              nbins  = 60,
+                              xmin   = 0.,
+                              xmax   = 6.,
+                              dir    = "event",
+                              vexpr  = "self.store['muons_dR']",
+                              )
+
 h_muons_mTtot  = Hist1D( hname  = "h_muons_mTtot",
                               xtitle = "m^{tot}_{T}(#mu_{lead},#mu_{sublead}) [GeV]",
                               ytitle = "Events / (1 GeV)", 
@@ -399,6 +419,7 @@ h_probe_ptvarcone30  = Hist1D( hname  = "h_probe_ptvarcone30",
 # -------
 # MET
 # -------
+"""
 h_met_clus_et  = Hist1D( hname  = "h_met_clus_et",
                               xtitle = "E^{miss}_{T}(clus) [GeV]",
                               ytitle = "Events / (1 GeV)", 
@@ -418,7 +439,7 @@ h_met_clus_phi  = Hist1D( hname  = "h_met_clus_phi",
                               dir    = "met",
                               vexpr  = "self.store['met_clus'].tlv.Phi()",
                             )
-
+"""
 h_met_trk_et  = Hist1D( hname  = "h_met_trk_et",
                               xtitle = "E^{miss}_{T}(trk) [GeV]",
                               ytitle = "Events / (1 GeV)", 
@@ -438,7 +459,7 @@ h_met_trk_phi  = Hist1D( hname  = "h_met_trk_phi",
                               dir    = "met",
                               vexpr  = "self.store['met_trk'].tlv.Phi()",
                             )
-
+"""
 h_met_clus_sumet  = Hist1D( hname  = "h_met_clus_sumet",
                               xtitle = "#Sigma E_{T}(clus) [GeV]",
                               ytitle = "Events / (1 GeV)", 
@@ -448,7 +469,7 @@ h_met_clus_sumet  = Hist1D( hname  = "h_met_clus_sumet",
                               dir    = "met",
                               vexpr  = "self.store['met_clus'].sumet/GeV",
                           )
-
+"""
 h_met_trk_sumet  = Hist1D( hname  = "h_met_trk_sumet",
                               xtitle = "#Sigma E_{T}(trk) [GeV]",
                               ytitle = "Events / (1 GeV)", 

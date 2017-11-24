@@ -8,15 +8,26 @@ ROOT.gStyle.SetOptStat(0000)
 # -------------------------------------------------------------------------------------
 # config
 # -------------------------------------------------------------------------------------
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesFinalFF"
-tag     = "red"
-name    = "avgpresc"
+#indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/Fakes23Jan"
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesSet2"
+#tag     = "rew"
+#tag     = "bveto"
+tag     = "s2"
+name    = "data"
 
 # pt
 var     = "mulead_pt"
 axislab = "p_{T}(#mu_{lead}) [GeV]"
-#new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,45.,60.,80.,300.])
-new_bins = array('d', [0.,25.,28.,32.,36.,40.,45.,60.,80.,300.])
+
+#new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,60.,300.])
+new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,300.])
+
+
+
+
+#new_bins = array('d', [0.,25.,28.,32.,36.,40.,45.,60.,80.,300.])
+#new_bins = array('d', [0.,25.,28.,32.,36.,40.,45.,300.])
+#new_bins = array('d', [0.,25.,28.,32.,36.,40.,300.])
 #new_bins = array('d', [0.,22.,40.,60.,90.,300.])
 
 '''
@@ -36,16 +47,18 @@ inf     = ROOT.TFile.Open(os.path.join(indir,infile),"READ")
 
 hdict = {}
 
-#hdict["NOM"] = inf.Get("h_ff_F1").Clone()
 hdict["NOM"] = inf.Get("h_ff_F1").Clone()
+#hdict["NOM"] = inf.Get("h_ff_F2").Clone()
 n_bins = hdict["NOM"].GetNbinsX()
 #for i in [2,3,4,5,6,7,8,9,10,11,12,13,14,15]:
-for i in [2,3,4,5,6,7,8]:
-##for i in [2,3,4,5,6,7,]:
+for i in [2,3,4,5,6,7,8,]:#9,10]:
+#for i in [2]:
   hdict["SYS%s"%str(i)] = inf.Get("h_ff_F%s"%str(i)).Clone()
 
 slabel = {}
 slabel["NOM"]  = "nominal"
+#slabel["SYS1"] = "nominal"
+
 slabel["SYS2"] = "E^{miss}_{T} < 50 GeV"
 slabel["SYS3"] = "E^{miss}_{T} < 30 GeV"
 slabel["SYS4"] = "#Delta#phi(#mu,jet) < 2.8"
@@ -53,6 +66,8 @@ slabel["SYS5"] = "#Delta#phi(#mu,jet) < 2.6"
 slabel["SYS6"] = "d_{0}/#sigma(d_{0}) < 2"
 slabel["SYS7"] = "d_{0}/#sigma(d_{0}) < 4"
 slabel["SYS8"] = "p_{T}(jet) > 40 GeV"
+#slabel["SYS9"] = "MC + 5%"
+#slabel["SYS10"] = "MC - 5%"
 
 #slabel["NOM"]  = "one jet"
 #slabel["SYS2"] = "one jet, den fails iso or d0"
@@ -184,6 +199,9 @@ for sys,hist in hdict.iteritems():
 hdict["NOM"].Draw("SAME,PE1")
 
 l2.Draw()
+
+c.SaveAs(os.path.join(indir,c.GetName()+"_%s.eps"%tag))
+c2.SaveAs(os.path.join(indir,c2.GetName()+"_%s.eps"%tag))
 
 outfile = ROOT.TFile.Open(os.path.join(indir,outfile),"RECREATE")
 

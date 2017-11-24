@@ -15,8 +15,14 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-indir    = 'Hist17JanFF'
-outdir   = 'Plots17JanFF'
+#indir    = 'HistFFFullBVeto17May'
+#outdir   = 'PlotsFFFullBVeto17May'
+
+#indir    = 'HistFF25Mar'
+#outdir   = 'PlotsFF25Mar'
+
+indir    = 'HistFFJustOnePlot'
+outdir   = 'PlotsFFJustOnePlot'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -48,15 +54,14 @@ job_vars['OUTDIR']    = OUTDIR
 job_vars['INDIR']     = INDIR
 job_vars['SCRIPT']    = SCRIPT
 
-#fake_estimate = "FullRegions"
-#fake_estimate = "ReducedRegions"
+#fake_estimate = "AllRegions"
 fake_estimate = "Subtraction"
 
 regions = {}
 # use it as such:
 #regions["FOLDERNAME"]     = [icut, "plot label"]
 
-#"""
+"""
 regions["ProbeTight_F1"] = [4, "TruthFilter_SS",   "truthfilter_ss"]
 regions["ProbeLoose_F1"] = [4, "TruthFilter_SS",   "truthfilter_ss"]
 
@@ -74,28 +79,74 @@ regions["ProbeLoose_R3"] = [4, "FakeFilter_OS",   "fakefilter_os"]
 
 regions["ProbeTight_R4"] = [4, "AntiTruth_OS",   "antitruth_os"]
 regions["ProbeLoose_R4"] = [4, "AntiTruth_OS",   "antitruth_os"]
+"""
+#"""
+regions["FAKES_NUM_F0"]   = [2,  "tight", "bveto"]
+regions["FAKES_DEN_F0"]   = [2,  "loose", "bveto"]
+
+regions["FAKES_NUM_F1"]   = [6,  "tight", "bveto"]
+regions["FAKES_DEN_F1"]   = [6,  "loose", "bveto"]
 #"""
 
+#regions["FAKESVR1_MAINREG"] = [3, "CR_Mvis<200GeV",   "newfull"]
 """
-regions["FAKES_NUM_F0"]   = [2,  "numerator", "bound"]
-regions["FAKES_DEN_F0"]   = [2,  "denominator", "bound"]
-
-regions["FAKES_NUM_F1"]   = [6,  "numerator", "bound"]
-regions["FAKES_DEN_F1"]   = [6,  "denominator", "bound"]
+regions["FAKESVR1_TT"]      = [3, "TT_Mvis<200GeV",   "newfull"]
+regions["FAKESVR1_LL"]      = [3, "LL_Mvis<200GeV",   "newfull"]
+regions["FAKESVR1_TL"]      = [3, "TL_Mvis<200GeV",   "newfull"]
+regions["FAKESVR1_LT"]      = [3, "LT_Mvis<200GeV",   "newfull"]
+regions["FAKESVR1_TTT"]     = [3, "TTT_Mvis<200GeV",  "newfull"]
+regions["FAKESVR1_TTL"]     = [3, "TTL_Mvis<200GeV",  "newfull"]
+regions["FAKESVR1_TLT"]     = [3, "TLT_Mvis<200GeV",  "newfull"]
+regions["FAKESVR1_LTT"]     = [3, "LTT_Mvis<200GeV",  "newfull"]
 """
 
-#regions["FAKESVR1_MAINREG"] = [5, "VR",   "v2"]
-#regions["FAKESVR1_TT"]      = [5, "TT",   "v2"]
-#regions["FAKESVR1_LL"]      = [5, "LL",   "v2"]
-#regions["FAKESVR1_TL"]      = [5, "TL",   "v2"]
-#regions["FAKESVR1_LT"]      = [5, "LT",   "v2"]
-#regions["FAKESVR1_TTL"]     = [5, "TTL",  "v2"]
-#regions["FAKESVR1_TLT"]     = [5, "TLT",  "v2"]
-#regions["FAKESVR1_LTT"]     = [5, "LTT",  "v2"]
-#regions["FAKESVR1_TTTL"]    = [5, "TTTL", "v2"]
-#regions["FAKESVR1_TTLT"]    = [5, "TTLT", "v2"]
-#regions["FAKESVR1_TLTT"]    = [5, "TLTT", "v2"]
-#regions["FAKESVR1_LTTT"]    = [5, "LTTT", "v2"]
+#regions["FAKESVR2_MAINREG"] = [3, "VR_MET>30GeV",   "newfull"]
+"""
+regions["FAKESVR2_TT"]      = [3, "TT_MET>30GeV",   "newfull"]
+regions["FAKESVR2_LL"]      = [3, "LL_MET>30GeV",   "newfull"]
+regions["FAKESVR2_TL"]      = [3, "TL_MET>30GeV",   "newfull"]
+regions["FAKESVR2_LT"]      = [3, "LT_MET>30GeV",   "newfull"]
+regions["FAKESVR2_TTT"]     = [3, "TTL_MET>30GeV",  "newfull"]
+regions["FAKESVR2_TTL"]     = [3, "TTL_MET>30GeV",  "newfull"]
+regions["FAKESVR2_TLT"]     = [3, "TLT_MET>30GeV",  "newfull"]
+regions["FAKESVR2_LTT"]     = [3, "LTT_MET>30GeV",  "newfull"]
+"""
+
+#regions["FAKESVR3_MAINREG"] = [3, "1_OR_2_bjets",   "newfull"]
+"""
+regions["FAKESVR3_TT"]      = [3, "TT_1_OR_2_bjets",   "newfull"]
+regions["FAKESVR3_LL"]      = [3, "LL_1_OR_2_bjets",   "newfull"]
+regions["FAKESVR3_TL"]      = [3, "TL_1_OR_2_bjets",   "newfull"]
+regions["FAKESVR3_LT"]      = [3, "LT_1_OR_2_bjets",   "newfull"]
+regions["FAKESVR3_TTT"]     = [3, "TTT_1_OR_2_bjets",  "newfull"]
+regions["FAKESVR3_TTL"]     = [3, "TTL_1_OR_2_bjets",  "newfull"]
+regions["FAKESVR3_TLT"]     = [3, "TLT_1_OR_2_bjets",  "newfull"]
+regions["FAKESVR3_LTT"]     = [3, "LTT_1_OR_2_bjets",  "newfull"]
+"""
+
+#regions["FAKESVR4_MAINREG"] = [3, "VR_#DeltaR>3.5",   "newfull"]
+"""
+regions["FAKESVR4_TT"]      = [3, "TT_#DeltaR>3.5",   "newfull"]
+regions["FAKESVR4_LL"]      = [3, "LL_#DeltaR>3.5",   "newfull"]
+regions["FAKESVR4_TL"]      = [3, "TL_#DeltaR>3.5",   "newfull"]
+regions["FAKESVR4_LT"]      = [3, "LT_#DeltaR>3.5",   "newfull"]
+regions["FAKESVR4_TTT"]     = [3, "TTT_#DeltaR>3.5",  "newfull"]
+regions["FAKESVR4_TTL"]     = [3, "TTL_#DeltaR>3.5",  "newfull"]
+regions["FAKESVR4_TLT"]     = [3, "TLT_#DeltaR>3.5",  "newfull"]
+regions["FAKESVR4_LTT"]     = [3, "LTT_#DeltaR>3.5",  "newfull"]
+"""
+
+#regions["FAKESVR5_MAINREG"] = [3, "VR_pT<80GeV",   "newfull"]
+"""
+regions["FAKESVR5_TT"]      = [3, "TT_pT<80GeV ",   "newfull"]
+regions["FAKESVR5_LL"]      = [3, "LL_pT<80GeV ",   "newfull"]
+regions["FAKESVR5_TL"]      = [3, "TL_pT<80GeV ",   "newfull"]
+regions["FAKESVR5_LT"]      = [3, "LT_pT<80GeV ",   "newfull"]
+regions["FAKESVR5_TTT"]     = [3, "TTT_pT<80GeV",  "newfull"]
+regions["FAKESVR5_TTL"]     = [3, "TTL_pT<80GeV",  "newfull"]
+regions["FAKESVR5_TLT"]     = [3, "TLT_pT<80GeV",  "newfull"]
+regions["FAKESVR5_LTT"]     = [3, "LTT_pT<80GeV",  "newfull"]
+"""
 
 #---------------------
 # Make input tarball

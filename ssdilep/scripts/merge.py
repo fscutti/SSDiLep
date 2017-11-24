@@ -41,9 +41,11 @@ parser.add_option('-t', '--tag', dest='tag',
 #-----------------
 # Configuration
 #-----------------
-lumi =  18232.8
-#lumi =  33257.2 + 3212.96
-#lumi =  33257.2 #+ 3212.96
+#lumi =  18232.8
+#lumi =  (33257.2 + 3212.96) * 1.05
+#lumi =  (33257.2 + 3212.96) * 0.95
+lumi = 32861.6 + 3212.96
+
 
 # Control regions
 plotsfile = []
@@ -95,15 +97,42 @@ reg_prefix, reg_suffix = funcs.get_pref_and_suff(options.region)
 
 if reg_suffix == "MAINREG":
   
-  fake_subtraction_regions = ["LL"]
-  
-  if options.fakest == "FullRegions":
+  # including all regions for fake-factor method
+  # ---------------------------------------------
+  if options.fakest == "AllRegions":
     main_addition_regions = ["TT","TTT","TTTT"]
-    fake_addition_regions = ["TL","LT","TTL","TLT","LTT","TTTL","TTLT","TLTT","LTTT"]
+    
+    fake_addition_regions = []
+    fake_addition_regions += ["TL","LT"]
+    fake_addition_regions += ["TTL","TLT","LTT"]
+    fake_addition_regions += ["LLL"]
+    #fake_addition_regions += ["TTTL","TTLT","TLTT","LTTT"]
+
+    fake_subtraction_regions = []
+    fake_subtraction_regions += ["LL"]
+    fake_subtraction_regions += ["LLT","LTL","TLL"]
   
-  if options.fakest == "ReducedRegions":
-    main_addition_regions = ["TT"]
-    fake_addition_regions = ["TL","LT"]
+  # only two lepton regions
+  # ---------------------------------------------
+  if options.fakest == "TwoLepRegions":
+    
+    main_addition_regions    = ["TT"]
+    fake_addition_regions    = ["TL","LT"]
+    fake_subtraction_regions = ["LL"]
+
+  # only three lepton regions
+  # ---------------------------------------------
+  if options.fakest == "ThreeLepRegions":
+    
+    main_addition_regions = ["TTT"]
+    
+    fake_addition_regions = []
+    fake_addition_regions += ["TTL","TLT","LTT"]
+    fake_addition_regions += ["LLL"]
+
+    fake_subtraction_regions = []
+    fake_subtraction_regions += ["LLT","LTL","TLL"]
+
 
 else:
   
@@ -142,7 +171,7 @@ mc_sys = [
 #for s in mc_bkg + signals:
 #    s.estimator.add_systematics(mc_sys)
 
-fakes.estimator.add_systematics(FF)
+#fakes.estimator.add_systematics(FF)
 
 mumu_vdict  = vars_mumu.vars_dict
 
@@ -169,8 +198,8 @@ if options.makeplot == "True":
     rebin         = mumu_vdict[options.vname]['rebin'],
     log           = mumu_vdict[options.vname]['log'],
     icut          = int(options.icut),
-    #sys_dict      = sys_dict,
-    sys_dict      = None,
+    sys_dict      = sys_dict,
+    #sys_dict      = None,
     #do_ratio_plot = True,
     save_eps      = True,
     plotsfile     = plotsfile,
@@ -180,7 +209,7 @@ else:
  funcs.write_hist(
          backgrounds = plot_ord_bkg,
          signal      = signals, # This can be a list
-         #data        = recom_data,
+         data        = recom_data,
          region      = options.region,
          icut        = int(options.icut),
          histname    = os.path.join(mumu_vdict[options.vname]['path'],mumu_vdict[options.vname]['hname']),

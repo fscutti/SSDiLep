@@ -1204,7 +1204,7 @@ ttbar = Sample( name =  'ttbar',
                     line_color =  ROOT.kCyan+2,
                     marker_color =  ROOT.kCyan+2,
                     daughters = [
-                                 PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_dil,     
+                                 #PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_dil,     
                                  PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad,                              
                                 ],
                     ) 

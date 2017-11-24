@@ -88,6 +88,15 @@ class CutAlg(pyframe.core.Algorithm):
           if p[0].trkcharge * p[1].trkcharge > 0.0: ss_pairs.append(p)
       if len(ss_pairs)==1 or len(ss_pairs)==3: return True
       return False
+    #__________________________________________________________________________
+    def cut_OddOSMuons(self):
+      muons = self.store['muons']
+      ss_pairs = []
+      if self.chain.nmuon >= 2:
+        for p in combinations(muons,2):
+          if p[0].trkcharge * p[1].trkcharge < 0.0: ss_pairs.append(p)
+      if len(ss_pairs)==1 or len(ss_pairs)==3: return True
+      return False
     
     #__________________________________________________________________________
     def cut_AtLeastOneMuPt28(self):
@@ -144,12 +153,56 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_OneJet(self):
-        return self.chain.njets == 1
+      return self.chain.njet == 1
+       
+    #__________________________________________________________________________
+    def cut_OneTightJet(self):
+      return len(self.store['jets_tight']) == 1
+    
+    #__________________________________________________________________________
+    def cut_AtLeastTwoTightJets(self):
+      return len(self.store['jets_tight']) >=2
+    
+    #__________________________________________________________________________
+    def cut_Two50TightJets(self):
+      tight_jets_above_50 = []
+      if len(self.store['jets_tight']) >= 2:
+        for j in self.store['jets_tight']:
+          if j.tlv.Pt() > 50 * GeV: tight_jets_above_50.append(j)
+      return len(tight_jets_above_50) == 2
+
+    #__________________________________________________________________________
+    def cut_EleVeto(self):
+      return self.chain.nel == 0
+
+    #__________________________________________________________________________
+    def cut_OneOrTwoBjets(self):
+        nbjets = 0
+        jets = self.store['jets']
+        for jet in jets:
+          if jet.isFix77: nbjets += 1
+        return nbjets in [1,2]
+    
+    #__________________________________________________________________________
+    def cut_BVeto(self):
+        jets = self.store['jets_tight']
+        for jet in jets:
+          if jet.isFix77: return False
+        return True
+    
     #__________________________________________________________________________
     def cut_JetCleaning(self):
-      for j in self.store['jets']:
+      for j in self.store['jets_tight']:
         if not j.isClean: return False
       return True
+    
+    #__________________________________________________________________________
+    def cut_AllMuPt22(self):
+      muons = self.store['muons']
+      passed = True
+      for m in muons:
+        passed = passed and m.tlv.Pt()>=22.0*GeV
+      return passed
     
     #__________________________________________________________________________
     def cut_AllMuPt25(self):
@@ -201,10 +254,12 @@ class CutAlg(pyframe.core.Algorithm):
           if "HR" in s: pdgId_sampl += [lep_dict[s.replace("HR","")[-2:]],lep_dict[s.replace("HR","")[:2]]]
         
         pdgId_branch = []
-        for pdgId in self.chain.HLpp_Daughters: pdgId_branch += [pdgId]
-        for pdgId in self.chain.HLmm_Daughters: pdgId_branch += [pdgId]
-        for pdgId in self.chain.HRpp_Daughters: pdgId_branch += [pdgId]
-        for pdgId in self.chain.HRmm_Daughters: pdgId_branch += [pdgId]
+        if "HL" in self.samplename:
+          for pdgId in self.chain.HLpp_Daughters: pdgId_branch += [pdgId]
+          for pdgId in self.chain.HLmm_Daughters: pdgId_branch += [pdgId]
+        if "HR" in self.samplename:
+          for pdgId in self.chain.HRpp_Daughters: pdgId_branch += [pdgId]
+          for pdgId in self.chain.HRmm_Daughters: pdgId_branch += [pdgId]
         
         pdgId_branch = filter(lambda pdgId: pdgId != 0, pdgId_branch) 
         
@@ -676,6 +731,14 @@ class CutAlg(pyframe.core.Algorithm):
       return abs(m_vis)>15*GeV
     
     #__________________________________________________________________________
+    def cut_dRhigh35(self):
+      return self.store['muons_dR'] > 3.5
+    
+    #__________________________________________________________________________
+    def cut_pTHlow80(self):
+      return self.store['muons_pTH'] < 80*GeV
+    
+    #__________________________________________________________________________
     def cut_Mlow200(self):
       muons = [self.store['muon1'],self.store['muon2']]
       mu_lead = muons[0] 
@@ -688,7 +751,11 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_PassAndMatch(self):
       required_triggers = self.store["reqTrig"]
       passed_triggers   = self.store["passTrig"].keys()
-      
+   
+      for t in required_triggers:
+        if t in passed_triggers: return True
+
+      '''
       muons = self.store['muons']
       for m in muons:
         for trig in required_triggers:
@@ -696,7 +763,10 @@ class CutAlg(pyframe.core.Algorithm):
             muon_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
             event_is_triggered = bool( trig in passed_triggers )
             if muon_is_matched and event_is_triggered: 
+              print "pass"
               return True
+      '''
+
       return False
    
 
@@ -745,66 +815,78 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_PassAndMatchPresc(self):
       required_triggers = self.store["reqTrig"]
       passed_triggers   = self.store["passTrig"].keys()
-
+ 
       muons = self.store['muons']
+      
       for m in muons:
         for trig in required_triggers:
           if trig in self.store["singleMuTrigList"].keys():
             muon_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
             event_is_triggered = bool( trig in passed_triggers )
             if muon_is_matched and event_is_triggered:
+              
               if m.tlv.Pt()>=self.store["singleMuTrigSlice"][trig][0] and m.tlv.Pt()<self.store["singleMuTrigSlice"][trig][1]:
-                return True
-      return False
-    
-    #__________________________________________________________________________
-    def cut_PassAndMatchPrescRed(self):
-      required_triggers = self.store["reqTrig"]
-      passed_triggers   = self.store["passTrig"].keys()
-
-      dGeV = GeV / 1.03
-
-      muons = self.store['muons']
+                if m.isIsolated_FixedCutTightTrackOnly and m.trkd0sig<3.: # require a tight muon for trigger matching
+                  return True
+      
       for m in muons:
         for trig in required_triggers:
           if trig in self.store["singleMuTrigList"].keys():
             muon_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
             event_is_triggered = bool( trig in passed_triggers )
-            if muon_is_matched and event_is_triggered: 
-              if m.tlv.Pt()>50*dGeV and trig != "HLT_mu50": continue 
-              if m.tlv.Pt()>24*dGeV and m.tlv.Pt()<50*dGeV and trig != "HLT_mu24": continue 
-              if m.tlv.Pt()>20*dGeV and m.tlv.Pt()<24*dGeV and trig != "HLT_mu20_L1MU15": continue
+            if muon_is_matched and event_is_triggered:
+              
+              if m.tlv.Pt()>=self.store["singleMuTrigSlice"][trig][0] and m.tlv.Pt()<self.store["singleMuTrigSlice"][trig][1]:
+                  if not m.isIsolated_FixedCutTightTrackOnly and m.trkd0sig<10.: # if no tight is found loop over loose
+                    return True
+
+      return False
+    
+    """ 
+    #__________________________________________________________________________
+    def cut_LeadIsMatchedPresc(self):
+      required_triggers = self.store["reqTrig"]
+      passed_triggers   = self.store["passTrig"].keys()
+      
+      lead_mu = self.store['muons'][0]
+      for trig in required_triggers:
+        if trig in self.store["singleMuTrigList"].keys():
+          lead_mu_is_matched = bool( lead_mu.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
+          event_is_triggered = bool( trig in passed_triggers )
+          if lead_mu_is_matched and event_is_triggered: 
+            if lead_mu.tlv.Pt()>=self.store["singleMuTrigSlice"][trig][0] and lead_mu.tlv.Pt()<self.store["singleMuTrigSlice"][trig][1]:
+              return True
+      return False
+    #__________________________________________________________________________
+    def cut_SubLeadIsMatchedPresc(self):
+      required_triggers = self.store["reqTrig"]
+      passed_triggers   = self.store["passTrig"].keys()
+      
+      sublead_mu = self.store['muons'][1]
+      for trig in required_triggers:
+        if trig in self.store["singleMuTrigList"].keys():
+          sublead_mu_is_matched = bool( sublead_mu.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
+          event_is_triggered = bool( trig in passed_triggers )
+          if sublead_mu_is_matched and event_is_triggered: 
+            if sublead_mu.tlv.Pt()>=self.store["singleMuTrigSlice"][trig][0] and sublead_mu.tlv.Pt()<self.store["singleMuTrigSlice"][trig][1]:
               return True
       return False
     
     #__________________________________________________________________________
-    def cut_PassAndMatchHLTmu50(self):
-      required_triggers = ['HLT_mu50']
+    def cut_ThirdLeadIsMatchedPresc(self):
+      required_triggers = self.store["reqTrig"]
       passed_triggers   = self.store["passTrig"].keys()
       
-      muons = self.store['muons']
-      for m in muons:
-        for trig in required_triggers:
-          if trig in self.store["singleMuTrigList"].keys():
-            muon_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
-            event_is_triggered = bool( trig in passed_triggers )
-            if muon_is_matched and event_is_triggered: return True
+      thirdlead_mu = self.store['muons'][2]
+      for trig in required_triggers:
+        if trig in self.store["singleMuTrigList"].keys():
+          thirdlead_mu_is_matched = bool( thirdlead_mu.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
+          event_is_triggered = bool( trig in passed_triggers )
+          if thirdlead_mu_is_matched and event_is_triggered: 
+            if thirdlead_mu.tlv.Pt()>=self.store["singleMuTrigSlice"][trig][0] and thirdlead_mu.tlv.Pt()<self.store["singleMuTrigSlice"][trig][1]:
+              return True
       return False
-    
-    #__________________________________________________________________________
-    def cut_PassAndMatchHLTmu24(self):
-      required_triggers = ['HLT_mu24']
-      passed_triggers   = self.store["passTrig"].keys()
-      
-      muons = self.store['muons']
-      for m in muons:
-        for trig in required_triggers:
-          if trig in self.store["singleMuTrigList"].keys():
-            muon_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
-            event_is_triggered = bool( trig in passed_triggers )
-            if muon_is_matched and event_is_triggered: return True
-      return False
-    
+    """ 
     
     #__________________________________________________________________________
     def cut_LeadMuTruthFilter(self):
@@ -880,78 +962,72 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_METlow40(self):
-      met = self.store["met_clus"]
+      met = self.store["met_trk"]
       return met.tlv.Pt() < 40 * GeV
     #__________________________________________________________________________
     def cut_METlow50(self):
-      met = self.store["met_clus"]
+      met = self.store["met_trk"]
       return met.tlv.Pt() < 50 * GeV
     #__________________________________________________________________________
     def cut_METlow30(self):
-      met = self.store["met_clus"]
+      met = self.store["met_trk"]
       return met.tlv.Pt() < 30 * GeV
+    #__________________________________________________________________________
+    def cut_METhigh30(self):
+      met = self.store["met_trk"]
+      return met.tlv.Pt() > 30 * GeV
     
     #__________________________________________________________________________
     def cut_MuJetDphi27(self):
       lead_mu = self.store["muons"][0]
-      lead_jet = None
-      if self.store["jets"]:
-        lead_jet = self.store["jets"][0]
-      if lead_jet:
-        return abs(lead_mu.tlv.DeltaPhi(lead_jet.tlv)) > 2.7
-      else: return False
+      if self.store["jets_tight"]:
+        for j in self.store["jets_tight"]:
+          if abs(lead_mu.tlv.DeltaPhi(j.tlv)) > 2.7: return True
+      return False
     #__________________________________________________________________________
     def cut_MuJetDphi28(self):
       lead_mu = self.store["muons"][0]
-      lead_jet = None
-      if self.store["jets"]:
-        lead_jet = self.store["jets"][0]
-      if lead_jet:
-        return abs(lead_mu.tlv.DeltaPhi(lead_jet.tlv)) > 2.8
-      else: return False
+      if self.store["jets_tight"]:
+        for j in self.store["jets_tight"]:
+          if abs(lead_mu.tlv.DeltaPhi(j.tlv)) > 2.8: return True
+      return False
     #__________________________________________________________________________
     def cut_MuJetDphi26(self):
       lead_mu = self.store["muons"][0]
-      lead_jet = None
-      if self.store["jets"]:
-        lead_jet = self.store["jets"][0]
-      if lead_jet:
-        return abs(lead_mu.tlv.DeltaPhi(lead_jet.tlv)) > 2.6
-      else: return False
+      if self.store["jets_tight"]:
+        for j in self.store["jets_tight"]:
+          if abs(lead_mu.tlv.DeltaPhi(j.tlv)) > 2.6: return True
+      return False
+
+    #__________________________________________________________________________
+    def cut_TightJetPt25(self):
+      if self.store["jets_tight"]:
+        jets = self.store["jets_tight"]
+        for j in jets:
+          if j.tlv.Pt() > 25 * GeV: return True
+      return False
+    #__________________________________________________________________________
+    def cut_TightJetPt35(self):
+      if self.store["jets_tight"]:
+        jets = self.store["jets_tight"]
+        for j in jets:
+          if j.tlv.Pt() > 35 * GeV: return True
+      return False
+    #__________________________________________________________________________
+    def cut_TightJetPt40(self):
+      if self.store["jets_tight"]:
+        jets = self.store["jets_tight"]
+        for j in jets:
+          if j.tlv.Pt() > 40 * GeV: return True
+      return False
+    #__________________________________________________________________________
+    def cut_TightJetPt45(self):
+      if self.store["jets_tight"]:
+        jets = self.store["jets_tight"]
+        for j in jets:
+          if j.tlv.Pt() > 45 * GeV: return True
+      return False
     
-    #__________________________________________________________________________
-    def cut_AllJetPt25(self):
-      if self.store["jets"]:
-        jets = self.store["jets"]
-        for j in jets:
-          if j.tlv.Pt() < 25 * GeV: return False
-      return True
-    #__________________________________________________________________________
-    def cut_AllJetPt35(self):
-      if self.store["jets"]:
-        jets = self.store["jets"]
-        for j in jets:
-          if j.tlv.Pt() < 35 * GeV: return False
-      return True
-    #__________________________________________________________________________
-    def cut_AllJetPt40(self):
-      if self.store["jets"]:
-        jets = self.store["jets"]
-        for j in jets:
-          if j.tlv.Pt() < 40 * GeV: return False
-      return True
-    #__________________________________________________________________________
-    def cut_AllJetPt45(self):
-      if self.store["jets"]:
-        jets = self.store["jets"]
-        for j in jets:
-          if j.tlv.Pt() < 45 * GeV: return False
-      return True
-    
-    #__________________________________________________________________________
-    def cut_PASS(self):
-      #print self.chain.njets
-      return True
     
 #------------------------------------------------------------------------------
 class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
@@ -1029,12 +1105,12 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
               h.instance = self.hist(h.hname, "ROOT.TH2F('$', ';%s;%s', %d, %lf, %lf, %d, %lf, %lf)" % (h.hname,h.hname,h.nbinsx,h.xmin,h.xmax,h.nbinsy,h.ymin,h.ymax), dir=os.path.join(region, '%s'%h.dir))
               h.set_axis_titles()
 
+         
         # ---------------
         # Fill histograms
         # ---------------
         if passed:
           for h in self.hist_list:
-            
             if self.do_var_check:
               exec ( "present = %s"%h.varcheck() )
               if not present: 
@@ -1042,7 +1118,12 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
             
             if h.get_name() == "Hist1D":
               var = -999.
-              exec( "var = %s" % h.vexpr ) # so dirty !!!
+              
+              # this all part gives me the shivers. But is just temporary. Don't panic
+              if hasattr(self.chain,"njets") and "njets" in h.vexpr: exec( "var = self.chain.njets" ) 
+              elif hasattr(self.chain,"njet") and "njet" in h.vexpr: exec( "var = self.chain.njet" ) 
+              else: exec( "var = %s" % h.vexpr ) # so dirty !!!
+              
               if h.instance and var!=-999.: h.fill(var, weight)
             
             elif h.get_name() == "Hist2D":
@@ -1050,7 +1131,8 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
               vary = -999.
               exec( "varx,vary = %s" % h.vexpr ) # so dirty !!!
               if h.instance and varx!=-999. and vary!=-999.: h.fill(varx,vary, weight)
-          
+
+
     #__________________________________________________________________________
     def check_region(self,cutnames):
         cut_passed = True

@@ -35,13 +35,11 @@ class TrigPresc(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def __init__(self, 
           cutflow     = None,
-          use_avg     = None,
-          SKIP        = None,
+          #use_avg     = None,
           key         = None):
         pyframe.core.Algorithm.__init__(self, name="TrigPresc", isfilter=True)
         self.cutflow     = cutflow
-        self.use_avg     = use_avg
-        self.SKIP        = SKIP
+        #self.use_avg     = use_avg
         self.key         = key
     #__________________________________________________________________________
     def execute(self, weight):
@@ -52,22 +50,25 @@ class TrigPresc(pyframe.core.Algorithm):
             "HLT_mu20_L1MU15"     : 354.153, 
             "HLT_mu24"            : 47.64, 
             "HLT_mu50"            : 1.0,
-            "HLT_mu26_imedium"    : 1.949,
-            #"HLT_mu26_ivarmedium" : 1.097,
-            "HLT_mu26_ivarmedium" : 1.000,
+            #"HLT_mu26_imedium"    : 1.943,
+            "HLT_mu26_ivarmedium" : 1.098,
             }
 
         if "data" in self.sampletype:
           ineff_list = []
           for trig in self.store["reqTrig"]: 
-            if trig in self.store["passTrig"].keys():
-              if not self.use_avg:
-                 if self.store["passTrig"][trig] != 0:
-                   ineff_list.append(1. - 1. / self.store["passTrig"][trig])
-                 else:
-                   ineff_list.append(1. - 1. / presc_dict[trig])
-              else:
-                 ineff_list.append(1. - 1. / presc_dict[trig])
+            
+            # used for main analysis
+            # ----------------------
+            #for mu in self.store["muons"]:
+            #  if mu.tlv.Pt()>=self.store["singleMuTrigSlice"][trig][0] and mu.tlv.Pt()<self.store["singleMuTrigSlice"][trig][1]:
+            #    ineff_list.append(1. - 1. / presc_dict[trig])
+            
+            # used for fake-factors
+            # ----------------------
+            if trig in self.store["passTrig"].keys(): 
+              for mu in self.store["muons"]:
+                ineff_list.append(1. - 1. / presc_dict[trig])
 
           if ineff_list:
             tot_ineff = 1.0
@@ -75,10 +76,9 @@ class TrigPresc(pyframe.core.Algorithm):
             trigpresc -= tot_ineff
         
         trigpresc = 1. / trigpresc
-        
-        if self.SKIP:  trigpresc = 1.0
-        
-        if self.key: self.store[self.key] = trigpresc
+
+        if self.key: 
+          self.store[self.key] = trigpresc
         self.set_weight(trigpresc*weight)
         return True
 
@@ -138,7 +138,7 @@ class LPXKfactor(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def execute(self, weight):
         if "mc" in self.sampletype: 
-            wkf = self.chain.LPXKfactor
+            wkf = self.chain.LPXKfactorVec.at(0)
             if self.key: self.store[self.key] = wkf
             self.set_weight(wkf*weight)
         return True
@@ -170,11 +170,11 @@ class MuTrigSF(pyframe.core.Algorithm):
     #_________________________________________________________________________
     def initialize(self):
       
-      if not self.mu_reco:      self.mu_reco = "Loose"
+      if not self.mu_reco:      self.mu_reco = "Medium"
       if not self.mu_iso:       self.mu_iso  = "FixedCutTightTrackOnly"
       
-      if "Not" in self.mu_iso:  self.mu_iso  = "Loose"
-      if "Not" in self.mu_reco: self.mu_reco = "Loose"
+      if "Not" in self.mu_iso:  self.mu_iso  = "FixedCutTightTrackOnly"
+      if "Not" in self.mu_reco: self.mu_reco = "Medium"
 
       if not self.trig_list: self.trig_list = self.store["reqTrig"]
 
@@ -227,6 +227,66 @@ class MuTrigSF(pyframe.core.Algorithm):
         if self.key: 
           self.store[self.key] = trig_sf
         return True
+
+#------------------------------------------------------------------------------
+class GlobalBjet(pyframe.core.Algorithm):
+    """
+    GlobalBjet
+    """
+    #__________________________________________________________________________
+    def __init__(self, name="GlobalBjet",
+            key            = None,
+            ):
+
+        pyframe.core.Algorithm.__init__(self, name=name)
+        self.key               = key
+
+        assert key, "Must provide key for storing ele reco sf"
+    #_________________________________________________________________________
+    def initialize(self):
+      pass
+    #_________________________________________________________________________
+    def execute(self, weight):
+      sf=1.0
+      if "mc" in self.sampletype: 
+        jets = self.store['jets_tight']
+        for jet in jets:
+          sf *= getattr(jet,"SFFix77").at(0)
+
+      if self.key: 
+        self.store[self.key] = sf
+      return True
+
+
+#------------------------------------------------------------------------------
+class GlobalJVT(pyframe.core.Algorithm):
+    """
+    GlobalJVT
+    """
+    #__________________________________________________________________________
+    def __init__(self, name="GlobalJVT",
+            key            = None,
+            ):
+
+        pyframe.core.Algorithm.__init__(self, name=name)
+        self.key               = key
+
+        assert key, "Must provide key for storing ele reco sf"
+    #_________________________________________________________________________
+    def initialize(self):
+      pass
+    #_________________________________________________________________________
+    def execute(self, weight):
+      sf=1.0
+      if "mc" in self.sampletype: 
+        jets = self.store['jets']
+        for jet in jets:
+          sf *= getattr(jet,"JvtEff_SF_Medium").at(0)
+          sf *= getattr(jet,"fJvtEff_SF_Medium").at(0)
+
+      if self.key: 
+        self.store[self.key] = sf
+      return True
 
 
 #------------------------------------------------------------------------------

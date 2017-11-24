@@ -19,14 +19,30 @@ parser.add_option('-s', '--samp', dest='sample',
 # --------------
 #user  = "fscutti"
 #user  = "gucchiel"
-user  = "mmuskinj"
+#user  = "mmuskinj"
+user  = "tadej"
+
 samp  = options.sample
-#jtag  =  "HIGG3D3_v7"
-jtag  =  "v2_EXOT12_data_2"
+
+##jtag = "EX12MC.v3.sys.003"
+#jtag = "ffres.v1.ff"
+#jtag = "H3D3.v1.FF"
+#jtag = "HIGG3D3MC.v2.fakes"
+jtag = "HIGG3D3Data.v2.fakes"
+
+#jtag  =  "EXOT12data_v3nom"      # done
+#jtag  =  "EXOT12data_v3nomi"
+#jtag  =  "EXOT12data_v3nomin"    # done
+
+#jtag  =  "EXOT12MC_v3n"
+#jtag  =  "EXOT12MC_v3no"         # done
+#jtag  =  "EXOT12MC_v3nom"        # done
+#jtag  =  "EXOT12MC_v3nomi"       # done
 
 jtagsamp  = "%s.*%s*" % (jtag,samp)
 
-jtype = "SSDiLep"
+#jtype = "SSDiLep"
+jtype = "DiLepAna"
 sys   = None
 if not sys: sys = "nominal"
 # --------------
@@ -35,7 +51,6 @@ if not sys: sys = "nominal"
 # --------------
 SCRIPT     = os.path.join("/coepp/cephfs/mel/fscutti/Analysis/batch","Get.sh")
 OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/%s" % (jtag)
-#OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/testV1"
 
 OUTMERGED  = os.path.join(OUTDIR,"merged",sys)
 OUTTREE    = os.path.join(OUTDIR,"tree",sys)
@@ -48,8 +63,11 @@ NCORES     = 1
 # --------------
 
 JOBDIR    = "/coepp/cephfs/mel/fscutti/jobdir" 
+JOBTMP    = "/coepp/cephfs/mel/fscutti/jobtmp" 
 
 dir_list = []
+dir_list.append(JOBDIR)
+dir_list.append(JOBTMP)
 dir_list.append(os.path.join(OUTDIR,"tree"))
 dir_list.append(os.path.join(OUTDIR,"tree",sys))
 dir_list.append(os.path.join(OUTDIR,"metadata"))
@@ -151,11 +169,13 @@ for k,v in outputs.iteritems():
   print 'downloading %s ...' % k
   job_name = recreplace(k,jrep)
   if job_name.startswith("."): job_name = job_name[1:]
-  if "physics_Main" in job_name: id = k.split(".")[5]+"_"+k.split(".")[4]
-  else: id = k.split(".")[5]
+  if "physics_Main" in job_name: id = k.split(".")[7]+"_"+k.split(".")[6]
+  #else: id = k.split(".")[5]
+  else: id = k.split(".")[7]
   merged = recreplace(id, mcstrings)
   
   vars=[]
+  vars+=["JOBTMP=%s"        % JOBTMP                 ]
   vars+=["NCORES=%d"        % NCORES                 ]
   vars+=["TREEFILE=%s"      % v["tree"]              ]
   vars+=["METAFILE=%s"      % v["metadata"]          ]

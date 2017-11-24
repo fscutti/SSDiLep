@@ -8,6 +8,8 @@ to single objects
 
 from math import sqrt
 from array import array
+from copy import copy
+
 # logging
 import logging
 log = logging.getLogger(__name__)
@@ -139,5 +141,48 @@ class MuFakeFactorGraph(pyframe.core.Algorithm):
           self.store[self.key] = ff_mu
 
         return True
+
+#------------------------------------------------------------------------------
+class JetPtWeightHist(pyframe.core.Algorithm):
+    """
+    Applies pt re-weighting of the jet pt
+    """
+    #__________________________________________________________________________
+    def __init__(self, name="JetPtWeight",config_file=None,key=None,scale=None):
+        pyframe.core.Algorithm.__init__(self,name=name)
+        self.config_file    = config_file
+        self.key            = key
+        self.scale          = scale
+        
+        assert config_file, "Must provide config file!"
+        assert key, "Must provide key for storing weight"
+    #_________________________________________________________________________
+    def initialize(self):
+        f = ROOT.TFile.Open(self.config_file)
+        assert f, "Failed to open weights config file: %s"%(self.config_file)
+
+        h_weights = copy(f.Get("weights_reb").Clone())
+        f.Close()
+        assert h_weights, "Failed to get 'h_weights' from %s"%(self.config_file)
+        self.h_weights = h_weights
+    #_________________________________________________________________________
+    def execute(self, weight):
+        
+        w_jet = 1.0 
+        jet = self.store['jets'][0]
+         
+        pt_jet = jet.tlv.Pt()/GeV  
+        if pt_jet < 250.:
+          w_jet = self.h_weights.GetBinContent( self.h_weights.FindBin(pt_jet) )
+        else: pass 
+        
+        if self.scale == 'up': pass
+        if self.scale == 'dn': pass
+       
+        if self.key: 
+          self.store[self.key] = w_jet
+
+        return True
+
 
 # EOF

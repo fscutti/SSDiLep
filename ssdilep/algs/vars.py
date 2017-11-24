@@ -51,7 +51,7 @@ class BuildTrigConfig(pyframe.core.Algorithm):
         for trig,presc in zip(self.chain.passedTriggers,self.chain.triggerPrescales):
           self.store["passTrig"][trig] = presc
 
-      dGeV = GeV / 1.03
+      mGeV = GeV * 1.0
 
       if self.key == "muons":
         self.store["singleMuTrigList"]  = {}  
@@ -68,23 +68,31 @@ class BuildTrigConfig(pyframe.core.Algorithm):
         for i,trig in enumerate(self.chain.muon_listTrigChains):
           if trig in self.store["singleMuTrigList"].keys(): continue
           self.store["singleMuTrigList"][trig] = i
-              
+        
+        """              
         for trig in self.store["reqTrig"]:
           for thr in trig.split("_"):
             if thr.startswith("mu"): 
-              self.store["singleMuTrigThr"][trig] = float( thr.replace("mu","") ) * GeV
-              low_thr.append(float( thr.replace("mu","") ) * dGeV)
-              high_thr.append(float( thr.replace("mu","") ) * dGeV)
+              self.store["singleMuTrigThr"][trig] = float( thr.replace("mu","") ) * mGeV
+              low_thr.append(float( thr.replace("mu","") ) * mGeV)
+              high_thr.append(float( thr.replace("mu","") ) * mGeV)
         
         if low_thr and high_thr: 
           low_thr  = sorted(low_thr) 
           high_thr = sorted(high_thr)
           high_thr.remove(low_thr[0])
-          high_thr.append(1000000000.)
+          high_thr.append(1000. * GeV)
 
         for low,high in zip(low_thr,high_thr):
           for trig,thr in self.store["singleMuTrigThr"].iteritems():
-            if thr>=low and thr<high: self.store["singleMuTrigSlice"][trig] = (low,high)
+            if thr>=low and thr<high: 
+              self.store["singleMuTrigSlice"][trig] = (low,high)
+        
+        """              
+        self.store["singleMuTrigSlice"]["HLT_mu26_ivarmedium"] = (28*GeV,51*GeV)
+        self.store["singleMuTrigSlice"]["HLT_mu24"] = (25*GeV,55*GeV)
+        self.store["singleMuTrigSlice"]["HLT_mu50"] = (55*GeV,10000*GeV)
+      
       
       return True
 
@@ -141,7 +149,7 @@ class TagAndProbeVars(pyframe.core.Algorithm):
     def __init__(self, 
                  name      = 'TagAndProbeVars',
                  key_muons = 'muons',
-                 key_met   = 'met_clus',
+                 key_met   = 'met_trk',
                  ):
         pyframe.core.Algorithm.__init__(self, name)
         self.key_muons = key_muons
@@ -325,7 +333,7 @@ class DiJetVars(pyframe.core.Algorithm):
                  name      = 'VarsAlg',
                  key_muons = 'muons',
                  key_jets  = 'jets',
-                 key_met   = 'met_clus',
+                 key_met   = 'met_trk',
                  ):
         pyframe.core.Algorithm.__init__(self, name)
         self.key_muons = key_muons
@@ -357,6 +365,27 @@ class DiJetVars(pyframe.core.Algorithm):
           scdphi += ROOT.TMath.Cos(met.tlv.Phi() - jets[0].tlv.Phi())
           self.store['scdphi'] = scdphi
         
+        # -------------------------
+        # build tight jets
+        # -------------------------
+
+        jets_tight = []
+        jets_nontight = []
+        for jet in jets:
+          if jet.JvtPass_Medium and jet.fJvtPass_Medium and abs(jet.eta) <= 2.8:
+            jets_tight += [jet]
+          else:
+            jets_nontight += [jet]
+
+        jets_tight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
+        jets_nontight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
+        
+        if len(jets_tight) > 1:
+          assert jets_tight[0].tlv.Pt() >= jets_tight[1].tlv.Pt(), "jets_tight not sorted.."
+        if len(jets_nontight) > 1:
+          assert jets_nontight[0].tlv.Pt() >= jets_nontight[1].tlv.Pt(), "jets_nontight not sorted.."
+        self.store['jets_tight'] = jets_tight        
+        self.store['jets_nontight'] = jets_nontight        
         return True
 
 
@@ -370,7 +399,7 @@ class DiMuVars(pyframe.core.Algorithm):
     def __init__(self, 
                  name      = 'DiMuVars',
                  key_muons = 'muons',
-                 key_met   = 'met_clus',
+                 key_met   = 'met_trk',
                  ):
         pyframe.core.Algorithm.__init__(self, name)
         self.key_muons = key_muons
@@ -399,7 +428,8 @@ class DiMuVars(pyframe.core.Algorithm):
         if len(muons)>=2:
           
           for p in combinations(muons,2):
-            ss_pairs[p] = p[0].trkd0sig + p[1].trkd0sig 
+            if p[0].trkcharge * p[1].trkcharge > 0.:
+              ss_pairs[p] = p[0].trkd0sig + p[1].trkd0sig 
           
           max_sig  = 1000.
           for pair,sig in ss_pairs.iteritems():
@@ -425,6 +455,8 @@ class DiMuVars(pyframe.core.Algorithm):
           self.store['mTtot']          = (muon1T + muon2T + met.tlv).M()  
           self.store['muons_dphi']     = muon2.tlv.DeltaPhi(muon1.tlv)
           self.store['muons_deta']     = muon2.tlv.Eta()-muon1.tlv.Eta()
+          self.store['muons_pTH']      = (muon2.tlv+muon1.tlv).Pt()
+          self.store['muons_dR']       = math.sqrt(self.store['muons_dphi']**2 + self.store['muons_deta']**2)
          
         # puts additional muons in the store
         if ss_pairs and len(muons)>2:
@@ -446,7 +478,7 @@ class MultiMuVars(pyframe.core.Algorithm):
     def __init__(self, 
                  name      = 'MultiMuVars',
                  key_muons = 'muons',
-                 key_met   = 'met_clus',
+                 key_met   = 'met_trk',
                  ):
         pyframe.core.Algorithm.__init__(self, name)
         self.key_muons = key_muons

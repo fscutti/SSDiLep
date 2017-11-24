@@ -17,9 +17,12 @@ echo " Job-id:        $PBS_JOBID"
 echo " Work dir:      $PBS_O_WORKDIR"
 echo " Submit host:   $PBS_O_HOST"
 echo " Worker node:   $HOSTNAME"
-echo " Temp dir:      $TMPDIR"
+#echo " Temp dir:      $TMPDIR"
 echo " parameters passed: $*"
 echo 
+
+
+echo " Temp dir:      $JOBTMP"
 
 echo " SCRIPT:        $SCRIPT"
 echo " TREEFILE:      $TREEFILE"
@@ -46,8 +49,6 @@ MYDIR=Get_${RANDOM}${RANDOM}
 
 export X509_USER_PROXY=/coepp/cephfs/mel/fscutti/jobdir/x509up_u1132
 setupATLAS
-lsetup rucio
-lsetup root
 
 # -----------------------------
 # avoid to fuck the cluster up:
@@ -63,116 +64,135 @@ echo ""
 
 echo "executing job..."
 
-echo "-----> ls ${TMPDIR} -la"
-ls ${TMPDIR} -la
+#echo "-----> ls ${JOBTMP} -la"
+#ls ${JOBTMP} -la
 
-echo "-----> rm -rf ${MYDIR}"
-rm -rf ${MYDIR}
+#echo "-----> rm -rf ${MYDIR}"
+#rm -rf ${MYDIR}
 
 #echo "-----> rm -rf *.root"
 #rm -rf *.root
 
-echo "-----> ls ${TMPDIR} -la"
-ls ${TMPDIR} -la
+#echo "-----> ls ${JOBTMP} -la"
+#ls ${JOBTMP} -la
 
-echo "-----> mkdir ${TMPDIR}/${MYDIR} "
-mkdir ${TMPDIR}/${MYDIR} 
+echo "-----> mkdir ${JOBTMP}/${MYDIR} "
+mkdir ${JOBTMP}/${MYDIR} 
 
-echo "-----> ls ${TMPDIR} -la"
-ls ${TMPDIR} -la
+echo "-----> ls ${JOBTMP} -la"
+ls ${JOBTMP} -la
 
 
-# ----------------------------
-# download and merge tree file
-# ----------------------------
-echo "-----> rucio download --dir=${TMPDIR}/${MYDIR} ${TREEFILE}"
-rucio download --dir=${TMPDIR}/${MYDIR} ${TREEFILE}
+# -------------------
+# download with rucio
+# -------------------
+lsetup rucio
 
-echo "-----> ls ${TMPDIR}/${MYDIR}/${TREEFILE} -la"
-ls ${TMPDIR}/${MYDIR}/${TREEFILE} -la
+# tree file
+# ---------
+echo "-----> rucio download --dir=${JOBTMP}/${MYDIR} ${TREEFILE}"
+rucio download --dir=${JOBTMP}/${MYDIR} ${TREEFILE}
 
-echo "-----> cp -rf ${TMPDIR}/${MYDIR}/${TREEFILE} ${OUTTREE}"
-cp -rf ${TMPDIR}/${MYDIR}/${TREEFILE} ${OUTTREE}
+echo "-----> ls ${JOBTMP}/${MYDIR}/${TREEFILE} -la"
+ls ${JOBTMP}/${MYDIR}/${TREEFILE} -la
 
-echo "-----> cd ${TMPDIR}/${MYDIR}/${TREEFILE}"
-cd ${TMPDIR}/${MYDIR}/${TREEFILE}
+echo "-----> cp -rf ${JOBTMP}/${MYDIR}/${TREEFILE} ${OUTTREE}"
+cp -rf ${JOBTMP}/${MYDIR}/${TREEFILE} ${OUTTREE}
+
+# meta file
+# ---------
+echo "-----> rucio download --dir=${JOBTMP}/${MYDIR} ${METAFILE}"
+rucio download --dir=${JOBTMP}/${MYDIR} ${METAFILE}
+
+echo "-----> ls ${JOBTMP}/${MYDIR}/${METAFILE} -la"
+ls ${JOBTMP}/${MYDIR}/${METAFILE} -la
+
+echo "-----> cp -rf ${JOBTMP}/${MYDIR}/${METAFILE} ${OUTMETA}"
+cp -rf ${JOBTMP}/${MYDIR}/${METAFILE} ${OUTMETA}
+
+# cutflow file
+# ------------
+echo "-----> rucio -v get --dir=${JOBTMP}/${MYDIR} ${CUTFLOWFILE}"
+rucio -v get --dir=${JOBTMP}/${MYDIR} ${CUTFLOWFILE}
+
+echo "-----> ls ${JOBTMP}/${MYDIR}/${CUTFLOWFILE} -la"
+ls ${JOBTMP}/${MYDIR}/${CUTFLOWFILE} -la
+
+echo "-----> cp -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE} ${OUTCUTFLOW}"
+cp -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE} ${OUTCUTFLOW}
+
+
+
+
+
+# --------------
+# hadd with root
+# --------------
+lsetup root
+
+# tree file
+# ---------
+echo "-----> cd ${JOBTMP}/${MYDIR}/${TREEFILE}"
+cd ${JOBTMP}/${MYDIR}/${TREEFILE}
 
 echo "-----> hadd ${MERGEDTREE} *.root*"
 hadd ${MERGEDTREE} *.root*
 
-echo "-----> cp ${MERGEDTREE} ${TMPDIR}/${MYDIR}"
-cp ${MERGEDTREE} ${TMPDIR}/${MYDIR}
+echo "-----> cp ${MERGEDTREE} ${JOBTMP}/${MYDIR}"
+cp ${MERGEDTREE} ${JOBTMP}/${MYDIR}
 
-echo "-----> cd ${TMPDIR}/${MYDIR}"
-cd ${TMPDIR}/${MYDIR}
+echo "-----> cd ${JOBTMP}/${MYDIR}"
+cd ${JOBTMP}/${MYDIR}
 
-echo "-----> rm -rf ${TMPDIR}/${MYDIR}/${TREEFILE}"
-rm -rf ${TMPDIR}/${MYDIR}/${TREEFILE}
+echo "-----> rm -rf ${JOBTMP}/${MYDIR}/${TREEFILE}"
+rm -rf ${JOBTMP}/${MYDIR}/${TREEFILE}
 
-echo "-----> ls ${TMPDIR}/${MYDIR} -la"
-ls ${TMPDIR}/${MYDIR} -la
-
-
-# ----------------------------
-# download and merge meta file
-# ----------------------------
-echo "-----> rucio download --dir=${TMPDIR}/${MYDIR} ${METAFILE}"
-rucio download --dir=${TMPDIR}/${MYDIR} ${METAFILE}
-
-echo "-----> ls ${TMPDIR}/${MYDIR}/${METAFILE} -la"
-ls ${TMPDIR}/${MYDIR}/${METAFILE} -la
-
-echo "-----> cp -rf ${TMPDIR}/${MYDIR}/${METAFILE} ${OUTMETA}"
-cp -rf ${TMPDIR}/${MYDIR}/${METAFILE} ${OUTMETA}
-
-echo "-----> cd ${TMPDIR}/${MYDIR}/${METAFILE}"
-cd ${TMPDIR}/${MYDIR}/${METAFILE}
-
-echo "-----> hadd ${MERGEDMETA} *.root*"
-hadd ${MERGEDMETA} *.root*
-
-echo "-----> cp ${MERGEDMETA} ${TMPDIR}/${MYDIR}"
-cp ${MERGEDMETA} ${TMPDIR}/${MYDIR}
-
-echo "-----> cd ${TMPDIR}/${MYDIR}"
-cd ${TMPDIR}/${MYDIR}
-
-echo "-----> rm -rf ${TMPDIR}/${MYDIR}/${METAFILE}"
-rm -rf ${TMPDIR}/${MYDIR}/${METAFILE}
-
-echo "-----> ls ${TMPDIR}/${MYDIR} -la"
-ls ${TMPDIR}/${MYDIR} -la
+echo "-----> ls ${JOBTMP}/${MYDIR} -la"
+ls ${JOBTMP}/${MYDIR} -la
 
 
-# -------------------------------
-# download and merge cutflow file
-# -------------------------------
-echo "-----> rucio -v get --dir=${TMPDIR}/${MYDIR} ${CUTFLOWFILE}"
-rucio -v get --dir=${TMPDIR}/${MYDIR} ${CUTFLOWFILE}
-
-echo "-----> ls ${TMPDIR}/${MYDIR}/${CUTFLOWFILE} -la"
-ls ${TMPDIR}/${MYDIR}/${CUTFLOWFILE} -la
-
-echo "-----> cp -rf ${TMPDIR}/${MYDIR}/${CUTFLOWFILE} ${OUTCUTFLOW}"
-cp -rf ${TMPDIR}/${MYDIR}/${CUTFLOWFILE} ${OUTCUTFLOW}
-
-echo "-----> cd ${TMPDIR}/${MYDIR}/${CUTFLOWFILE}"
-cd ${TMPDIR}/${MYDIR}/${CUTFLOWFILE}
+# meta file
+# ---------
+echo "-----> cd ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}"
+cd ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}
 
 echo "-----> hadd ${MERGEDCUTFLOW} *.root*"
 hadd ${MERGEDCUTFLOW} *.root*
 
-echo "-----> cp ${MERGEDCUTFLOW} ${TMPDIR}/${MYDIR}"
-cp ${MERGEDCUTFLOW} ${TMPDIR}/${MYDIR}
+echo "-----> cp ${MERGEDCUTFLOW} ${JOBTMP}/${MYDIR}"
+cp ${MERGEDCUTFLOW} ${JOBTMP}/${MYDIR}
 
-echo "-----> cd ${TMPDIR}/${MYDIR}"
-cd ${TMPDIR}/${MYDIR}
+echo "-----> cd ${JOBTMP}/${MYDIR}"
+cd ${JOBTMP}/${MYDIR}
 
-echo "-----> rm -rf ${TMPDIR}/${MYDIR}/${CUTFLOWFILE}"
-rm -rf ${TMPDIR}/${MYDIR}/${CUTFLOWFILE}
+echo "-----> rm -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}"
+rm -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}
 
-echo "-----> ls ${TMPDIR}/${MYDIR} -la"
-ls ${TMPDIR}/${MYDIR} -la
+echo "-----> ls ${JOBTMP}/${MYDIR} -la"
+ls ${JOBTMP}/${MYDIR} -la
+
+
+# cutflow file
+# ------------
+echo "-----> cd ${JOBTMP}/${MYDIR}/${METAFILE}"
+cd ${JOBTMP}/${MYDIR}/${METAFILE}
+
+echo "-----> hadd ${MERGEDMETA} *.root*"
+hadd ${MERGEDMETA} *.root*
+
+echo "-----> cp ${MERGEDMETA} ${JOBTMP}/${MYDIR}"
+cp ${MERGEDMETA} ${JOBTMP}/${MYDIR}
+
+echo "-----> cd ${JOBTMP}/${MYDIR}"
+cd ${JOBTMP}/${MYDIR}
+
+echo "-----> rm -rf ${JOBTMP}/${MYDIR}/${METAFILE}"
+rm -rf ${JOBTMP}/${MYDIR}/${METAFILE}
+
+echo "-----> ls ${JOBTMP}/${MYDIR} -la"
+ls ${JOBTMP}/${MYDIR} -la
+
+
 
 # ----------------------
 # merge cutflow and tree
@@ -180,20 +200,20 @@ ls ${TMPDIR}/${MYDIR} -la
 echo "-----> hadd ${MERGED} ${MERGEDTREE} ${MERGEDMETA} ${MERGEDCUTFLOW}"
 hadd ${MERGED} ${MERGEDTREE} ${MERGEDMETA} ${MERGEDCUTFLOW}
 
-echo "-----> ls ${TMPDIR}/${MYDIR} -la"
-ls ${TMPDIR}/${MYDIR} -la
+echo "-----> ls ${JOBTMP}/${MYDIR} -la"
+ls ${JOBTMP}/${MYDIR} -la
 
 echo "-----> cp ${MERGED} ${OUTMERGED}"
 cp ${MERGED} ${OUTMERGED}
 
-echo "-----> cd ${TMPDIR}"
-cd ${TMPDIR}
+echo "-----> cd ${JOBTMP}"
+cd ${JOBTMP}
 
 echo "-----> rm -rf ${MYDIR}"
 rm -rf ${MYDIR}
 
-echo "-----> ls ${TMPDIR} -la"
-ls ${TMPDIR} -la
+echo "-----> ls ${JOBTMP} -la"
+ls ${JOBTMP} -la
 
 # EOF
 

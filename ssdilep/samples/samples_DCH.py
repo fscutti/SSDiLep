@@ -197,6 +197,10 @@ for boson in parent.keys():
     for neg_mode in neg_decay.keys():
       sname = "%s%s_%s%s"%(boson,pos_mode,boson,neg_mode)
       for sroot in root_DCH:
+        if "HL" in sname:
+          globals()[full_sname].line_color   += 2
+          globals()[full_sname].marker_color += 2
+          globals()[full_sname].fill_color   += 2
         full_sname = "%s_%s"%(sroot.name,sname) 
         globals()[full_sname]         = copy(sroot)
         globals()[full_sname].infile  = sroot.name
