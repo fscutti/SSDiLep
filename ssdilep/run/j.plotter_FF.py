@@ -17,9 +17,6 @@ import pyframe
 ## local modules
 import ssdilep
 
-GeV = 1000.0
-
-
 #_____________________________________________________________________________
 def analyze(config):
   
@@ -125,10 +122,10 @@ def analyze(config):
     
     # Either one of these two sets:
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTightJet') # Set1
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTightJet') # Set1
     # ----------------------------- 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastTwoTightJets') # Set 2
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='Two50TightJets')
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastTwoTightJets') # Set 2
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='Two50TightJets')
     # ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
     

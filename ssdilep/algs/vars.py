@@ -11,7 +11,7 @@ from types import MethodType
 import pyframe
 import ROOT
 
-GeV = 1000.0
+from units import GeV
 
 import logging
 log = logging.getLogger(__name__)
@@ -42,17 +42,45 @@ class BuildTrigConfig(pyframe.core.Algorithm):
     def execute(self, weight):
         
       assert len(self.chain.passedTriggers) == len(self.chain.triggerPrescales), "ERROR: # passed triggers != # trigger prescales !!!"
-      
+     
+      nolim = 1000. 
+
+      # slices for jet triggers
+      # -----------------------
+      jet_trigger_slice = {}
+      jet_trigger_slice["HLT_j15"]  = (17. * GeV,  nolim * GeV)
+      jet_trigger_slice["HLT_j25"]  = (30. * GeV,  nolim * GeV)
+      jet_trigger_slice["HLT_j35"]  = (40. * GeV,  nolim * GeV)
+      jet_trigger_slice["HLT_j55"]  = (60. * GeV,  nolim * GeV)
+      jet_trigger_slice["HLT_j60"]  = (66. * GeV,  nolim * GeV)
+      jet_trigger_slice["HLT_j85"]  = (94. * GeV,  nolim * GeV)
+      jet_trigger_slice["HLT_j110"] = (120. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j150"] = (165. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j175"] = (195. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j260"] = (285. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j320"] = (350. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j360"] = (395. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j380"] = (420. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j400"] = (440. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j420"] = (465. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j440"] = (485. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j460"] = (505. * GeV, nolim * GeV)
+
+      # initialise the different slices
+      pt_slice = {}
+      if self.key == "jets": pt_slice = jet_trigger_slice
+
       if not "reqTrig" in self.store.keys():
         self.store["reqTrig"] = self.required_triggers
       
       if not "passTrig" in self.store.keys():
         self.store["passTrig"] = {}
         for trig,presc in zip(self.chain.passedTriggers,self.chain.triggerPrescales):
-          self.store["passTrig"][trig] = presc
+          self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":pt_slice[trig]}
 
+      """
       mGeV = GeV * 1.0
-
+      
       if self.key == "muons":
         self.store["singleMuTrigList"]  = {}  
         self.store["singleMuTrigSlice"] = {}  # this is for prescale slicing
@@ -69,31 +97,33 @@ class BuildTrigConfig(pyframe.core.Algorithm):
           if trig in self.store["singleMuTrigList"].keys(): continue
           self.store["singleMuTrigList"][trig] = i
         
-        """              
-        for trig in self.store["reqTrig"]:
-          for thr in trig.split("_"):
-            if thr.startswith("mu"): 
-              self.store["singleMuTrigThr"][trig] = float( thr.replace("mu","") ) * mGeV
-              low_thr.append(float( thr.replace("mu","") ) * mGeV)
-              high_thr.append(float( thr.replace("mu","") ) * mGeV)
+        #for trig in self.store["reqTrig"]:
+        #  for thr in trig.split("_"):
+        #    if thr.startswith("mu"): 
+        #      self.store["singleMuTrigThr"][trig] = float( thr.replace("mu","") ) * mGeV
+        #      low_thr.append(float( thr.replace("mu","") ) * mGeV)
+        #      high_thr.append(float( thr.replace("mu","") ) * mGeV)
         
-        if low_thr and high_thr: 
-          low_thr  = sorted(low_thr) 
-          high_thr = sorted(high_thr)
-          high_thr.remove(low_thr[0])
-          high_thr.append(1000. * GeV)
+        #if low_thr and high_thr: 
+        #  low_thr  = sorted(low_thr) 
+        #  high_thr = sorted(high_thr)
+        #  high_thr.remove(low_thr[0])
+        #  high_thr.append(1000. * GeV)
 
-        for low,high in zip(low_thr,high_thr):
-          for trig,thr in self.store["singleMuTrigThr"].iteritems():
-            if thr>=low and thr<high: 
-              self.store["singleMuTrigSlice"][trig] = (low,high)
+        #for low,high in zip(low_thr,high_thr):
+        #  for trig,thr in self.store["singleMuTrigThr"].iteritems():
+        #    if thr>=low and thr<high: 
+        #      self.store["singleMuTrigSlice"][trig] = (low,high)
         
-        """              
         self.store["singleMuTrigSlice"]["HLT_mu26_ivarmedium"] = (28*GeV,51*GeV)
         self.store["singleMuTrigSlice"]["HLT_mu24"] = (25*GeV,55*GeV)
         self.store["singleMuTrigSlice"]["HLT_mu50"] = (55*GeV,10000*GeV)
+      """ 
+     
+
       
-      
+
+
       return True
 
 #-------------------------------------------------------------------------------
@@ -330,13 +360,13 @@ class DiJetVars(pyframe.core.Algorithm):
     """
     #__________________________________________________________________________
     def __init__(self, 
-                 name      = 'VarsAlg',
-                 key_muons = 'muons',
-                 key_jets  = 'jets',
-                 key_met   = 'met_trk',
+                 name        = 'VarsAlg',
+                 key_leptons = 'taus',
+                 key_jets    = 'jets',
+                 key_met     = 'met_trk',
                  ):
         pyframe.core.Algorithm.__init__(self, name)
-        self.key_muons = key_muons
+        self.key_leptons = key_leptons
         self.key_jets = key_jets
         self.key_met = key_met
 
@@ -349,26 +379,30 @@ class DiJetVars(pyframe.core.Algorithm):
 
         ## get objects from event candidate
         ## --------------------------------------------------
-        assert self.store.has_key(self.key_muons), "muons key: %s not found in store!" % (self.key_muons)
-        muons = self.store[self.key_muons]
+        assert self.store.has_key(self.key_leptons), "leptons key: %s not found in store!" % (self.key_leptons)
+        leptons = self.store[self.key_leptons]
         met = self.store[self.key_met]
         jets = self.store[self.key_jets]
-        
+       
+        prefix = self.key_leptons[:-1]
+
         # -------------------------
         # at least a muon and a jet
         # -------------------------
         
-        if bool(len(jets)) and bool(len(muons)):
-          self.store['mujet_dphi'] = muons[0].tlv.DeltaPhi(jets[0].tlv)
+        if bool(len(jets)) and bool(len(leptons)):
+          self.store['%sjet_dphi'%prefix] = leptons[0].tlv.DeltaPhi(jets[0].tlv)
           scdphi = 0.0
-          scdphi += ROOT.TMath.Cos(met.tlv.Phi() - muons[0].tlv.Phi())
+          scdphi += ROOT.TMath.Cos(met.tlv.Phi() - leptons[0].tlv.Phi())
           scdphi += ROOT.TMath.Cos(met.tlv.Phi() - jets[0].tlv.Phi())
-          self.store['scdphi'] = scdphi
+          self.store['%sjet_scdphi'%prefix] = scdphi
+       
+          self.store['%sjet_ptratio'%prefix] = leptons[0].tlv.Pt() / jets[0].tlv.Pt()
         
         # -------------------------
         # build tight jets
         # -------------------------
-
+        """
         jets_tight = []
         jets_nontight = []
         for jet in jets:
@@ -386,6 +420,7 @@ class DiJetVars(pyframe.core.Algorithm):
           assert jets_nontight[0].tlv.Pt() >= jets_nontight[1].tlv.Pt(), "jets_nontight not sorted.."
         self.store['jets_tight'] = jets_tight        
         self.store['jets_nontight'] = jets_nontight        
+        """
         return True
 
 

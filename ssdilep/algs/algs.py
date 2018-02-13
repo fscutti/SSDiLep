@@ -28,7 +28,7 @@ import sys
 ## pyframe
 import pyframe
 
-GeV = 1000.0
+from units import GeV
 
 #------------------------------------------------------------------------------
 class CutAlg(pyframe.core.Algorithm):
@@ -121,7 +121,12 @@ class CutAlg(pyframe.core.Algorithm):
         tag = self.store['tag']
         return tag.tlv.Pt()>28*GeV
     
-    
+    #__________________________________________________________________________
+    def cut_OneTau(self):
+        return self.chain.ntau == 1
+    #__________________________________________________________________________
+    def cut_OneJet(self):
+        return self.chain.njet == 1
     #__________________________________________________________________________
     def cut_OneMuon(self):
         return self.chain.nmuon == 1
@@ -152,10 +157,6 @@ class CutAlg(pyframe.core.Algorithm):
       return False
     
     #__________________________________________________________________________
-    def cut_OneJet(self):
-      return self.chain.njet == 1
-       
-    #__________________________________________________________________________
     def cut_OneTightJet(self):
       return len(self.store['jets_tight']) == 1
     
@@ -171,9 +172,22 @@ class CutAlg(pyframe.core.Algorithm):
           if j.tlv.Pt() > 50 * GeV: tight_jets_above_50.append(j)
       return len(tight_jets_above_50) == 2
 
+
+    #__________________________________________________________________________
+    def cut_LeadJetPt150(self):
+      return self.store['jets'][0].tlv.Pt()>150*GeV
+    #__________________________________________________________________________
+    def cut_LeadTauPt65(self):
+      return self.store['taus'][0].tlv.Pt()>65*GeV
+
+
     #__________________________________________________________________________
     def cut_EleVeto(self):
       return self.chain.nel == 0
+    
+    #__________________________________________________________________________
+    def cut_MuVeto(self):
+      return self.chain.nmuon == 0
 
     #__________________________________________________________________________
     def cut_OneOrTwoBjets(self):
@@ -637,6 +651,13 @@ class CutAlg(pyframe.core.Algorithm):
       return True
     
     #__________________________________________________________________________
+    def cut_LeadTauIsTight(self):
+      return self.store['taus'][0].isJetBDTTight
+    #__________________________________________________________________________
+    def cut_LeadTauNotTight(self):
+      return not self.store['taus'][0].isJetBDTTight
+    
+    #__________________________________________________________________________
     def cut_LeadMuIsLoose(self):
       muons = self.store['muons']
       lead_mu = muons[0]
@@ -763,12 +784,25 @@ class CutAlg(pyframe.core.Algorithm):
             muon_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
             event_is_triggered = bool( trig in passed_triggers )
             if muon_is_matched and event_is_triggered: 
-              print "pass"
               return True
       '''
 
       return False
+  
+
+    #__________________________________________________________________________
+    def cut_SingleJetTrigger(self):
+      required_triggers = self.store["reqTrig"]
+      passed_triggers   = self.store["passTrig"].keys()
    
+      lead_jet = self.store['jets'][0]
+
+      for t in required_triggers:
+        if t in passed_triggers: 
+          if lead_jet.tlv.Pt() >= self.store["passTrig"][t]["pt_slice"][0] and lead_jet.tlv.Pt() < self.store["passTrig"][t]["pt_slice"][1]:
+            return True
+      return False
+
 
     #__________________________________________________________________________
     def cut_TagIsMatched(self):
@@ -976,6 +1010,13 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_METhigh30(self):
       met = self.store["met_trk"]
       return met.tlv.Pt() > 30 * GeV
+    
+    #__________________________________________________________________________
+    def cut_TauJetDphi282(self):
+      lead_tau = self.store["taus"][0]
+      lead_jet = self.store["jets"][0]
+      if abs(lead_tau.tlv.DeltaPhi(lead_jet.tlv)) > 2.82: return True
+      return False
     
     #__________________________________________________________________________
     def cut_MuJetDphi27(self):

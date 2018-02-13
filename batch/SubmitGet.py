@@ -4,6 +4,8 @@ import subprocess
 
 from pyutils.utils import recreplace, mcstrings
 
+from SamplesID import SampleID
+
 ## list jobs output
 ## it wildcards around jtagsamp!
 
@@ -14,43 +16,48 @@ parser.add_option('-s', '--samp', dest='sample',
                   help='sample name',metavar='SAMP',default="")
 (options, args) = parser.parse_args()
 
+# prototype of sample name
+#user.tadej.SeeSaw.EXOT12MC.v1a.nominal.363355.e5525_e5984_s3126_r9781_r9778_p3371.rF1
+#user.tadej.SeeSaw.EXOT22Data.v1a.fakes.data15_13TeV.periodD.physics_Main.r1
 
+#user.fscutti.SSDiLep.SUSY11Data.v0.fakes.data17_13TeV.periodI.physics_Main.r3/
 
 # --------------
-#user  = "fscutti"
-#user  = "gucchiel"
-#user  = "mmuskinj"
-user  = "tadej"
+user  = "fscutti"
+#user  = "tadej"
 
 samp  = options.sample
 
 ##jtag = "EX12MC.v3.sys.003"
-#jtag = "ffres.v1.ff"
-#jtag = "H3D3.v1.FF"
 #jtag = "HIGG3D3MC.v2.fakes"
-jtag = "HIGG3D3Data.v2.fakes"
+#jtag = "EXOT22MC.v1a"
+#jtag = "EXOT12Data.v1a"
+jtag = "SUSY11Data.v1"
 
-#jtag  =  "EXOT12data_v3nom"      # done
-#jtag  =  "EXOT12data_v3nomi"
-#jtag  =  "EXOT12data_v3nomin"    # done
-
-#jtag  =  "EXOT12MC_v3n"
-#jtag  =  "EXOT12MC_v3no"         # done
-#jtag  =  "EXOT12MC_v3nom"        # done
-#jtag  =  "EXOT12MC_v3nomi"       # done
+# append here any last tag 
+# before the file type identifyier
+append_id = "r1"
 
 jtagsamp  = "%s.*%s*" % (jtag,samp)
 
-#jtype = "SSDiLep"
-jtype = "DiLepAna"
+
+jtype = "SSDiLep"
+#jtype = "SeeSaw"
+
 sys   = None
 if not sys: sys = "nominal"
+
+use_sample_id = True
 # --------------
 
 
 # --------------
+if append_id: jtagsamp+=".%s"%append_id
+
 SCRIPT     = os.path.join("/coepp/cephfs/mel/fscutti/Analysis/batch","Get.sh")
 OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/%s" % (jtag)
+
+if append_id: OUTDIR += ".%s"%append_id
 
 OUTMERGED  = os.path.join(OUTDIR,"merged",sys)
 OUTTREE    = os.path.join(OUTDIR,"tree",sys)
@@ -169,9 +176,19 @@ for k,v in outputs.iteritems():
   print 'downloading %s ...' % k
   job_name = recreplace(k,jrep)
   if job_name.startswith("."): job_name = job_name[1:]
-  if "physics_Main" in job_name: id = k.split(".")[7]+"_"+k.split(".")[6]
+  
+  # my config
+  #if "physics_Main" in job_name: id = k.split(".")[7]+"_"+k.split(".")[6]
   #else: id = k.split(".")[5]
-  else: id = k.split(".")[7]
+  
+  # tadej config
+  if "physics_Main" in job_name: id = k.split(".")[6]+"_"+k.split(".")[7]
+  else: id = k.split(".")[6]
+  
+  # replace number with name of sample
+  if use_sample_id  and not "physics_Main" in job_name:
+    id = SampleID[int(id)]
+  
   merged = recreplace(id, mcstrings)
   
   vars=[]

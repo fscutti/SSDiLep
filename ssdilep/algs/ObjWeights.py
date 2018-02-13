@@ -25,7 +25,7 @@ import pyframe
 # pyutils
 import rootutils
 
-GeV = 1000.0
+from units import GeV
 
 #------------------------------------------------------------------------------
 class MuAllSF(pyframe.core.Algorithm):

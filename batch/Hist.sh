@@ -105,11 +105,11 @@ echo "copying input locally..."
 # avoid to fuck the cluster up:
 # -----------------------------
 
-cgcreate -a ${USER} -t ${USER} -g cpuset,cpu,memory:${USER}/${PBS_JOBID}
-cp /cgroup/cpuset/${USER}/cpuset.mems /cgroup/cpuset/${USER}/cpuset.cpus /cgroup/cpuset/${USER}/${PBS_JOBID}
-MEMLIMIT="$((4 * ${NCORES}))"
-echo "${MEMLIMIT}000000000" > /cgroup/cpuset/${USER}/${PBS_JOBID}/memory.limit_in_bytes
-echo $$ > /cgroup/cpuset/${USER}/${PBS_JOBID}/tasks
+cgcreate -a ${USER}:people -t ${USER}:people -g cpu,memory:user/${USER}/${PBS_JOBID}
+MEMLIMIT="$((3 * ${NCORES}))"
+echo "${MEMLIMIT}g" > /cgroup/memory/user/${USER}/${PBS_JOBID}/memory.limit_in_bytes
+echo $$ > /cgroup/memory/user/${USER}/${PBS_JOBID}/tasks
+
 
 echo ""
 echo "executing job..."

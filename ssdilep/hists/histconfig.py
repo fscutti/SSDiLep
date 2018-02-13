@@ -78,7 +78,7 @@ h_njets = Hist1D( hname  = "h_njets",
                               xmin   = 0,
                               xmax   = 8,
                               dir    = "event",
-                              vexpr  = "self.chain.njets",
+                              vexpr  = "self.chain.njet",
                             )
 
 h_muons_chargeprod  = Hist1D( hname  = "h_muons_chargeprod",
@@ -161,14 +161,44 @@ h_mujet_dphi  = Hist1D( hname  = "h_mujet_dphi",
                               vexpr  = "self.store['mujet_dphi']",
                             )
 
-h_scdphi  = Hist1D( hname  = "h_scdphi",
-                              xtitle = "#Sigma cos#Delta#phi",
+h_mujet_scdphi  = Hist1D( hname  = "h_mujet_scdphi",
+                              xtitle = "#Sigma cos#Delta#phi(#mu,jet)",
                               ytitle = "Events", 
                               nbins  = 400,
                               xmin   = -2.,
                               xmax   = 2.,
                               dir    = "event",
-                              vexpr  = "self.store['scdphi']",
+                              vexpr  = "self.store['mujet_scdphi']",
+                            )
+
+h_taujet_dphi  = Hist1D( hname  = "h_taujet_dphi",
+                              xtitle = "#Delta#phi(#tau_{lead},jet_{lead})",
+                              ytitle = "Events", 
+                              nbins  = 64,
+                              xmin   = -3.2,
+                              xmax   = 3.2,
+                              dir    = "event",
+                              vexpr  = "self.store['taujet_dphi']",
+                              )
+
+h_taujet_scdphi  = Hist1D( hname  = "h_taujet_scdphi",
+                           xtitle = "#Sigma cos#Delta#phi(#tau,jet)",
+                           ytitle = "Events", 
+                           nbins  = 400,
+                           xmin   = -2.,
+                           xmax   = 2.,
+                           dir    = "event",
+                           vexpr  = "self.store['taujet_scdphi']",
+                           )
+
+h_taujet_ptratio  = Hist1D( hname  = "h_taujet_ptratio",
+                            xtitle = "#Delta#phi(#tau_{lead},jet_{lead})",
+                            ytitle = "Events", 
+                            nbins  = 64,
+                            xmin   = 0.,
+                            xmax   = 2.,
+                            dir    = "event",
+                            vexpr  = "self.store['taujet_ptratio']",
                             )
 
 
@@ -185,6 +215,61 @@ h_jetlead_pt  = Hist1D( hname  = "h_jetlead_pt",
                               vexpr  = "self.store['jets'][0].tlv.Pt()/GeV",
                             )
 
+h_jetlead_eta = Hist1D( hname  = "h_jetlead_eta",
+                              xtitle = "#eta(jet_{lead})",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 50,
+                              xmin   = -2.5,
+                              xmax   = 2.5,
+                              dir    = "jets",
+                              vexpr  = "self.store['jets'][0].tlv.Eta()",
+                            )
+
+h_jetlead_phi = Hist1D( hname  = "h_jetlead_phi",
+                              xtitle = "#phi(jet_{lead})",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 64,
+                              xmin   = -3.2,
+                              xmax   = 3.2,
+                              dir    = "jets",
+                              vexpr  = "self.store['jets'][0].tlv.Phi()",
+                            )
+
+# -------
+# taus
+# -------
+
+# taulead
+# ------
+h_taulead_pt = Hist1D( hname  = "h_taulead_pt",
+                              xtitle = "p_{T}(#tau_{lead}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].tlv.Pt() / GeV",
+                            )
+
+h_taulead_eta = Hist1D( hname  = "h_taulead_eta",
+                              xtitle = "#eta(#tau_{lead})",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 50,
+                              xmin   = -2.5,
+                              xmax   = 2.5,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].tlv.Eta()",
+                            )
+
+h_taulead_phi = Hist1D( hname  = "h_taulead_phi",
+                              xtitle = "#phi(#tau_{lead})",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 64,
+                              xmin   = -3.2,
+                              xmax   = 3.2,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].tlv.Phi()",
+                            )
 
 # -------
 # muons

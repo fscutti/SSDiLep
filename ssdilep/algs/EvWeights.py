@@ -24,7 +24,7 @@ import pyframe
 # pyutils
 import rootutils
 
-GeV = 1000.0
+from units import GeV
 
 #------------------------------------------------------------------------------
 class TrigPresc(pyframe.core.Algorithm):
@@ -36,23 +36,25 @@ class TrigPresc(pyframe.core.Algorithm):
     def __init__(self, 
           cutflow     = None,
           #use_avg     = None,
+          particles   = None,
           key         = None):
         pyframe.core.Algorithm.__init__(self, name="TrigPresc", isfilter=True)
         self.cutflow     = cutflow
         #self.use_avg     = use_avg
+        self.particles   = particles
         self.key         = key
     #__________________________________________________________________________
     def execute(self, weight):
         trigpresc = 1.0
         
         # luminosity weighted prescales
-        presc_dict = {
-            "HLT_mu20_L1MU15"     : 354.153, 
-            "HLT_mu24"            : 47.64, 
-            "HLT_mu50"            : 1.0,
-            #"HLT_mu26_imedium"    : 1.943,
-            "HLT_mu26_ivarmedium" : 1.098,
-            }
+        #presc_dict = {
+        #    "HLT_mu20_L1MU15"     : 354.153, 
+        #    "HLT_mu24"            : 47.64, 
+        #    "HLT_mu50"            : 1.0,
+        #    #"HLT_mu26_imedium"    : 1.943,
+        #    "HLT_mu26_ivarmedium" : 1.098,
+        #    }
 
         if "data" in self.sampletype:
           ineff_list = []
@@ -66,9 +68,16 @@ class TrigPresc(pyframe.core.Algorithm):
             
             # used for fake-factors
             # ----------------------
+            #if trig in self.store["passTrig"].keys(): 
+            #  for mu in self.store["muons"]:
+            #    ineff_list.append(1. - 1. / presc_dict[trig])
+
+
+            # used for new fake-factors
+            # ----------------------
             if trig in self.store["passTrig"].keys(): 
-              for mu in self.store["muons"]:
-                ineff_list.append(1. - 1. / presc_dict[trig])
+              for p in self.store[self.particles]:
+                ineff_list.append(1. - 1. / self.store["passTrig"][trig]["prescale"])
 
           if ineff_list:
             tot_ineff = 1.0
@@ -77,7 +86,7 @@ class TrigPresc(pyframe.core.Algorithm):
         
         trigpresc = 1. / trigpresc
 
-        if self.key: 
+        if self.key:
           self.store[self.key] = trigpresc
         self.set_weight(trigpresc*weight)
         return True

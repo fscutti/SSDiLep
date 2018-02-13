@@ -9,7 +9,7 @@ import os
 import pyframe
 import ROOT
 
-GeV = 1000.0
+from units import GeV
 
 import logging
 log = logging.getLogger(__name__)
