@@ -44,7 +44,8 @@ parser.add_option('-t', '--tag', dest='tag',
 #lumi =  18232.8
 #lumi =  (33257.2 + 3212.96) * 1.05
 #lumi =  (33257.2 + 3212.96) * 0.95
-lumi = 32861.6 + 3212.96
+#lumi = 32861.6 + 3212.96
+lumi = 80000.
 
 
 # Control regions

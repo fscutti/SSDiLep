@@ -1,4 +1,4 @@
-#PBS -l walltime=40:00:00
+#PBS -l walltime=6:00:00
 #PBS -l pmem=1gb
 
 #!/bin/bash
@@ -85,10 +85,14 @@ SAMPLENAME=${arrIN[0]}
 INPUT=${arrIN[1]}
 OUTPUT=${arrIN[2]}
 SAMPLETYPE=${arrIN[3]}
-CFG=${arrIN[4]}
+MINENTRY=${arrIN[4]}
+MAXENTRY=${arrIN[5]}
+CFG=${arrIN[6]}
 
 echo "SAMPLENAME: ${SAMPLENAME}"
 echo "SAMPLETYPE: ${SAMPLETYPE}"
+echo "MINENTRY:   ${MINENTRY}"
+echo "MAXENTRY:   ${MAXENTRY}"
 echo "INPUT:      ${INPUT}"
 echo "CFG:        ${CFG}"
 
@@ -113,9 +117,9 @@ echo $$ > /cgroup/memory/user/${USER}/${PBS_JOBID}/tasks
 
 echo ""
 echo "executing job..."
-echo ${SCRIPT} --input ${INPUT} --samplename ${SAMPLENAME} --sampletype ${SAMPLETYPE} --config "${CFG}"
+echo ${SCRIPT} --input ${INPUT} --samplename ${SAMPLENAME} --sampletype ${SAMPLETYPE} --minentry ${MINENTRY} --maxentry ${MAXENTRY} --config "${CFG}"
 
-${SCRIPT} --input ${INPUT} --samplename ${SAMPLENAME} --sampletype ${SAMPLETYPE} --config "${CFG}"
+${SCRIPT} --input ${INPUT} --samplename ${SAMPLENAME} --sampletype ${SAMPLETYPE} --minentry ${MINENTRY} --maxentry ${MAXENTRY} --config "${CFG}"
 
 
 echo "finished execution"

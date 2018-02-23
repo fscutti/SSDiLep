@@ -69,7 +69,8 @@ class MuAllSF(pyframe.core.Algorithm):
         
           if "mc" in self.sampletype: 
             
-            if muon.isTruthMatchedToMuon:
+            #if muon.isTruthMatchedToMuon:
+            if muon.isTrueIsoMuon():
               if not ("Not" in self.mu_iso):
                 sf *= getattr(muon,"_".join(["IsoEff","SF","Iso"+self.mu_iso])).at(0)
                 # EXOT12 v1 ntuples 

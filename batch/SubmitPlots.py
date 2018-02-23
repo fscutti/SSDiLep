@@ -15,14 +15,8 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-#indir    = 'HistFFFullBVeto17May'
-#outdir   = 'PlotsFFFullBVeto17May'
-
-#indir    = 'HistFF25Mar'
-#outdir   = 'PlotsFF25Mar'
-
-indir    = 'HistFFJustOnePlot'
-outdir   = 'PlotsFFJustOnePlot'
+indir    = 'HistFFltt'
+outdir   = 'PlotsFFltt'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -81,11 +75,32 @@ regions["ProbeTight_R4"] = [4, "AntiTruth_OS",   "antitruth_os"]
 regions["ProbeLoose_R4"] = [4, "AntiTruth_OS",   "antitruth_os"]
 """
 #"""
-regions["FAKES_NUM_F0"]   = [2,  "tight", "bveto"]
-regions["FAKES_DEN_F0"]   = [2,  "loose", "bveto"]
+#regions["FAKES_NUM_F0"]   = [2,  "tight", "bveto"]
+#regions["FAKES_DEN_F0"]   = [2,  "loose", "bveto"]
 
 regions["FAKES_NUM_F1"]   = [6,  "tight", "bveto"]
 regions["FAKES_DEN_F1"]   = [6,  "loose", "bveto"]
+
+regions["FAKES_NUM_F2"]   = [6,  "tight", "bveto"]
+regions["FAKES_DEN_F2"]   = [6,  "loose", "bveto"]
+
+regions["FAKES_NUM_F3"]   = [6,  "tight", "bveto"]
+regions["FAKES_DEN_F3"]   = [6,  "loose", "bveto"]
+
+regions["FAKES_NUM_F4"]   = [6,  "tight", "bveto"]
+regions["FAKES_DEN_F4"]   = [6,  "loose", "bveto"]
+
+regions["FAKES_NUM_F5"]   = [6,  "tight", "bveto"]
+regions["FAKES_DEN_F5"]   = [6,  "loose", "bveto"]
+
+regions["FAKES_NUM_F6"]   = [6,  "tight", "bveto"]
+regions["FAKES_DEN_F6"]   = [6,  "loose", "bveto"]
+
+regions["FAKES_NUM_F7"]   = [6,  "tight", "bveto"]
+regions["FAKES_DEN_F7"]   = [6,  "loose", "bveto"]
+
+regions["FAKES_NUM_F8"]   = [6,  "tight", "bveto"]
+regions["FAKES_DEN_F8"]   = [6,  "loose", "bveto"]
 #"""
 
 #regions["FAKESVR1_MAINREG"] = [3, "CR_Mvis<200GeV",   "newfull"]
@@ -174,7 +189,7 @@ for REG,OPT in regions.iteritems():
     job_vars['ICUT']     = OPT[0]
     job_vars['LAB']      = OPT[1]
     job_vars['TAG']      = OPT[2]
-    job_vars['MAKEPLOT'] = True
+    job_vars['MAKEPLOT'] = False
     job_vars['FAKEST']   = fake_estimate
     
     VARS = []

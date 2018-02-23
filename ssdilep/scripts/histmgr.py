@@ -29,7 +29,6 @@ class HistMgr():
     def __init__(self,
             basedir = None,
             target_lumi = None,
-            #cutflow_histname = 'BaselineSelection/h_cut_flow',
             cutflow_histname = 'MetaData_EventCount', ### IMPORTANT: verify origin of the cutflow hist!!!
             ):
         self.basedir = basedir
@@ -37,7 +36,7 @@ class HistMgr():
         self.cutflow_histname = cutflow_histname
 
     #____________________________________________________________
-    def get_file_path(self,samplename=None,sys=None,mode=None):
+    def get_files_paths(self,samplename=None,sys=None,mode=None,get_slices=True,get_first_item=False):
         '''
         construct path to file for sample+systematic
         '''
@@ -48,11 +47,21 @@ class HistMgr():
             else:            syspath = sys.var_dn
 
         ## get file path
-        path_to_file = ''
-        path_to_file = os.path.join(self.basedir,syspath)
-        filename = '%s.root' % (samplename)
-        path_to_file = os.path.join(path_to_file,filename)
-        return path_to_file
+        paths_to_files = []
+        common_file_path = os.path.join(self.basedir,syspath)
+        
+        for infile in os.listdir(common_file_path):
+          if get_slices:
+            if os.path.isfile(os.path.join(common_file_path,infile)) and samplename+"_slice" in infile:
+              paths_to_files.append(os.path.join(common_file_path,infile))
+          else: 
+            if os.path.isfile(os.path.join(common_file_path,infile)) and samplename+"." in infile:
+              paths_to_files.append(os.path.join(common_file_path,infile))
+        
+        if get_first_item:
+          return paths_to_files[0]
+        else:
+          return paths_to_files
 
     #____________________________________________________________
     def hist(self, # retrieve folder with longer name
@@ -69,49 +78,72 @@ class HistMgr():
         if sys: 
             assert mode in ['up','dn'], "mode must be either 'up' or 'dn'"
 
-        path_to_file = self.get_file_path(samplename,sys,mode)
+        paths_to_files = self.get_files_paths(samplename,sys,mode,get_slices=True)
 
-        f = ROOT.TFile.Open(path_to_file)
-        assert f, 'Failed to open input file!'
+        ####
 
-        ## get hist path
-        path_to_hist = ''
-        
-        if region != None:
-           path_to_hist = os.path.join('regions',region)
+        h_list = []
+        f_list = []
+
+        for path in paths_to_files:
+           #print "This is the path ", path
+           f = ROOT.TFile.Open(path)
+           #print "new appending %s to list of slices"%path
+           f_list.append(f)
+           assert f, 'Failed to open input file!'
            
-           ## check region exists
-           if not f.Get(path_to_hist):
-               f.Close()
-               return None
-           cutflow = get_icut_path(path_to_file, path_to_hist, icut)
+           ## get hist path
+           path_to_hist = ''
            
-           if icut == 0: pass #cutflow = "ALL"
-           if not cutflow: 
-               log.debug( '%s no cut: %s'% (samplename,icut) )
-               f.Close()
-               return None
-           path_to_hist = os.path.join(path_to_hist,cutflow)
-          
-        path_to_hist = os.path.join(path_to_hist,histname)
-        
-        h = f.Get(path_to_hist)
-        
-        if not h:
-            f.Close()
-            print 'failed retrieveing hist: %s:%s'%(path_to_file,path_to_hist)
-            return None
-        
-        h = h.Clone()
-        h.SetDirectory(0)
-        f.Close()
+           if region != None:
+              #print "looking for region %s"%region
+              path_to_hist = os.path.join('regions',region)
 
+              ## check region exists
+              if not f.Get(path_to_hist):
+                  f.Close()
+                  return None
+              cutflow = get_icut_path(path, path_to_hist, icut)
+              
+              if icut == 0: pass #cutflow = "ALL"
+              if not cutflow: 
+                  log.debug( '%s no cut: %s'% (samplename,icut) )
+                  f.Close()
+                  return None
+              path_to_hist = os.path.join(path_to_hist,cutflow)
+             
+           path_to_hist = os.path.join(path_to_hist,histname)
+           #print "found path to hist %s"%path_to_hist
+
+           h = f.Get(path_to_hist)
+           #print "got histogram %s"%h.GetName()
+           
+           if not h:
+               f.Close()
+               #print 'failed retrieveing hist: %s:%s'%(path_to_file,path_to_hist)
+               return None
+           
+           h = h.Clone()
+           #h.SetDirectory(0)
+           #print "This is the histogram"
+           #print h
+           h_list.append(h)
+           #print "This is the list inside"
+           #print h_list
+        
+        #print "This is the list outside"
+        #print h_list        
+        h_sum = h_list[0]
+        for h in h_list[1:]: h_sum.Add(h)
+
+        #for f in f_list: f.Close()
+        
         ## apply flat sys (if specified)
         if sys and sys.flat_err:
-            if mode == 'up': h.Scale(1.+sys.flat_err)
-            else:            h.Scale(1.-sys.flat_err)
+            if mode == 'up': h_sum.Scale(1.+sys.flat_err)
+            else:            h_sum.Scale(1.-sys.flat_err)
 
-        return h
+        return h_sum
           
     #____________________________________________________________
     def get_nevents(self,samplename,sys=None,mode=None):
@@ -123,7 +155,7 @@ class HistMgr():
         assert samplename, 'must provide samplename'
     
         nevents = None 
-        path_to_file = self.get_file_path(samplename,sys,mode)
+        path_to_file = self.get_files_paths(samplename,sys,mode,get_slices=True,get_first_item=True)
         f = ROOT.TFile.Open(path_to_file)
         if f:
             h = f.Get(self.cutflow_histname)

@@ -451,12 +451,12 @@ vars_list = []
 # ---------------
 #"""
 vars_list.append(averageIntPerXing)
-vars_list.append(actualIntPerXing)
-vars_list.append(NPV)
+#vars_list.append(actualIntPerXing)
+#vars_list.append(NPV)
 vars_list.append(nmuons)
-vars_list.append(nelectrons)
+#vars_list.append(nelectrons)
 vars_list.append(njets)
-vars_list.append(nmuonpairs)
+#vars_list.append(nmuonpairs)
 
 vars_list.append(mulead_pt)
 vars_list.append(mulead_eta)
@@ -464,14 +464,14 @@ vars_list.append(mulead_phi)
 vars_list.append(mulead_trkd0)
 vars_list.append(mulead_trkd0sig)
 vars_list.append(mulead_trkz0)
-vars_list.append(mulead_trkz0sintheta)
-vars_list.append(mulead_ptvarcone30)
+#vars_list.append(mulead_trkz0sintheta)
+#vars_list.append(mulead_ptvarcone30)
 
-vars_list.append(met_clus_et)
-vars_list.append(met_clus_phi)
-vars_list.append(met_clus_sumet)
+#vars_list.append(met_clus_et)
+#vars_list.append(met_clus_phi)
+#vars_list.append(met_clus_sumet)
 #"""
-#vars_list.append(met_trk_et)
+vars_list.append(met_trk_et)
 
 
 # -------------
@@ -490,11 +490,11 @@ vars_list.append(probe_ptvarcone30)
 # ---------------------
 # just for fake-factors
 # ---------------------
-"""
+#"""
 vars_list.append(mujet_dphi)
-vars_list.append(scdphi)
+#vars_list.append(scdphi)
 vars_list.append(jetlead_pt)
-"""
+#"""
 
 # ---------------------
 # for validation

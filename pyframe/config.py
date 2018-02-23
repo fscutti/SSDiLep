@@ -11,7 +11,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--channel"    , default=0  , help="Channel number for juggling similar analyses.")
 parser.add_argument("--execfiles"  , default="" , help="Comma-separated list of files to be executed by config.")
 parser.add_argument("--input"      , default="" , help="Comma-separated list of input ROOT files.")
-parser.add_argument("--events"     , default=0  , help="Maximum number of events considered by EventLoop.")
+parser.add_argument("--events"     , default=0  , help="Maximum number of events  considered by EventLoop.")
+parser.add_argument("--minentry"   , default=0  , help="Minimum entry index considered by EventLoop.")
+parser.add_argument("--maxentry"   , default=-1 , help="Maximum entry index  considered by EventLoop.")
 parser.add_argument("--proc"       , default=0  , help="Number of parallel processes to run.")
 parser.add_argument("--samplename" , default="" , help="Name of sample (eg Ztautau, Zee).")
 parser.add_argument("--sampletype" , default="" , help="Type of sample (eg data12-Muons, mc12, AF2")
@@ -43,12 +45,14 @@ def main(analyze):
     
     # config defaults
     config = {}
-    config["channel"] = 0
-    config["events"]  = -1
-    config["input"]   = []
-    config["proc"]    = 0
-    config["tree"]    = "tau"
-    config["version"] = ""
+    config["channel"]   = 0
+    config["minentry"]  = 0
+    config["maxentry"]  = -1
+    config["events"]    = -1
+    config["input"]     = []
+    config["proc"]      = 0
+    config["tree"]      = "tau"
+    config["version"]   = ""
 
     # get config from the argument config files
     if ops.execfiles:
@@ -57,7 +61,9 @@ def main(analyze):
             execfile(_file)
 
     # get config from the command-line
-    if ops.events     : config["events"]     = int(ops.events)
+    if ops.events     : config["events"]   = int(ops.events)
+    if ops.minentry   : config["minentry"]   = int(ops.minentry)
+    if ops.maxentry   : config["maxentry"]   = int(ops.maxentry)
     if ops.channel    : config["channel"]    = int(ops.channel)
     if ops.tree       : config["tree"]       = ops.tree
     if ops.version    : config["version"]    = ops.version

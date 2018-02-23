@@ -77,6 +77,7 @@ class TrigPresc(pyframe.core.Algorithm):
             # ----------------------
             if trig in self.store["passTrig"].keys(): 
               for p in self.store[self.particles]:
+                if self.store["passTrig"][trig]["prescale"] == 0.: continue
                 ineff_list.append(1. - 1. / self.store["passTrig"][trig]["prescale"])
 
           if ineff_list:
@@ -201,7 +202,8 @@ class MuTrigSF(pyframe.core.Algorithm):
             eff_data_muon = 1.0 
             eff_mc_muon   = 1.0
 
-            if m.isTruthMatchedToMuon: 
+            #if m.isTruthMatchedToMuon: 
+            if m.isTrueIsoMuon(): 
               for trig in self.trig_list:
                 
                 sf_muon  = getattr(m,"_".join(["TrigEff","SF",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
@@ -260,7 +262,8 @@ class GlobalBjet(pyframe.core.Algorithm):
       if "mc" in self.sampletype: 
         jets = self.store['jets_tight']
         for jet in jets:
-          sf *= getattr(jet,"SFFix77").at(0)
+          if jet.is_MV2c10_FixedCutBEff_77: 
+            sf *= getattr(jet,"SF_MV2c10_FixedCutBEff_77").at(0)
 
       if self.key: 
         self.store[self.key] = sf

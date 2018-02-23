@@ -65,7 +65,8 @@ def analyze(config):
     ## trig list to the store for later cutflow
     ## ---------------------------------------
     loop += ssdilep.algs.vars.BuildTrigConfig(
-        required_triggers = ['HLT_j15', 
+        required_triggers = [
+                             'HLT_j15', 
                              'HLT_j25', 
                              'HLT_j35', 
                              'HLT_j55', 
@@ -76,14 +77,14 @@ def analyze(config):
                              'HLT_j175',
                              'HLT_j200',
                              'HLT_j260',
-                             'HLT_j300',
                              'HLT_j320',
                              'HLT_j360',
                              'HLT_j380',
                              'HLT_j400',
                              'HLT_j420',
                              'HLT_j440',
-                             'HLT_j460'],
+                             'HLT_j460',
+                             ],
         key               = 'jets',
         )
 

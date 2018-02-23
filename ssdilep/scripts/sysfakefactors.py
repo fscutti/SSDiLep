@@ -9,20 +9,16 @@ ROOT.gStyle.SetOptStat(0000)
 # config
 # -------------------------------------------------------------------------------------
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/Fakes23Jan"
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesSet2"
-#tag     = "rew"
-#tag     = "bveto"
-tag     = "s2"
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesLTT"
+tag     = "bveto"
 name    = "data"
 
 # pt
 var     = "mulead_pt"
 axislab = "p_{T}(#mu_{lead}) [GeV]"
 
-#new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,60.,300.])
-new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,300.])
-
-
+#new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,300.])
+new_bins = array('d', [0.,25.,28.,30.,32.,36.,300.])
 
 
 #new_bins = array('d', [0.,25.,28.,32.,36.,40.,45.,60.,80.,300.])

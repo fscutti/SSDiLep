@@ -48,12 +48,12 @@ class BuildTrigConfig(pyframe.core.Algorithm):
       # slices for jet triggers
       # -----------------------
       jet_trigger_slice = {}
-      jet_trigger_slice["HLT_j15"]  = (17. * GeV,  nolim * GeV)
-      jet_trigger_slice["HLT_j25"]  = (30. * GeV,  nolim * GeV)
-      jet_trigger_slice["HLT_j35"]  = (40. * GeV,  nolim * GeV)
-      jet_trigger_slice["HLT_j55"]  = (60. * GeV,  nolim * GeV)
-      jet_trigger_slice["HLT_j60"]  = (66. * GeV,  nolim * GeV)
-      jet_trigger_slice["HLT_j85"]  = (94. * GeV,  nolim * GeV)
+      jet_trigger_slice["HLT_j15"]  = (17.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j25"]  = (30.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j35"]  = (40.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j55"]  = (60.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j60"]  = (66.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j85"]  = (94.  * GeV, nolim * GeV)
       jet_trigger_slice["HLT_j110"] = (120. * GeV, nolim * GeV)
       jet_trigger_slice["HLT_j150"] = (165. * GeV, nolim * GeV)
       jet_trigger_slice["HLT_j175"] = (195. * GeV, nolim * GeV)
@@ -66,9 +66,18 @@ class BuildTrigConfig(pyframe.core.Algorithm):
       jet_trigger_slice["HLT_j440"] = (485. * GeV, nolim * GeV)
       jet_trigger_slice["HLT_j460"] = (505. * GeV, nolim * GeV)
 
+
+      # slices for muon triggers
+      # ------------------------
+      mu_trigger_slice = {}
+      mu_trigger_slice["HLT_mu24"]  = (26. * GeV,  nolim * GeV)
+      mu_trigger_slice["HLT_mu50"]  = (43. * GeV,  nolim * GeV)
+
+
       # initialise the different slices
       pt_slice = {}
       if self.key == "jets": pt_slice = jet_trigger_slice
+      if self.key == "muons": pt_slice = mu_trigger_slice
 
       if not "reqTrig" in self.store.keys():
         self.store["reqTrig"] = self.required_triggers
@@ -76,7 +85,8 @@ class BuildTrigConfig(pyframe.core.Algorithm):
       if not "passTrig" in self.store.keys():
         self.store["passTrig"] = {}
         for trig,presc in zip(self.chain.passedTriggers,self.chain.triggerPrescales):
-          self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":pt_slice[trig]}
+          if trig in pt_slice.keys():
+            self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":pt_slice[trig]}
 
       """
       mGeV = GeV * 1.0
@@ -149,11 +159,13 @@ class Particle(pyframe.core.ParticleProxy):
     #__________________________________________________________________________
     def isTrueNonIsoMuon(self):
       matchtype = self.truthType in [5,7,8]
-      return self.isTruthMatchedToMuon and matchtype
+      #return self.isTruthMatchedToMuon and matchtype
+      return matchtype
     #__________________________________________________________________________
     def isTrueIsoMuon(self):
       matchtype = self.truthType in [6]
-      return self.isTruthMatchedToMuon and matchtype
+      #return self.isTruthMatchedToMuon and matchtype
+      return matchtype
 
 
 class ParticlesBuilder(pyframe.core.Algorithm):
@@ -364,11 +376,13 @@ class DiJetVars(pyframe.core.Algorithm):
                  key_leptons = 'taus',
                  key_jets    = 'jets',
                  key_met     = 'met_trk',
+                 build_tight_jets = False,
                  ):
         pyframe.core.Algorithm.__init__(self, name)
         self.key_leptons = key_leptons
         self.key_jets = key_jets
         self.key_met = key_met
+        self.build_tight_jets = build_tight_jets
 
     #__________________________________________________________________________
     def execute(self, weight):
@@ -384,11 +398,13 @@ class DiJetVars(pyframe.core.Algorithm):
         met = self.store[self.key_met]
         jets = self.store[self.key_jets]
        
-        prefix = self.key_leptons[:-1]
+        prefix = ""
+        if self.key_leptons == "muons": prefix = "mu"
+        if self.key_leptons == "taus": prefix = "tau"
 
-        # -------------------------
-        # at least a muon and a jet
-        # -------------------------
+        # ---------------------------
+        # at least a lepton and a jet
+        # ---------------------------
         
         if bool(len(jets)) and bool(len(leptons)):
           self.store['%sjet_dphi'%prefix] = leptons[0].tlv.DeltaPhi(jets[0].tlv)
@@ -402,25 +418,24 @@ class DiJetVars(pyframe.core.Algorithm):
         # -------------------------
         # build tight jets
         # -------------------------
-        """
-        jets_tight = []
-        jets_nontight = []
-        for jet in jets:
-          if jet.JvtPass_Medium and jet.fJvtPass_Medium and abs(jet.eta) <= 2.8:
-            jets_tight += [jet]
-          else:
-            jets_nontight += [jet]
-
-        jets_tight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
-        jets_nontight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
-        
-        if len(jets_tight) > 1:
-          assert jets_tight[0].tlv.Pt() >= jets_tight[1].tlv.Pt(), "jets_tight not sorted.."
-        if len(jets_nontight) > 1:
-          assert jets_nontight[0].tlv.Pt() >= jets_nontight[1].tlv.Pt(), "jets_nontight not sorted.."
-        self.store['jets_tight'] = jets_tight        
-        self.store['jets_nontight'] = jets_nontight        
-        """
+        if self.build_tight_jets:
+           jets_tight = []
+           jets_nontight = []
+           for jet in jets:
+             if jet.JvtPass_Medium and jet.fJvtPass_Medium and abs(jet.eta) <= 2.8:
+               jets_tight += [jet]
+             else:
+               jets_nontight += [jet]
+           
+           jets_tight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
+           jets_nontight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
+           
+           if len(jets_tight) > 1:
+             assert jets_tight[0].tlv.Pt() >= jets_tight[1].tlv.Pt(), "jets_tight not sorted.."
+           if len(jets_nontight) > 1:
+             assert jets_nontight[0].tlv.Pt() >= jets_nontight[1].tlv.Pt(), "jets_nontight not sorted.."
+           self.store['jets_tight'] = jets_tight        
+           self.store['jets_nontight'] = jets_nontight        
         return True
 
 

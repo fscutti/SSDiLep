@@ -194,14 +194,21 @@ class CutAlg(pyframe.core.Algorithm):
         nbjets = 0
         jets = self.store['jets']
         for jet in jets:
-          if jet.isFix77: nbjets += 1
+          if jet.is_MV2c10_FixedCutBEff_77: nbjets += 1
         return nbjets in [1,2]
+    
+    #__________________________________________________________________________
+    def cut_AtLeastOneBjet(self):
+        jets = self.store['jets_tight']
+        for jet in jets:
+          if jet.is_MV2c10_FixedCutBEff_77: return True
+        return False
     
     #__________________________________________________________________________
     def cut_BVeto(self):
         jets = self.store['jets_tight']
         for jet in jets:
-          if jet.isFix77: return False
+          if jet.is_MV2c10_FixedCutBEff_77: return False
         return True
     
     #__________________________________________________________________________
@@ -800,6 +807,19 @@ class CutAlg(pyframe.core.Algorithm):
       for t in required_triggers:
         if t in passed_triggers: 
           if lead_jet.tlv.Pt() >= self.store["passTrig"][t]["pt_slice"][0] and lead_jet.tlv.Pt() < self.store["passTrig"][t]["pt_slice"][1]:
+            return True
+      return False
+    
+    #__________________________________________________________________________
+    def cut_SingleMuTrigger(self):
+      required_triggers = self.store["reqTrig"]
+      passed_triggers   = self.store["passTrig"].keys()
+   
+      lead_mu = self.store['muons'][0]
+
+      for t in required_triggers:
+        if t in passed_triggers: 
+          if lead_mu.tlv.Pt() >= self.store["passTrig"][t]["pt_slice"][0] and lead_mu.tlv.Pt() < self.store["passTrig"][t]["pt_slice"][1]:
             return True
       return False
 

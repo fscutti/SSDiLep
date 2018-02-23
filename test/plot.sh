@@ -3,29 +3,29 @@
 # ------------
 # FAKE FACTORS
 # ------------
-python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F1" --lab="numerator" --tag="s1" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet1" --output="./" --makeplot=True --fakest="Subtraction"
-python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F1" --lab="denominator" --tag="s1" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet1" --output="./" --makeplot=True --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F1" --lab="numerator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F1" --lab="denominator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
 
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F2" --lab="numerator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F2" --lab="denominator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F2" --lab="numerator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F2" --lab="denominator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
 
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F3" --lab="numerator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F3" --lab="denominator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F3" --lab="numerator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F3" --lab="denominator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
 
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F4" --lab="numerator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F4" --lab="denominator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F4" --lab="numerator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F4" --lab="denominator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
 
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F5" --lab="numerator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F5" --lab="denominator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F5" --lab="numerator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F5" --lab="denominator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
 
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F6" --lab="numerator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F6" --lab="denominator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F6" --lab="numerator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F6" --lab="denominator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
 
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F7" --lab="numerator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F7" --lab="denominator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F7" --lab="numerator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F7" --lab="denominator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
 
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F8" --lab="numerator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
-#python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F8" --lab="denominator" --tag="s2" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSet2" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_NUM_F8" --lab="numerator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
+python ../ssdilep/scripts/merge.py --var="mulead_pt" --reg="FAKES_DEN_F8" --lab="denominator" --tag="ltt" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFltt" --output="./" --makeplot=False --fakest="Subtraction"
 
 
 
