@@ -13,17 +13,18 @@
 #INPATH="/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v12/merged/nominal"
 
 
-#INPATH="/coepp/cephfs/share/atlas/SSDiLep/SUSY11Data.v1.r1/merged/nominal"
+INPATH="/coepp/cephfs/share/atlas/SSDiLep/SUSY11Data.v2.r3/merged/nominal"
 
 #INPATH="/coepp/cephfs/share/atlas/SSDiLep/EXOT22Data.v1a/merged/nominal"
-INPATH="/coepp/cephfs/share/atlas/SSDiLep/EXOT22MC.v1a/merged/nominal"
+#INPATH="/coepp/cephfs/share/atlas/SSDiLep/EXOT22MC.v1a/merged/nominal"
 
 #INPATH="/data/fscutti/ORstudy/ORtest"
 
 
 INSCRIPT="../ssdilep/run"
 
-SCRIPT="j.plotter_MuFF.py"
+#SCRIPT="j.plotter_MuFF.py"
+SCRIPT="j.plotter_TauFF.py"
 #SCRIPT="j.plotter_TEST.py"
 #SCRIPT="j.plotter_VR_OneMuPair.py"
 #SCRIPT="j.plotter_TAndP.py"
@@ -35,9 +36,9 @@ SCRIPT="j.plotter_MuFF.py"
 #SCRIPT="j.plotter_VR4.py"
 #SCRIPT="j.plotter_VR5.py"
 
-#python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/data16_13TeV_periodC.root --sampletype="data" --samplename="data16_13TeV_periodC" --minentry=101 --maxentry=200 #--events=20000   #--config="sys:FF_DN" 
+python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/data16_13TeV_periodC.root --sampletype="data" --samplename="data16_13TeV_periodC" --events=20000   #--config="sys:FF_DN" 
 
-python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CFilterBVeto.root --sampletype="mc" --samplename="Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CFilterBVeto" --events=20000   #--config="sys:FF_DN" 
+#python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CFilterBVeto.root --sampletype="mc" --samplename="Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CFilterBVeto" --events=20000   #--config="sys:FF_DN" 
 
 
 #python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/physics_Main_00280273.root --sampletype="data"  #--events=20000

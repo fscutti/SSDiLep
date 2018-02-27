@@ -121,7 +121,7 @@ def analyze(config):
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.EvWeights.MCEventWeight(cutflow='presel',key='weight_mc_event')
     loop += ssdilep.algs.EvWeights.Pileup(cutflow='presel',key='weight_pileup')
-    loop += ssdilep.algs.EvWeights.TrigPresc(cutflow='presel',particles="jets",key="weight_data_unpresc")
+    ##loop += ssdilep.algs.EvWeights.TrigPresc(cutflow='presel',particles="jets",key="weight_data_unpresc")
    
     ## initialize and/or decorate objects
     ## ---------------------------------------

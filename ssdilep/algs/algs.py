@@ -659,10 +659,10 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_LeadTauIsTight(self):
-      return self.store['taus'][0].isJetBDTTight
+      return self.store['taus'][0].isJetBDTSigTight
     #__________________________________________________________________________
     def cut_LeadTauNotTight(self):
-      return not self.store['taus'][0].isJetBDTTight
+      return not self.store['taus'][0].isJetBDTSigTight
     
     #__________________________________________________________________________
     def cut_LeadMuIsLoose(self):

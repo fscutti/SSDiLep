@@ -41,7 +41,7 @@ class BuildTrigConfig(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def execute(self, weight):
         
-      assert len(self.chain.passedTriggers) == len(self.chain.triggerPrescales), "ERROR: # passed triggers != # trigger prescales !!!"
+      #assert len(self.chain.passedTriggers) == len(self.chain.triggerPrescales), "ERROR: # passed triggers != # trigger prescales !!!"
      
       nolim = 1000. 
 
@@ -81,57 +81,22 @@ class BuildTrigConfig(pyframe.core.Algorithm):
 
       if not "reqTrig" in self.store.keys():
         self.store["reqTrig"] = self.required_triggers
-      
+
+      """
       if not "passTrig" in self.store.keys():
         self.store["passTrig"] = {}
         for trig,presc in zip(self.chain.passedTriggers,self.chain.triggerPrescales):
           if trig in pt_slice.keys():
             self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":pt_slice[trig]}
-
       """
-      mGeV = GeV * 1.0
       
-      if self.key == "muons":
-        self.store["singleMuTrigList"]  = {}  
-        self.store["singleMuTrigSlice"] = {}  # this is for prescale slicing
-        self.store["singleMuTrigThr"]   = {}  # this is for prescale slicing
-        low_thr  = []
-        high_thr = []
-
-        
-        # the muon_listTrigChains is filled 
-        # in the ntuple if # muons>0. If more 
-        # than one muon exists skip repetitions
-
-        for i,trig in enumerate(self.chain.muon_listTrigChains):
-          if trig in self.store["singleMuTrigList"].keys(): continue
-          self.store["singleMuTrigList"][trig] = i
-        
-        #for trig in self.store["reqTrig"]:
-        #  for thr in trig.split("_"):
-        #    if thr.startswith("mu"): 
-        #      self.store["singleMuTrigThr"][trig] = float( thr.replace("mu","") ) * mGeV
-        #      low_thr.append(float( thr.replace("mu","") ) * mGeV)
-        #      high_thr.append(float( thr.replace("mu","") ) * mGeV)
-        
-        #if low_thr and high_thr: 
-        #  low_thr  = sorted(low_thr) 
-        #  high_thr = sorted(high_thr)
-        #  high_thr.remove(low_thr[0])
-        #  high_thr.append(1000. * GeV)
-
-        #for low,high in zip(low_thr,high_thr):
-        #  for trig,thr in self.store["singleMuTrigThr"].iteritems():
-        #    if thr>=low and thr<high: 
-        #      self.store["singleMuTrigSlice"][trig] = (low,high)
-        
-        self.store["singleMuTrigSlice"]["HLT_mu26_ivarmedium"] = (28*GeV,51*GeV)
-        self.store["singleMuTrigSlice"]["HLT_mu24"] = (25*GeV,55*GeV)
-        self.store["singleMuTrigSlice"]["HLT_mu50"] = (55*GeV,10000*GeV)
-      """ 
-     
-
-      
+      # bogus crap that we need until 
+      # the prescales will be back on
+      if not "passTrig" in self.store.keys():
+        self.store["passTrig"] = {}
+        for trig,presc in zip(self.chain.passedTriggers,self.chain.passedTriggers):
+          if trig in pt_slice.keys():
+            self.store["passTrig"][trig] = {"prescale":1, "pt_slice":pt_slice[trig]}
 
 
       return True

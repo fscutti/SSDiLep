@@ -32,11 +32,11 @@ samp  = options.sample
 #jtag = "HIGG3D3MC.v2.fakes"
 #jtag = "EXOT22MC.v1a"
 #jtag = "EXOT12Data.v1a"
-jtag = "SUSY11Data.v1"
+jtag = "SUSY11Data.v2"
 
 # append here any last tag 
 # before the file type identifyier
-append_id = "r1"
+append_id = "r3"
 
 jtagsamp  = "%s.*%s*" % (jtag,samp)
 
