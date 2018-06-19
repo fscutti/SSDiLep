@@ -206,8 +206,11 @@ class MuTrigSF(pyframe.core.Algorithm):
             if m.isTrueIsoMuon(): 
               for trig in self.trig_list:
                 
-                sf_muon  = getattr(m,"_".join(["TrigEff","SF",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
-                eff_muon = getattr(m,"_".join(["TrigMCEff",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
+                sf_muon  = getattr(m,"_".join(["TrigEff","SF",trig,"Reco"+self.mu_reco,])).at(0)
+                eff_muon = getattr(m,"_".join(["TrigMCEff",trig,"Reco"+self.mu_reco,])).at(0)
+                
+                #sf_muon  = getattr(m,"_".join(["TrigEff","SF",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
+                #eff_muon = getattr(m,"_".join(["TrigMCEff",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
                 
                 # EXOT12 for v1 ntuples
                 #sf_muon  = getattr(m,"_".join(["TrigEff","SF",self.mu_reco,self.mu_iso])).at(0)
@@ -262,8 +265,7 @@ class GlobalBjet(pyframe.core.Algorithm):
       if "mc" in self.sampletype: 
         jets = self.store['jets_tight']
         for jet in jets:
-          if jet.is_MV2c10_FixedCutBEff_77: 
-            sf *= getattr(jet,"SF_MV2c10_FixedCutBEff_77").at(0)
+          sf *= getattr(jet,"SF_MV2c10_FixedCutBEff_77").at(0)
 
       if self.key: 
         self.store[self.key] = sf

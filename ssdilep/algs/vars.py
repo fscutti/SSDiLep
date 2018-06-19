@@ -47,13 +47,15 @@ class BuildTrigConfig(pyframe.core.Algorithm):
 
       # slices for jet triggers
       # -----------------------
+      
       jet_trigger_slice = {}
-      jet_trigger_slice["HLT_j15"]  = (17.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j25"]  = (30.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j35"]  = (40.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j55"]  = (60.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j60"]  = (66.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j85"]  = (94.  * GeV, nolim * GeV)
+      """
+      jet_trigger_slice["HLT_j15" ] = (17.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j25" ] = (30.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j35" ] = (40.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j55" ] = (60.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j60" ] = (66.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j85" ] = (94.  * GeV, nolim * GeV)
       jet_trigger_slice["HLT_j110"] = (120. * GeV, nolim * GeV)
       jet_trigger_slice["HLT_j150"] = (165. * GeV, nolim * GeV)
       jet_trigger_slice["HLT_j175"] = (195. * GeV, nolim * GeV)
@@ -65,10 +67,113 @@ class BuildTrigConfig(pyframe.core.Algorithm):
       jet_trigger_slice["HLT_j420"] = (465. * GeV, nolim * GeV)
       jet_trigger_slice["HLT_j440"] = (485. * GeV, nolim * GeV)
       jet_trigger_slice["HLT_j460"] = (505. * GeV, nolim * GeV)
+      """
+      
+      """
+      jet_trigger_slice["HLT_j15"]  = (15.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j25"]  = (25.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j35"]  = (35.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j55"]  = (55.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j60"]  = (60.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j85"]  = (85.  * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j110"] = (110. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j150"] = (150. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j175"] = (175. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j260"] = (260. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j320"] = (320. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j360"] = (360. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j380"] = (380. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j400"] = (400. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j420"] = (420. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j440"] = (440. * GeV, nolim * GeV)
+      jet_trigger_slice["HLT_j460"] = (460. * GeV, nolim * GeV)
+      """
+
+      # reverse threshold
+      """
+      jet_trigger_slice["HLT_j15"]  = (15.  * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j25"]  = (25.  * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j35"]  = (35.  * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j55"]  = (55.  * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j60"]  = (60.  * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j85"]  = (85.  * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j110"] = (110. * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j150"] = (150. * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j175"] = (175. * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j260"] = (260. * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j320"] = (320. * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j360"] = (360. * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j380"] = (380. * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j400"] = (400. * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j420"] = (420. * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j440"] = (440. * GeV * 0.8, nolim * GeV)
+      jet_trigger_slice["HLT_j460"] = (460. * GeV * 0.8, nolim * GeV)
+      """ 
+      """
+      # pt window
+      jet_trigger_slice["HLT_j15"]  = (15.  * GeV * 1.2, 25.  * GeV * 1.2)
+      jet_trigger_slice["HLT_j25"]  = (25.  * GeV * 1.2, 35.  * GeV * 1.2)
+      jet_trigger_slice["HLT_j35"]  = (35.  * GeV * 1.2, 55.  * GeV * 1.2)
+      jet_trigger_slice["HLT_j55"]  = (55.  * GeV * 1.2, 60.  * GeV * 1.2)
+      jet_trigger_slice["HLT_j60"]  = (60.  * GeV * 1.2, 85.  * GeV * 1.2)
+      jet_trigger_slice["HLT_j85"]  = (85.  * GeV * 1.2, 110. * GeV * 1.2)
+      jet_trigger_slice["HLT_j110"] = (110. * GeV * 1.2, 150. * GeV * 1.2)
+      jet_trigger_slice["HLT_j150"] = (150. * GeV * 1.2, 175. * GeV * 1.2)
+      jet_trigger_slice["HLT_j175"] = (175. * GeV * 1.2, 260. * GeV * 1.2)
+      jet_trigger_slice["HLT_j260"] = (260. * GeV * 1.2, 320. * GeV * 1.2)
+      jet_trigger_slice["HLT_j320"] = (320. * GeV * 1.2, 360. * GeV * 1.2)
+      jet_trigger_slice["HLT_j360"] = (360. * GeV * 1.2, 380. * GeV * 1.2)
+      jet_trigger_slice["HLT_j380"] = (380. * GeV * 1.2, 400. * GeV * 1.2)
+      jet_trigger_slice["HLT_j400"] = (400. * GeV * 1.2, 420. * GeV * 1.2)
+      jet_trigger_slice["HLT_j420"] = (420. * GeV * 1.2, 440. * GeV * 1.2)
+      jet_trigger_slice["HLT_j440"] = (440. * GeV * 1.2, 460. * GeV * 1.2)
+      jet_trigger_slice["HLT_j460"] = (460. * GeV * 1.2, nolim * GeV)
+      """
+
+      # pt window red
+      """
+      jet_trigger_slice["HLT_j15"]  = (15.  * GeV * 1.02, 25.  * GeV * 1.02)
+      jet_trigger_slice["HLT_j25"]  = (25.  * GeV * 1.02, 35.  * GeV * 1.02)
+      jet_trigger_slice["HLT_j35"]  = (35.  * GeV * 1.02, 55.  * GeV * 1.02)
+      jet_trigger_slice["HLT_j55"]  = (55.  * GeV * 1.02, 60.  * GeV * 1.02)
+      jet_trigger_slice["HLT_j60"]  = (60.  * GeV * 1.02, 85.  * GeV * 1.02)
+      jet_trigger_slice["HLT_j85"]  = (85.  * GeV * 1.02, 110. * GeV * 1.02)
+      jet_trigger_slice["HLT_j110"] = (110. * GeV * 1.02, 150. * GeV * 1.02)
+      jet_trigger_slice["HLT_j150"] = (150. * GeV * 1.02, 175. * GeV * 1.02)
+      jet_trigger_slice["HLT_j175"] = (175. * GeV * 1.02, 260. * GeV * 1.02)
+      jet_trigger_slice["HLT_j260"] = (260. * GeV * 1.02, 320. * GeV * 1.02)
+      jet_trigger_slice["HLT_j320"] = (320. * GeV * 1.02, 360. * GeV * 1.02)
+      jet_trigger_slice["HLT_j360"] = (360. * GeV * 1.02, 380. * GeV * 1.02)
+      jet_trigger_slice["HLT_j380"] = (380. * GeV * 1.02, 400. * GeV * 1.02)
+      jet_trigger_slice["HLT_j400"] = (400. * GeV * 1.02, 420. * GeV * 1.02)
+      jet_trigger_slice["HLT_j420"] = (420. * GeV * 1.02, 440. * GeV * 1.02)
+      jet_trigger_slice["HLT_j440"] = (440. * GeV * 1.02, 460. * GeV * 1.02)
+      jet_trigger_slice["HLT_j460"] = (460. * GeV * 1.02, nolim * GeV)
+      """
+
+      # pt window red limit
+      jet_trigger_slice["HLT_j15"]  = (15.  * GeV * 1.02, 25.  * GeV * 1.2)
+      jet_trigger_slice["HLT_j25"]  = (25.  * GeV * 1.02, 35.  * GeV * 1.2)
+      jet_trigger_slice["HLT_j35"]  = (35.  * GeV * 1.02, 55.  * GeV * 1.2)
+      jet_trigger_slice["HLT_j55"]  = (55.  * GeV * 1.02, 60.  * GeV * 1.2)
+      jet_trigger_slice["HLT_j60"]  = (60.  * GeV * 1.02, 85.  * GeV * 1.2)
+      jet_trigger_slice["HLT_j85"]  = (85.  * GeV * 1.02, 110. * GeV * 1.2)
+      jet_trigger_slice["HLT_j110"] = (110. * GeV * 1.02, 150. * GeV * 1.2)
+      jet_trigger_slice["HLT_j150"] = (150. * GeV * 1.02, 175. * GeV * 1.2)
+      jet_trigger_slice["HLT_j175"] = (175. * GeV * 1.02, 260. * GeV * 1.2)
+      jet_trigger_slice["HLT_j260"] = (260. * GeV * 1.02, 320. * GeV * 1.2)
+      jet_trigger_slice["HLT_j320"] = (320. * GeV * 1.02, 360. * GeV * 1.2)
+      jet_trigger_slice["HLT_j360"] = (360. * GeV * 1.02, 380. * GeV * 1.2)
+      jet_trigger_slice["HLT_j380"] = (380. * GeV * 1.02, 400. * GeV * 1.2)
+      jet_trigger_slice["HLT_j400"] = (400. * GeV * 1.02, 420. * GeV * 1.2)
+      jet_trigger_slice["HLT_j420"] = (420. * GeV * 1.02, 440. * GeV * 1.2)
+      jet_trigger_slice["HLT_j440"] = (440. * GeV * 1.02, 460. * GeV * 1.2)
+      jet_trigger_slice["HLT_j460"] = (460. * GeV * 1.02, nolim * GeV)
 
 
       # slices for muon triggers
       # ------------------------
+      # for prescaled studies
       mu_trigger_slice = {}
       mu_trigger_slice["HLT_mu24"]  = (26. * GeV,  nolim * GeV)
       mu_trigger_slice["HLT_mu50"]  = (43. * GeV,  nolim * GeV)
@@ -81,23 +186,20 @@ class BuildTrigConfig(pyframe.core.Algorithm):
 
       if not "reqTrig" in self.store.keys():
         self.store["reqTrig"] = self.required_triggers
-
-      """
-      if not "passTrig" in self.store.keys():
-        self.store["passTrig"] = {}
-        for trig,presc in zip(self.chain.passedTriggers,self.chain.triggerPrescales):
-          if trig in pt_slice.keys():
-            self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":pt_slice[trig]}
-      """
-      
-      # bogus crap that we need until 
-      # the prescales will be back on
-      if not "passTrig" in self.store.keys():
-        self.store["passTrig"] = {}
-        for trig,presc in zip(self.chain.passedTriggers,self.chain.passedTriggers):
-          if trig in pt_slice.keys():
-            self.store["passTrig"][trig] = {"prescale":1, "pt_slice":pt_slice[trig]}
-
+     
+      if self.sampletype=="mc":
+        # there is no triggerPrescales branch for mc
+        if not "passTrig" in self.store.keys():
+          self.store["passTrig"] = {}
+          for trig,presc in zip(self.chain.passedTriggers,self.chain.passedTriggers):
+            if trig in pt_slice.keys():
+              self.store["passTrig"][trig] = {"prescale":1, "pt_slice":pt_slice[trig]}
+      else:
+        if not "passTrig" in self.store.keys():
+          self.store["passTrig"] = {}
+          for trig,presc in zip(self.chain.passedTriggers,self.chain.triggerPrescales):
+            if trig in pt_slice.keys():
+              self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":pt_slice[trig]}
 
       return True
 
@@ -186,11 +288,11 @@ class TagAndProbeVars(pyframe.core.Algorithm):
         # ------------------
           
         # definition of tag and probe 
-        lead_mu_is_tight = bool(muon1.isIsolated_FixedCutTightTrackOnly and muon1.trkd0sig<3.)
-        lead_mu_is_loose = bool(not muon1.isIsolated_FixedCutTightTrackOnly and muon1.trkd0sig<10.)
+        lead_mu_is_tight = bool(muon1.isIsolated_FixedCutTightTrackOnly and abs(muon1.trkd0sig)<3.)
+        lead_mu_is_loose = bool(not muon1.isIsolated_FixedCutTightTrackOnly and abs(muon1.trkd0sig)<10.)
 
-        sublead_mu_is_tight = bool(muon2.isIsolated_FixedCutTightTrackOnly and muon2.trkd0sig<3.)
-        sublead_mu_is_loose = bool(not muon2.isIsolated_FixedCutTightTrackOnly and muon2.trkd0sig<10.)
+        sublead_mu_is_tight = bool(muon2.isIsolated_FixedCutTightTrackOnly and abs(muon2.trkd0sig)<3.)
+        sublead_mu_is_loose = bool(not muon2.isIsolated_FixedCutTightTrackOnly and abs(muon2.trkd0sig)<10.)
        
         if lead_mu_is_tight and sublead_mu_is_tight:
           if random.randint(0,9) > 4:
@@ -326,8 +428,6 @@ class ProbeVars(pyframe.core.Algorithm):
 
         return True
 
-
-
 #------------------------------------------------------------------------------
 class DiJetVars(pyframe.core.Algorithm):
           
@@ -379,7 +479,16 @@ class DiJetVars(pyframe.core.Algorithm):
           self.store['%sjet_scdphi'%prefix] = scdphi
        
           self.store['%sjet_ptratio'%prefix] = leptons[0].tlv.Pt() / jets[0].tlv.Pt()
-        
+      
+
+        # ---------------------------
+        # at least two leptons
+        # ---------------------------
+
+        if len(leptons)>1:
+          self.store['%ssubleadlead_ptratio'%prefix] = leptons[1].tlv.Pt() / leptons[0].tlv.Pt()
+
+
         # -------------------------
         # build tight jets
         # -------------------------
@@ -397,13 +506,23 @@ class DiJetVars(pyframe.core.Algorithm):
            
            if len(jets_tight) > 1:
              assert jets_tight[0].tlv.Pt() >= jets_tight[1].tlv.Pt(), "jets_tight not sorted.."
+             jet1 = self.store['jets'][0]
+             jet2 = self.store['jets'][1] 
+             jet1T = ROOT.TLorentzVector()
+             jet1T.SetPtEtaPhiM( jet1.tlv.Pt(), 0., jet1.tlv.Phi(), jet1.tlv.M() )
+             jet2T = ROOT.TLorentzVector()
+             jet2T.SetPtEtaPhiM( jet2.tlv.Pt(), 0., jet2.tlv.Phi(), jet2.tlv.M() )
+             
+             self.store['mVisJJ']           = (jet2.tlv+jet1.tlv).M()
+             self.store['mTtotJJ']          = (jet1T + jet2T + met.tlv).M()  
+
            if len(jets_nontight) > 1:
              assert jets_nontight[0].tlv.Pt() >= jets_nontight[1].tlv.Pt(), "jets_nontight not sorted.."
            self.store['jets_tight'] = jets_tight        
            self.store['jets_nontight'] = jets_nontight        
         return True
 
-
+       
 
 #------------------------------------------------------------------------------
 class DiMuVars(pyframe.core.Algorithm):
@@ -441,10 +560,25 @@ class DiMuVars(pyframe.core.Algorithm):
         # and significance
         ss_pairs = {} 
         if len(muons)>=2:
-          
+          muon1 = self.store['muons'][0]
+          muon2 = self.store['muons'][1] 
+          muon1T = ROOT.TLorentzVector()
+          muon1T.SetPtEtaPhiM( muon1.tlv.Pt(), 0., muon1.tlv.Phi(), muon1.tlv.M() )
+          muon2T = ROOT.TLorentzVector()
+          muon2T.SetPtEtaPhiM( muon2.tlv.Pt(), 0., muon2.tlv.Phi(), muon2.tlv.M() )
+        
+          #self.store['charge_product'] = muon2.trkcharge*muon1.trkcharge
+          self.store['mVisMM']           = (muon2.tlv+muon1.tlv).M()
+          self.store['mTtotMM']          = (muon1T + muon2T + met.tlv).M()  
+          #self.store['muons_dphi']     = muon2.tlv.DeltaPhi(muon1.tlv)
+          #self.store['muons_deta']     = muon2.tlv.Eta()-muon1.tlv.Eta()
+          #self.store['muons_pTH']      = (muon2.tlv+muon1.tlv).Pt()
+          #self.store['muons_dR']       = math.sqrt(self.store['muons_dphi']**2 + self.store['muons_deta']**2)
+
+          """
           for p in combinations(muons,2):
             if p[0].trkcharge * p[1].trkcharge > 0.:
-              ss_pairs[p] = p[0].trkd0sig + p[1].trkd0sig 
+              ss_pairs[p] = abs(p[0].trkd0sig) + abs(p[1].trkd0sig)
           
           max_sig  = 1000.
           for pair,sig in ss_pairs.iteritems():
@@ -456,7 +590,9 @@ class DiMuVars(pyframe.core.Algorithm):
                 self.store['muon1'] = pair[1]
                 self.store['muon2'] = pair[0]
               max_sig = sig 
+          """
         
+        """ 
         if ss_pairs:
           muon1 = self.store['muon1'] 
           muon2 = self.store['muon2'] 
@@ -472,7 +608,8 @@ class DiMuVars(pyframe.core.Algorithm):
           self.store['muons_deta']     = muon2.tlv.Eta()-muon1.tlv.Eta()
           self.store['muons_pTH']      = (muon2.tlv+muon1.tlv).Pt()
           self.store['muons_dR']       = math.sqrt(self.store['muons_dphi']**2 + self.store['muons_deta']**2)
-         
+        """ 
+        """  
         # puts additional muons in the store
         if ss_pairs and len(muons)>2:
            i = 2
@@ -480,7 +617,7 @@ class DiMuVars(pyframe.core.Algorithm):
              if m==self.store['muon1'] or m==self.store['muon2']: continue
              i = i + 1
              self.store['muon%d'%i] = m
-
+        """
         return True
 
 
@@ -518,7 +655,7 @@ class MultiMuVars(pyframe.core.Algorithm):
         if len(muons)>=4:
           for q in combinations(muons,4):
             if q[0].trkcharge * q[1].trkcharge * q[2].trkcharge * q[3].trkcharge > 0.0:
-              two_pairs[q] = q[0].trkd0sig + q[1].trkd0sig + q[2].trkd0sig + q[3].trkd0sig
+              two_pairs[q] = abs(q[0].trkd0sig) + abs(q[1].trkd0sig) + abs(q[2].trkd0sig) + abs(q[3].trkd0sig)
 
           max_sig  = 1000.
           for quad,sig in two_pairs.iteritems():

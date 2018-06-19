@@ -58,7 +58,7 @@ h_nmuons = Hist1D( hname  = "h_nmuons",
                               xmin   = 0,
                               xmax   = 8,
                               dir    = "event",
-                              vexpr  = "self.chain.nmuon",
+                              vexpr  = "self.chain.muon_pt.size()",
                             )
 
 h_nelectrons = Hist1D( hname  = "h_nelectrons",
@@ -78,7 +78,7 @@ h_njets = Hist1D( hname  = "h_njets",
                               xmin   = 0,
                               xmax   = 8,
                               dir    = "event",
-                              vexpr  = "self.chain.njet",
+                              vexpr  = "self.chain.jet_pt.size()",
                             )
 
 h_muons_chargeprod  = Hist1D( hname  = "h_muons_chargeprod",
@@ -118,7 +118,7 @@ h_muons_mVis  = Hist1D( hname  = "h_muons_mVis",
                               xmin   = 0.0,
                               xmax   = 2000.,
                               dir    = "event",
-                              vexpr  = "self.store['mVis']/GeV",
+                              vexpr  = "self.store['mVisMM']/GeV",
                             )
 
 h_muons_pTH  = Hist1D( hname  = "h_muons_pTH",
@@ -148,7 +148,7 @@ h_muons_mTtot  = Hist1D( hname  = "h_muons_mTtot",
                               xmin   = 0.0,
                               xmax   = 2000.,
                               dir    = "event",
-                              vexpr  = "self.store['mTtot']/GeV",
+                              vexpr  = "self.store['mTtotMM']/GeV",
                             )
 
 h_mujet_dphi  = Hist1D( hname  = "h_mujet_dphi",
@@ -201,6 +201,15 @@ h_taujet_ptratio  = Hist1D( hname  = "h_taujet_ptratio",
                             vexpr  = "self.store['taujet_ptratio']",
                             )
 
+h_tausubleadlead_ptratio  = Hist1D( hname  = "h_tausubleadlead_ptratio",
+                            xtitle = "#Delta#phi(#tau_{sublead},#tau_{lead})",
+                            ytitle = "Events", 
+                            nbins  = 64,
+                            xmin   = 0.,
+                            xmax   = 1.,
+                            dir    = "event",
+                            vexpr  = "self.store['tausubleadlead_ptratio']",
+                            )
 
 # -------
 # jets
@@ -234,6 +243,27 @@ h_jetlead_phi = Hist1D( hname  = "h_jetlead_phi",
                               dir    = "jets",
                               vexpr  = "self.store['jets'][0].tlv.Phi()",
                             )
+
+h_jets_mTtot  = Hist1D( hname  = "h_jets_mTtot",
+                              xtitle = "m^{tot}_{T}(j_{lead},j_{sublead}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "event",
+                              vexpr  = "self.store['mTtotJJ']/GeV",
+                            )
+
+h_jets_mVis  = Hist1D( hname  = "h_jets_mVis",
+                              xtitle = "m_{vis}(j_{lead},j_{sublead}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "event",
+                              vexpr  = "self.store['mVisJJ']/GeV",
+                            )
+
 
 # -------
 # taus
@@ -270,6 +300,58 @@ h_taulead_phi = Hist1D( hname  = "h_taulead_phi",
                               dir    = "taus",
                               vexpr  = "self.store['taus'][0].tlv.Phi()",
                             )
+
+h_taulead_JetBDTScore = Hist1D( hname  = "h_taulead_JetBDTScore",
+                              xtitle = "BDT Score (#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 200,
+                              xmin   = -1.,
+                              xmax   = 1.,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].JetBDTScore",
+                            )
+
+h_taulead_JetBDTScoreSigTrans = Hist1D( hname  = "h_taulead_JetBDTScoreSigTrans",
+                              xtitle = "Trans. BDT Score (#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 100,
+                              xmin   = 0.,
+                              xmax   = 1.,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].JetBDTScoreSigTrans",
+                            )
+
+
+h_tausublead_pt = Hist1D( hname  = "h_tausublead_pt",
+                              xtitle = "p_{T}(#tau_{sublead}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][1].tlv.Pt() / GeV",
+                            )
+
+h_tausublead_eta = Hist1D( hname  = "h_tausublead_eta",
+                              xtitle = "#eta(#tau_{sublead})",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 50,
+                              xmin   = -2.5,
+                              xmax   = 2.5,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][1].tlv.Eta()",
+                            )
+
+h_tausublead_phi = Hist1D( hname  = "h_tausublead_phi",
+                              xtitle = "#phi(#tau_{sublead})",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 64,
+                              xmin   = -3.2,
+                              xmax   = 3.2,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][1].tlv.Phi()",
+                            )
+
 
 # -------
 # muons
@@ -320,8 +402,8 @@ h_mulead_trkd0 = Hist1D( hname  = "h_mulead_trkd0",
 h_mulead_trkd0sig = Hist1D( hname  = "h_mulead_trkd0sig",
                               xtitle = "d^{trk}_{0} / #sigma(d^{trk}_{0}) (#mu_{lead})",
                               ytitle = "Events / (0.01)", 
-                              nbins  = 100,
-                              xmin   = 0.,
+                              nbins  = 200,
+                              xmin   = -10.,
                               xmax   = 10.,
                               dir    = "muons",
                               vexpr  = "self.store['muons'][0].trkd0sig",
@@ -402,8 +484,8 @@ h_musublead_trkd0 = Hist1D( hname  = "h_musublead_trkd0",
 h_musublead_trkd0sig = Hist1D( hname  = "h_musublead_trkd0sig",
                               xtitle = "d^{trk}_{0} / #sigma(d^{trk}_{0}) (#mu_{sublead})",
                               ytitle = "Events / (0.01)", 
-                              nbins  = 100,
-                              xmin   = 0.,
+                              nbins  = 200,
+                              xmin   = -10.,
                               xmax   = 10.,
                               dir    = "muons",
                               vexpr  = "self.store['muons'][1].trkd0sig",
@@ -563,6 +645,16 @@ h_met_trk_sumet  = Hist1D( hname  = "h_met_trk_sumet",
                               xmax   = 2000.,
                               dir    = "met",
                               vexpr  = "self.store['met_trk'].sumet/GeV",
+                          )
+
+h_met_trk_sig  = Hist1D( hname  = "h_met_trk_sig",
+                              xtitle = "E_{T}(trk) / #sigma_{MET} ",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 100,
+                              xmin   = 0.,
+                              xmax   = 100.,
+                              dir    = "met",
+                              vexpr  = "self.store['met_trk'].sig",
                           )
 
 

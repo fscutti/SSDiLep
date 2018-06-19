@@ -54,6 +54,8 @@ class Hist1D(object):
     #________________________________________________________
     def varcheck(self):
       if self.vexpr:
+        if "size" in self.vexpr:
+          return "True"
         if "store" in self.vexpr:
           var = self.vexpr.split("'")[1]
           return  "bool('%s' in self.store.keys())" % var 

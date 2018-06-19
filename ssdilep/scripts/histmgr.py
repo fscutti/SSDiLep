@@ -57,7 +57,6 @@ class HistMgr():
           else: 
             if os.path.isfile(os.path.join(common_file_path,infile)) and samplename+"." in infile:
               paths_to_files.append(os.path.join(common_file_path,infile))
-        
         if get_first_item:
           return paths_to_files[0]
         else:
@@ -79,8 +78,8 @@ class HistMgr():
             assert mode in ['up','dn'], "mode must be either 'up' or 'dn'"
 
         paths_to_files = self.get_files_paths(samplename,sys,mode,get_slices=True)
-
-        ####
+        
+        #### 
 
         h_list = []
         f_list = []
@@ -127,9 +126,8 @@ class HistMgr():
            #h.SetDirectory(0)
            #print "This is the histogram"
            #print h
-           h_list.append(h)
-           #print "This is the list inside"
-           #print h_list
+           #h_list.append(h)
+           h_list += [h]
         
         #print "This is the list outside"
         #print h_list        

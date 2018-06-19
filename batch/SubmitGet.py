@@ -23,7 +23,8 @@ parser.add_option('-s', '--samp', dest='sample',
 #user.fscutti.SSDiLep.SUSY11Data.v0.fakes.data17_13TeV.periodI.physics_Main.r3/
 
 # --------------
-user  = "fscutti"
+#user  = "fscutti"
+user  = "kkarppin"
 #user  = "tadej"
 
 samp  = options.sample
@@ -32,16 +33,24 @@ samp  = options.sample
 #jtag = "HIGG3D3MC.v2.fakes"
 #jtag = "EXOT22MC.v1a"
 #jtag = "EXOT12Data.v1a"
-jtag = "SUSY11Data.v2"
+#jtag = "EXOT22Data.v3"
+#jtag = "EXOT22MC.v3"
+#jtag = "SUSY11Data.v4"
+#jtag = "SUSY11Data.v1"
+jtag = "SUSY11MC.v1"
 
 # append here any last tag 
 # before the file type identifyier
-append_id = "r3"
+append_id = "r2"
+#append_id = "r2"
 
-jtagsamp  = "%s.*%s*" % (jtag,samp)
+stag = "r10210"
+
+jtagsamp  = "%s.*%s*.*%s*" % (jtag,samp,stag)
 
 
-jtype = "SSDiLep"
+#jtype = "SSDiLep"
+jtype = "Tau"
 #jtype = "SeeSaw"
 
 sys   = None
@@ -55,8 +64,10 @@ use_sample_id = True
 if append_id: jtagsamp+=".%s"%append_id
 
 SCRIPT     = os.path.join("/coepp/cephfs/mel/fscutti/Analysis/batch","Get.sh")
-OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/%s" % (jtag)
+#OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/%s" % (jtag)
+OUTDIR     = "/coepp/cephfs/share/atlas/%s/%s" % (jtype,jtag)
 
+if stag: OUTDIR += ".%s"%stag
 if append_id: OUTDIR += ".%s"%append_id
 
 OUTMERGED  = os.path.join(OUTDIR,"merged",sys)
@@ -145,17 +156,10 @@ for l in lines:
   if "duplicates" in l: continue
   key = recreplace(l.replace("_tree",""),rep)
   outputs[key] = {}
-  print key
+  print "Grouping files for %s"%key
   outputs[key]["tree"] = recreplace(l,rep)
 f.close()
 
-with open(infile_cutflow) as f: lines = f.readlines()
-for l in lines:
-  if not "CONTAINER" in l: continue
-  if "duplicates" in l: continue
-  key = recreplace(l.replace("_cutflow",""),rep)
-  outputs[key]["cutflow"] = recreplace(l,rep)
-f.close()
 
 with open(infile_meta) as f: lines = f.readlines()
 for l in lines:
@@ -163,6 +167,15 @@ for l in lines:
   if "duplicates" in l: continue
   key = recreplace(l.replace("_metadata",""),rep)
   outputs[key]["metadata"] = recreplace(l,rep)
+f.close()
+
+with open(infile_cutflow) as f: lines = f.readlines()
+for l in lines:
+  if not "CONTAINER" in l: continue
+  if "duplicates" in l: continue
+  key = recreplace(l.replace("_cutflow",""),rep)
+  print "This is the cutflow ",key
+  outputs[key]["cutflow"] = recreplace(l,rep)
 f.close()
 
 jrep = []
@@ -187,7 +200,11 @@ for k,v in outputs.iteritems():
   
   # replace number with name of sample
   if use_sample_id  and not "physics_Main" in job_name:
-    id = SampleID[int(id)]
+    if int(id) in SampleID.keys():
+     id = SampleID[int(id)]
+    else: 
+      print "id %s is not in SamplesID keys" % id  
+      continue
   
   merged = recreplace(id, mcstrings)
   

@@ -7,12 +7,10 @@ hist_list = []
 # -------
 # event
 # -------
-hist_list.append(h_averageIntPerXing)
 hist_list.append(h_njets)
 
 hist_list.append(h_taujet_dphi)
 hist_list.append(h_taujet_ptratio)
-#hist_list.append(h_tausubleadlead_ptratio)
 
 
 # -------
@@ -32,12 +30,8 @@ hist_list.append(h_jetlead_phi)
 hist_list.append(h_taulead_pt)
 hist_list.append(h_taulead_eta)
 hist_list.append(h_taulead_phi)
-
-
-# tausublead
-#hist_list.append(h_tausublead_pt)
-#hist_list.append(h_tausublead_eta)
-#hist_list.append(h_tausublead_phi)
+hist_list.append(h_taulead_JetBDTScore)
+hist_list.append(h_taulead_JetBDTScoreSigTrans)
 
 
 # -------

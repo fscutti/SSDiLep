@@ -28,7 +28,6 @@ green = ROOT.kGreen+1
 # data
 #-------------------------------------------------------------------------------
 periods = []
-
 periods += [
          # 2015
          "data15_13TeV_periodD",
@@ -58,7 +57,6 @@ periods += [
          "data17_13TeV_periodI",
          "data17_13TeV_periodK",
         ]
-
 
 for name in periods:
     globals()[name] = Sample(
@@ -222,17 +220,17 @@ Wtaunu = Sample( name =   'Wtaunu',
                   daughters = [
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CVetoBVeto,        
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CVetoBVeto,                                    
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CVetoBVeto,     
+                               #Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CVetoBVeto,     
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CVetoBVeto,     
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CFilterBVeto,      
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CFilterBVeto,    
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CFilterBVeto,   
+                               #Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CFilterBVeto,   
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CFilterBVeto,   
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_BFilter,           
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_BFilter,         
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_BFilter,        
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_BFilter,        
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV500_1000,        
+                               #Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV500_1000,        
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV1000_E_CMS,       
                               ],
                 ) 
@@ -352,7 +350,7 @@ Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_CFilterBVeto    = Sample( name = 
 Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_CFilterBVeto",    xsec = 2.21896214715 ,  )
                                                                                                                                                                           
 Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_BFilter",            xsec = 124.552404811 ,  )
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_BFilter",          xsec = 11.9878119426 ,  ) #missing cross section!!!
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_BFilter",          xsec = 11.9878119426 ,  ) 
 Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_BFilter",         xsec = 5.34266418886 ,  )
 Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_BFilter",         xsec = 1.46541699447 ,  )
                                                                                                                                                                           
@@ -394,8 +392,10 @@ Ztautau = Sample( name =   'Ztautau',
 # Notes:
 #       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryTTbar 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_nonallhad = Sample( name =  "PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_nonallhad", xsec = 452.2944528,  )
+#PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_nonallhad = Sample( name =  "PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_nonallhad", xsec = 452.2944528,  )
 #PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad  = Sample( name =  "PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad", xsec = 452.69355909,  )
+
+PhPy8EG_A14_ttbar_hdamp258p75_nonallhad = Sample( name =  "PhPy8EG_A14_ttbar_hdamp258p75_nonallhad", xsec = 452.2944528,  )
 
 ttbar = Sample( name =  'ttbar',
                     tlatex = 'ttbar',
@@ -404,7 +404,8 @@ ttbar = Sample( name =  'ttbar',
                     marker_color =  ROOT.kCyan+2,
                     daughters = [
                                  #PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad,                              
-                                 PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_nonallhad,                              
+                                 #PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_nonallhad,                              
+                                 PhPy8EG_A14_ttbar_hdamp258p75_nonallhad,
                                 ],
                     ) 
 
@@ -437,6 +438,56 @@ singletop = Sample( name =   'singletop',
                                 ],
                 ) 
 
+#-----------------------------------------------------------------------------
+# Diboson (list of samples might be incomplete!)
+#-----------------------------------------------------------------------------
+
+Sherpa_221_NNPDF30NNLO_ZqqZvv   = Sample( name = "Sherpa_221_NNPDF30NNLO_ZqqZvv" ,   xsec = 4.35418464, )
+Sherpa_221_NNPDF30NNLO_ZqqZll   = Sample( name = "Sherpa_221_NNPDF30NNLO_ZqqZll" ,   xsec = 2.17275043, )
+Sherpa_221_NNPDF30NNLO_WqqZvv   = Sample( name = "Sherpa_221_NNPDF30NNLO_WqqZvv" ,   xsec = 6.7973,     )
+Sherpa_221_NNPDF30NNLO_WqqZll   = Sample( name = "Sherpa_221_NNPDF30NNLO_WqqZll" ,   xsec = 3.4345,     )
+Sherpa_221_NNPDF30NNLO_WpqqWmlv = Sample( name = "Sherpa_221_NNPDF30NNLO_WpqqWmlv" , xsec = 24.719,     )
+Sherpa_221_NNPDF30NNLO_WplvWmqq = Sample( name = "Sherpa_221_NNPDF30NNLO_WplvWmqq" , xsec = 112.74,     )
+Sherpa_221_NNPDF30NNLO_WlvZqq   = Sample( name = "Sherpa_221_NNPDF30NNLO_WlvZqq" ,   xsec = 11.42,      )
+
+Sherpa_222_NNPDF30NNLO_lllljj_EW6    = Sample( name ="Sherpa_222_NNPDF30NNLO_lllljj_EW6" ,    xsec = 0.010523,)
+Sherpa_222_NNPDF30NNLO_lllvjj_EW6    = Sample( name ="Sherpa_222_NNPDF30NNLO_lllvjj_EW6" ,    xsec = 0.046691,)
+Sherpa_222_NNPDF30NNLO_llvvjj_EW6    = Sample( name ="Sherpa_222_NNPDF30NNLO_llvvjj_EW6" ,    xsec = 0.11621, )
+Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW4 = Sample( name ="Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW4" , xsec = 0.025211,)
+Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW6 = Sample( name ="Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW6" , xsec = 0.040804,)
+
+# this is a mix of 222 and 221
+Sherpa_222_NNPDF30NNLO_llll = Sample( name ="Sherpa_222_NNPDF30NNLO_llll" , xsec = 1.2523, )
+Sherpa_222_NNPDF30NNLO_lllv = Sample( name ="Sherpa_222_NNPDF30NNLO_lllv" , xsec = 4.5832, )
+Sherpa_222_NNPDF30NNLO_llvv = Sample( name ="Sherpa_222_NNPDF30NNLO_llvv" , xsec = 12.501, )
+Sherpa_222_NNPDF30NNLO_lvvv = Sample( name ="Sherpa_222_NNPDF30NNLO_lvvv" , xsec = 3.231, )
+Sherpa_221_NNPDF30NNLO_vvvv = Sample( name ="Sherpa_221_NNPDF30NNLO_vvvv" , xsec = 0.60154,)
+
+diboson = Sample( name =   'diboson',
+                    tlatex = 'diboson',
+                    fill_color = ROOT.kOrange+4,
+                    line_color =  ROOT.kOrange+3,
+                    marker_color =  ROOT.kOrange+4,
+                    daughters = [
+                                  Sherpa_221_NNPDF30NNLO_ZqqZvv,
+                                  Sherpa_221_NNPDF30NNLO_ZqqZll,  
+                                  Sherpa_221_NNPDF30NNLO_WqqZvv,  
+                                  Sherpa_221_NNPDF30NNLO_WqqZll,  
+                                  Sherpa_221_NNPDF30NNLO_WpqqWmlv,
+                                  #Sherpa_221_NNPDF30NNLO_WplvWmqq,
+                                  Sherpa_221_NNPDF30NNLO_WlvZqq,  
+                                  #Sherpa_222_NNPDF30NNLO_lllljj_EW6,  
+                                  #Sherpa_222_NNPDF30NNLO_lllvjj_EW6,   
+                                  #Sherpa_222_NNPDF30NNLO_llvvjj_EW6,   
+                                  #Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW4,
+                                  #Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW6,
+                                  Sherpa_222_NNPDF30NNLO_llll,
+                                  Sherpa_222_NNPDF30NNLO_lllv,
+                                  Sherpa_222_NNPDF30NNLO_llvv,
+                                  Sherpa_222_NNPDF30NNLO_lvvv,
+                                  Sherpa_221_NNPDF30NNLO_vvvv,
+                                ],
+                ) 
 
 #-------------------------------------------------------------------------------
 # Collections 
@@ -449,17 +500,18 @@ all_data = data.daughters
 
 all_mc = []
 
-all_mc += ttbar.daughters
-all_mc += singletop.daughters
+#all_mc += ttbar.daughters
+#all_mc += singletop.daughters
 
 #all_mc += Wenu.daughters
-all_mc += Wmunu.daughters
+#all_mc += Wmunu.daughters
 all_mc += Wtaunu.daughters
 
-#all_mc += Zee.daughters
-all_mc += Zmumu.daughters
-all_mc += Ztautau.daughters
+##all_mc += Zee.daughters
+#all_mc += Zmumu.daughters
+#all_mc += Ztautau.daughters
 
+#all_mc += diboson.daughters
 
 
 # Samples loaded for SubmitPlot.py
@@ -467,15 +519,18 @@ all_mc += Ztautau.daughters
 
 mc_bkg = []
 
-#mc_bkg.append( Wenu )
-mc_bkg.append( Wmunu )
+##mc_bkg.append( Wenu )
 mc_bkg.append( Wtaunu )
+"""
+mc_bkg.append( Wmunu )
 
-#mc_bkg.append( Zee ) 
+##mc_bkg.append( Zee ) 
 mc_bkg.append( Zmumu )
 mc_bkg.append( Ztautau )
 
 mc_bkg.append( singletop )
 mc_bkg.append( ttbar )
 
+mc_bkg.append( diboson )
+"""
 ## EOF

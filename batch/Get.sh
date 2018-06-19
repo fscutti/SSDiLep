@@ -121,9 +121,6 @@ echo "-----> cp -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE} ${OUTCUTFLOW}"
 cp -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE} ${OUTCUTFLOW}
 
 
-
-
-
 # --------------
 # hadd with root
 # --------------
@@ -151,27 +148,6 @@ ls ${JOBTMP}/${MYDIR} -la
 
 
 # meta file
-# ---------
-echo "-----> cd ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}"
-cd ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}
-
-echo "-----> hadd ${MERGEDCUTFLOW} *.root*"
-hadd ${MERGEDCUTFLOW} *.root*
-
-echo "-----> cp ${MERGEDCUTFLOW} ${JOBTMP}/${MYDIR}"
-cp ${MERGEDCUTFLOW} ${JOBTMP}/${MYDIR}
-
-echo "-----> cd ${JOBTMP}/${MYDIR}"
-cd ${JOBTMP}/${MYDIR}
-
-echo "-----> rm -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}"
-rm -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}
-
-echo "-----> ls ${JOBTMP}/${MYDIR} -la"
-ls ${JOBTMP}/${MYDIR} -la
-
-
-# cutflow file
 # ------------
 echo "-----> cd ${JOBTMP}/${MYDIR}/${METAFILE}"
 cd ${JOBTMP}/${MYDIR}/${METAFILE}
@@ -192,12 +168,33 @@ echo "-----> ls ${JOBTMP}/${MYDIR} -la"
 ls ${JOBTMP}/${MYDIR} -la
 
 
+# cutflow file
+# ---------
+echo "-----> cd ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}"
+cd ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}
+
+echo "-----> hadd ${MERGEDCUTFLOW} *.root*"
+hadd ${MERGEDCUTFLOW} *.root*
+
+echo "-----> cp ${MERGEDCUTFLOW} ${JOBTMP}/${MYDIR}"
+cp ${MERGEDCUTFLOW} ${JOBTMP}/${MYDIR}
+
+echo "-----> cd ${JOBTMP}/${MYDIR}"
+cd ${JOBTMP}/${MYDIR}
+
+echo "-----> rm -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}"
+rm -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}
+
+echo "-----> ls ${JOBTMP}/${MYDIR} -la"
+ls ${JOBTMP}/${MYDIR} -la
+
 
 # ----------------------
 # merge cutflow and tree
 # ----------------------
 echo "-----> hadd ${MERGED} ${MERGEDTREE} ${MERGEDMETA} ${MERGEDCUTFLOW}"
 hadd ${MERGED} ${MERGEDTREE} ${MERGEDMETA} ${MERGEDCUTFLOW}
+
 
 echo "-----> ls ${JOBTMP}/${MYDIR} -la"
 ls ${JOBTMP}/${MYDIR} -la

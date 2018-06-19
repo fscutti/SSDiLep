@@ -8,23 +8,36 @@ ROOT.gStyle.SetOptStat(0000)
 # -------------------------------------------------------------------------------------
 # config
 # -------------------------------------------------------------------------------------
-#indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/Fakes23Jan"
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesLTT"
-tag     = "bveto"
+#indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesOneTau"
+
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau1PRevThr"
+#indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWin"
+#indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWinRed"
+
+tag     = "1prong"
+#tag     = "final"
 name    = "data"
 
 # pt
-var     = "mulead_pt"
-axislab = "p_{T}(#mu_{lead}) [GeV]"
+#var     = "mulead_pt"
+var     = "taulead_pt"
+#var     = "tausublead_pt"
 
-#new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,300.])
-new_bins = array('d', [0.,25.,28.,30.,32.,36.,300.])
+#axislab = "p_{T}(#mu_{lead}) [GeV]"
+axislab = "p_{T}(#tau_{lead}) [GeV]"
+#axislab = "p_{T}(#tau_{sublead}) [GeV]"
+
+# muon fakes
+#new_bins = array('d', [0.,25.,28.,30.,32.,36.,300.])
+
+# tau fakes (one tau)
 
 
-#new_bins = array('d', [0.,25.,28.,32.,36.,40.,45.,60.,80.,300.])
-#new_bins = array('d', [0.,25.,28.,32.,36.,40.,45.,300.])
-#new_bins = array('d', [0.,25.,28.,32.,36.,40.,300.])
-#new_bins = array('d', [0.,22.,40.,60.,90.,300.])
+new_bins = array('d', [0.,20.,30.,40.,60.,90.,150.,250.,400.,800.])
+
+# tau fakes (two tau)
+#new_bins = array('d', [0.,50.,60.,70.,80.,120.,160.,260.,460.,700.])
+
 
 '''
 # eta
@@ -44,34 +57,61 @@ inf     = ROOT.TFile.Open(os.path.join(indir,infile),"READ")
 hdict = {}
 
 hdict["NOM"] = inf.Get("h_ff_F1").Clone()
-#hdict["NOM"] = inf.Get("h_ff_F2").Clone()
 n_bins = hdict["NOM"].GetNbinsX()
-#for i in [2,3,4,5,6,7,8,9,10,11,12,13,14,15]:
-for i in [2,3,4,5,6,7,8,]:#9,10]:
-#for i in [2]:
+for i in [2,3,4,5,6,7,8,9,]: 
   hdict["SYS%s"%str(i)] = inf.Get("h_ff_F%s"%str(i)).Clone()
 
 slabel = {}
+
+# --------------
+# muon FF labels
+# --------------
+"""
 slabel["NOM"]  = "nominal"
 #slabel["SYS1"] = "nominal"
 
 slabel["SYS2"] = "E^{miss}_{T} < 50 GeV"
 slabel["SYS3"] = "E^{miss}_{T} < 30 GeV"
-slabel["SYS4"] = "#Delta#phi(#mu,jet) < 2.8"
-slabel["SYS5"] = "#Delta#phi(#mu,jet) < 2.6"
+slabel["SYS4"] = "#Delta#phi(#mu,jet) > 2.9"
+slabel["SYS5"] = "#Delta#phi(#mu,jet) > 2.5"
 slabel["SYS6"] = "d_{0}/#sigma(d_{0}) < 2"
 slabel["SYS7"] = "d_{0}/#sigma(d_{0}) < 4"
 slabel["SYS8"] = "p_{T}(jet) > 40 GeV"
-#slabel["SYS9"] = "MC + 5%"
-#slabel["SYS10"] = "MC - 5%"
+slabel["SYS9"] = "One b-jet"
+#slabel["SYS10"] = "MC + 30%"
+#slabel["SYS11"] = "MC - 30%"
+"""
 
-#slabel["NOM"]  = "one jet"
-#slabel["SYS2"] = "one jet, den fails iso or d0"
-#slabel["SYS3"] = "al one jet"
-#slabel["SYS4"] = "al one jet, gradient"
-#slabel["SYS5"] = "al one jet, gradient, nom med"
-#slabel["SYS6"] = "al one jet, gradient, nom med, den d015"
-#slabel["SYS7"] = "al one jet, fixedcut, den fails iso or d0"
+# --------------
+# one tau FF labels
+# --------------
+#"""
+slabel["NOM"]  = "tau+jet"
+
+slabel["SYS2"] = "p_{T}(jet) > 50 GeV"
+slabel["SYS3"] = "E^{miss}_{T} < 40 GeV"
+slabel["SYS4"] = "No #Delta#phi(#tau,jet) cut"
+slabel["SYS5"] = "N_{jet}>0"
+slabel["SYS6"] = "N_{jet}>1"
+slabel["SYS7"] = "N_{jet}>2"
+slabel["SYS8"] = "One b-jet"
+slabel["SYS9"] = "Veto b-jet"
+#"""
+
+# --------------
+# two tau FF labels
+# --------------
+"""
+slabel["NOM"]  = "two SS taus + jet"
+slabel["SYS2"] = "two OS taus + jet"
+slabel["SYS3"] = "two SS taus (no back to back)"
+slabel["SYS4"] = "p_{T}(#tau_{lead}) > 170 GeV"
+slabel["SYS5"] = "two SS taus ptratio>0.3"
+slabel["SYS6"] = "two SS taus ptratio>0.3 p_{T}(#tau_{lead}) > 170 GeV"
+slabel["SYS7"] = "two SS taus ptratio>0.3 p_{T}(#tau_{lead}) > 170 GeV N_{jet}>0"
+slabel["SYS8"] = "two SS taus ptratio>0.3 p_{T}(#tau_{lead}) > 170 GeV N_{jet}>1"
+slabel["SYS9"] = "two SS taus ptratio>0.3 p_{T}(#tau_{lead}) > 170 GeV N_{jet}>2"
+"""
 
 g_sys_ff = ROOT.TGraphAsymmErrors(n_bins)
 g_nom_ff = ROOT.TGraphAsymmErrors(n_bins)
@@ -135,7 +175,8 @@ g_sys_ff.SetLineColor(ROOT.kYellow)
 g_sys_ff.SetMarkerColor(ROOT.kBlack)
 g_sys_ff.SetFillColor(ROOT.kYellow)
 g_sys_ff.SetMarkerSize(1.3)
-g_sys_ff.SetMaximum(2.0)
+#g_sys_ff.SetMaximum(2.0) # for muons
+g_sys_ff.SetMaximum(1.0)  # for taus
 g_sys_ff.SetMinimum(0)
 
 g_nom_ff.GetYaxis().SetTitle("Fake-factor")
@@ -152,7 +193,8 @@ g_nom_ff.SetLineWidth(2)
 g_nom_ff.SetMarkerColor(ROOT.kBlack)
 g_nom_ff.SetMarkerStyle(20)
 g_nom_ff.SetMarkerSize(0.9)
-g_nom_ff.SetMaximum(2.0)
+#g_nom_ff.SetMaximum(2.0)   # for muons
+g_nom_ff.SetMaximum(1.0)   # for taus
 g_nom_ff.SetMinimum(0)
 
 c.cd() 
@@ -183,9 +225,14 @@ c2.cd()
 hdict["NOM"].SetStats(0)
 hdict["NOM"].SetLineWidth(2)
 hdict["NOM"].Draw()
-l2.SetHeader("Systematics")
+#l2.SetHeader("Systematics")  # for muons
+l2.SetHeader("N_{tracks}=1")  # for one taus
+#l2.SetHeader("N_{tracks}=3")  # for one taus
+#l2.SetHeader("N_{#tau}=2")  # for two taus
 
-l2.AddEntry(hdict["NOM"],"nominal","PL")
+#l2.AddEntry(hdict["NOM"],"nominal","PL")
+l2.AddEntry(hdict["NOM"],"tau+jet","PL")
+#l2.AddEntry(hdict["NOM"],"two SS taus + jet","PL")
 
 for sys,hist in hdict.iteritems():
     if sys == "NOM": continue

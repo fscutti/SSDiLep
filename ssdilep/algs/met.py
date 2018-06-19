@@ -23,10 +23,11 @@ class MET(object):
     Simple MET class.
     """
     #__________________________________________________________________________
-    def __init__(self, et, phi, sumet):
+    def __init__(self, et, phi, sumet, sig):
         self.tlv = ROOT.TLorentzVector()
         self.tlv.SetPtEtaPhiM(et, 0.0, phi, 0.0)
         self.sumet = sumet
+        self.sig = sig
 
 #-------------------------------------------------------------------------------
 class METCLUS(pyframe.core.Algorithm):
@@ -43,7 +44,12 @@ class METCLUS(pyframe.core.Algorithm):
         log.info('initialized METCLUS')
     #__________________________________________________________________________
     def execute(self, weight):
-        self.store[self.key] = MET(getattr(self.chain, self.prefix), getattr(self.chain, self.prefix+"Phi"), getattr(self.chain, self.prefix+"SumEt"))
+        self.store[self.key] = MET(
+            getattr(self.chain, self.prefix), 
+            getattr(self.chain, self.prefix+"Phi"), 
+            getattr(self.chain, self.prefix+"SumEt"), 
+            getattr(self.chain, self.prefix+"Significance")
+            )
 
 
 #-------------------------------------------------------------------------------
@@ -61,7 +67,12 @@ class METTRK(pyframe.core.Algorithm):
         log.info('initialized METTRK')
     #__________________________________________________________________________
     def execute(self, weight):
-        self.store[self.key] = MET(getattr(self.chain, self.prefix), getattr(self.chain, self.prefix+"Phi"), getattr(self.chain, self.prefix+"SumEt"))
+        self.store[self.key] = MET(
+            getattr(self.chain, self.prefix), 
+            getattr(self.chain, self.prefix+"Phi"), 
+            getattr(self.chain, self.prefix+"SumEt"), 
+            getattr(self.chain, self.prefix+"Significance"),
+            )
 
 
 

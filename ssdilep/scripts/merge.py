@@ -7,6 +7,7 @@ import os
 
 from ssdilep.samples import samples
 from ssdilep.plots   import vars_mumu
+from ssdilep.plots   import vars_tau
 from systematics     import *
 
 from optparse import OptionParser
@@ -45,7 +46,7 @@ parser.add_option('-t', '--tag', dest='tag',
 #lumi =  (33257.2 + 3212.96) * 1.05
 #lumi =  (33257.2 + 3212.96) * 0.95
 #lumi = 32861.6 + 3212.96
-lumi = 80000.
+lumi = 79800.  
 
 
 # Control regions
@@ -174,7 +175,9 @@ mc_sys = [
 
 #fakes.estimator.add_systematics(FF)
 
-mumu_vdict  = vars_mumu.vars_dict
+#vardict  = vars_mumu.vars_dict
+vardict  = vars_tau.vars_dict
+
 
 #-----------------
 # Plotting 
@@ -193,11 +196,11 @@ if options.makeplot == "True":
     data          = recom_data,
     region        = options.region,
     label         = options.label,
-    histname      = os.path.join(mumu_vdict[options.vname]['path'],mumu_vdict[options.vname]['hname']),
-    xmin          = mumu_vdict[options.vname]['xmin'],
-    xmax          = mumu_vdict[options.vname]['xmax'],
-    rebin         = mumu_vdict[options.vname]['rebin'],
-    log           = mumu_vdict[options.vname]['log'],
+    histname      = os.path.join(vardict[options.vname]['path'],vardict[options.vname]['hname']),
+    xmin          = vardict[options.vname]['xmin'],
+    xmax          = vardict[options.vname]['xmax'],
+    rebin         = vardict[options.vname]['rebin'],
+    log           = vardict[options.vname]['log'],
     icut          = int(options.icut),
     sys_dict      = sys_dict,
     #sys_dict      = None,
@@ -213,8 +216,8 @@ else:
          data        = recom_data,
          region      = options.region,
          icut        = int(options.icut),
-         histname    = os.path.join(mumu_vdict[options.vname]['path'],mumu_vdict[options.vname]['hname']),
-         #rebin       = mumu_vdict[options.vname]['rebin'],
+         histname    = os.path.join(vardict[options.vname]['path'],vardict[options.vname]['hname']),
+         #rebin       = vardict[options.vname]['rebin'],
          rebin       = 1,
          sys_dict    = None,
          outname     = plotsfile

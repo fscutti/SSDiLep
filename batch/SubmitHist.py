@@ -19,10 +19,12 @@ USER   = os.getenv('USER')
 
 ## global config
 # inputs
-#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v12/merged' # input NTUP path
+#NTUPDATA='/coepp/cephfs/share/atlas/SSDiLep/EXOT22Data.v1a/merged'
+#NTUPMC='/coepp/cephfs/share/atlas/SSDiLep/EXOT22MC.v3/merged'
 
-NTUPDATA='/coepp/cephfs/share/atlas/SSDiLep/EXOT22Data.v1a/merged'
-NTUPMC='/coepp/cephfs/share/atlas/SSDiLep/EXOT22MC.v1a/merged'
+NTUPDATA='/coepp/cephfs/share/atlas/Tau/SUSY11Data.v1.r2/merged'
+NTUPMC='/coepp/cephfs/share/atlas/Tau/SUSY11MC.v1.r10210.r2/merged'
+
 
 JOBDIR = "/coepp/cephfs/mel/%s/jobdir" % USER # Alright this is twisted...
 INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%m_y%Y_H%H_M%M_S%S")) )
@@ -30,9 +32,8 @@ INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-#RUN = "HistFF2018BVeto"
-RUN = "HistFF2018BTag"
-
+RUN = "HistFF1PTauWinRedLim"
+#RUN = "HistFF3PTauWinRedLim"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 
@@ -40,15 +41,15 @@ OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) #
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
 
 # pick your script!!!
-SCRIPT="./ssdilep/run/j.plotter_MuFF.py"  
-#SCRIPT="./ssdilep/run/j.plotter_TAndP.py"  
-#SCRIPT="./ssdilep/run/j.plotter_VR_OneMuPair.py"  
+SCRIPT="./ssdilep/run/j.plotter_OneTauFF.py"  
+#SCRIPT="./ssdilep/run/j.plotter_TwoTauFF.py"  
 
-#SCRIPT="./ssdilep/run/j.plotter_VR3.py"  
+#SCRIPT="./ssdilep/run/j.plotter_MuFF.py"  
+#SCRIPT="./ssdilep/run/j.plotter_MuVal.py"  
 
 BEXEC="Hist.sh"                      # exec script (probably dont change) 
 
-EVENT_BLOCK = 100000                 # number of events considered for each individual job
+EVENT_BLOCK = 200000                  # number of events considered for each individual job
 NJMAX       = 500                    # maximum number of jobs per train: should not exceed 600!!!
 
 DO_NOM = True                        # submit the nominal job
@@ -86,8 +87,8 @@ def main():
     all_mc   = samples.all_mc
 
     nominal = all_data + all_mc 
-    #nominal = all_data 
-    #nominal = all_mc 
+    #nominal = all_mc
+    #nominal = all_data
 
     
     ntup_sys = [

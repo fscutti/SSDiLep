@@ -63,12 +63,19 @@ class ListBuilder(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def execute(self, weight):
         for prefix, key in zip(self.prefixes, self.keys):
+
             nparts = "" 
+            """
             if "jet" in prefix:
               if hasattr(self.chain,"njets"): nparts = "njets"
               if hasattr(self.chain,"njet"):  nparts = "njet"
-            else: nparts = "n"+prefix.replace("_","") 
-            parts = pyframe.core.buildParticleProxies(self.chain, getattr(self.chain, nparts), prefix) 
+            """
+            #else: nparts = "n"+prefix.replace("_","") 
+            nparts = prefix+"pt" 
+
+            # This is a dirty hack to use the pt branch to get the number of particles
+            #parts = pyframe.core.buildParticleProxies(self.chain, getattr(self.chain, nparts), prefix) 
+            parts = pyframe.core.buildParticleProxies(self.chain, getattr(self.chain, nparts).size(), prefix) 
             self.store[key] = parts
 
 

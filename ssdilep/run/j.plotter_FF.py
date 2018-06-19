@@ -107,7 +107,7 @@ def analyze(config):
    
     ## initialize and/or decorate objects
     ## ---------------------------------------
-    loop += ssdilep.algs.vars.DiJetVars(key_muons='muons',key_jets='jets')   
+    loop += ssdilep.algs.vars.DiJetVars(key_leptons='muons',key_jets='jets',build_tight_jets=True)   
     
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
@@ -140,7 +140,8 @@ def analyze(config):
     
     # WARNING: no trigger correction available for HLT_mu20_L1MU15 
     loop += ssdilep.algs.EvWeights.MuTrigSF(
-            trig_list = ["HLT_mu24", "HLT_mu50"],
+            #trig_list = ["HLT_mu24", "HLT_mu50"],
+            trig_list = ["HLT_mu50"],
             mu_reco   = "Medium",
             mu_iso    = "FixedCutTightTrackOnly",
             key       = "MuTrigSFNUM1",
@@ -148,7 +149,8 @@ def analyze(config):
             )
     
     loop += ssdilep.algs.EvWeights.MuTrigSF(
-            trig_list = ["HLT_mu24", "HLT_mu50"],
+            #trig_list = ["HLT_mu24", "HLT_mu50"],
+            trig_list = ["HLT_mu50"],
             mu_reco   = "Medium",
             mu_iso    = "NotFixedCutTightTrackOnly",
             key       = "MuTrigSFDEN1",
@@ -191,7 +193,7 @@ def analyze(config):
     ## configure histograms
     ## ---------------------------------------
     hist_list = []
-    hist_list += ssdilep.hists.FF_hists.hist_list
+    hist_list += ssdilep.hists.MuFF_hists.hist_list
     #hist_list += ssdilep.hists.H2D_hists.hist_list
     #hist_list += ssdilep.hists.PtOnly_hists.hist_list
     
@@ -259,7 +261,7 @@ def analyze(config):
               ['METlow40',None],
               ],
             )
-    
+    """ 
     ## F2
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -498,7 +500,7 @@ def analyze(config):
               ['METlow40',None],
               ],
             )
-    
+    """ 
     loop += pyframe.algs.HistCopyAlg()
 
     ##-------------------------------------------------------------------------

@@ -3,6 +3,8 @@ import histconfig
 import Main_hists
 import FF_hists
 import TauFF_hists
+import OneTauFF_hists
+import TwoTauFF_hists
 import MuFF_hists
 import PtOnly_hists
 import H2D_hists

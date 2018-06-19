@@ -116,22 +116,8 @@ def analyze(config):
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt30') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='BVeto') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastOneBjet') 
-    
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='Two50Jets')
-    
-    # Either one of these two sets:
-    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTightJet') # Set1
-    # ----------------------------- 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastTwoTightJets') # Set 2
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='Two50TightJets')
-    # ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-    
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTightJet') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuIsoBound15') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneOrTwoBjets') 
-    
 
     
     ## weights configuration
@@ -139,26 +125,14 @@ def analyze(config):
     ## event
     ## +++++++++++++++++++++++++++++++++++++++
     
-    # WARNING: no trigger correction available for HLT_mu20_L1MU15 
-    """
+    # WARNING: no trigger correction available for HLT_mu24
     loop += ssdilep.algs.EvWeights.MuTrigSF(
-            trig_list = ["HLT_mu24", "HLT_mu50"],
-            #trig_list = ["HLT_mu50"],
+            trig_list = ["HLT_mu50"],
             mu_reco   = "Medium",
-            mu_iso    = "FixedCutTightTrackOnly",
-            key       = "MuTrigSFNUM1",
+            key       = "MuTrigSFMedium",
             scale     = None,
             )
     
-    loop += ssdilep.algs.EvWeights.MuTrigSF(
-            trig_list = ["HLT_mu24", "HLT_mu50"],
-            #trig_list = ["HLT_mu50"],
-            mu_reco   = "Medium",
-            mu_iso    = "NotFixedCutTightTrackOnly",
-            key       = "MuTrigSFDEN1",
-            scale     = None,
-            )
-    """ 
     # jet weights 
     loop += ssdilep.algs.EvWeights.GlobalBjet(
             key       = "GlobBJetSF",
@@ -169,7 +143,6 @@ def analyze(config):
 
     ## objects
     ## +++++++++++++++++++++++++++++++++++++++
-    """
     loop += ssdilep.algs.ObjWeights.MuAllSF(
             mu_index      = 0,
             mu_iso        = "NotFixedCutTightTrackOnly",
@@ -177,7 +150,6 @@ def analyze(config):
             key           = "MuSFNotFixedCutTightTrackOnlyMedium",
             scale         = None,
             )
-    """
     loop += ssdilep.algs.ObjWeights.MuAllSF(
             mu_index      = 0,
             mu_iso        = "FixedCutTightTrackOnly",
@@ -185,19 +157,11 @@ def analyze(config):
             key           = "MuSFFixedCutTightTrackOnlyMedium",
             scale         = None,
             )
-    """ 
-    loop += ssdilep.algs.ObjWeights.JetPtWeightHist(
-            config_file=os.path.join(main_path,'ssdilep/data/weights_30Jan.root'),
-            key='JetW',
-            scale=None,
-            )
-    """ 
     ## configure histograms
     ## ---------------------------------------
     hist_list = []
     hist_list += ssdilep.hists.MuFF_hists.hist_list
     #hist_list += ssdilep.hists.H2D_hists.hist_list
-    #hist_list += ssdilep.hists.PtOnly_hists.hist_list
     
     
     ##-------------------------------------------------------------------------
@@ -211,8 +175,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ],
@@ -224,11 +188,10 @@ def analyze(config):
             hist_list    = hist_list,
             do_var_check = True,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
-              #['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
-              ['LeadMuIsoNotFixedCutTightTrackOnly',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ],
             )
     ## F1
@@ -239,8 +202,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -255,13 +218,11 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
-              #['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
-              ['LeadMuIsoNotFixedCutTightTrackOnly',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
-              #['TightJetPt35',['JetW']],
               ['TightJetPt35',None],
               ['LeadMuD0Sig10',None],
               ['METlow40',None],
@@ -276,8 +237,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -292,11 +253,10 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
-              #['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
-              ['LeadMuIsoNotFixedCutTightTrackOnly',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
               ['TightJetPt35',None],
               ['LeadMuD0Sig10',None],
@@ -312,8 +272,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -328,11 +288,10 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
-              #['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
-              ['LeadMuIsoNotFixedCutTightTrackOnly',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
               ['TightJetPt35',None],
               ['LeadMuD0Sig10',None],
@@ -348,11 +307,11 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
-              ['MuJetDphi28',None],
+              ['MuJetDphi29',None],
               ['TightJetPt35',None],
               ['LeadMuD0Sig3',None],
               ['METlow40',None],
@@ -364,12 +323,11 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
-              #['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
-              ['LeadMuIsoNotFixedCutTightTrackOnly',None],
-              ['MuJetDphi28',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
+              ['MuJetDphi29',None],
               ['TightJetPt35',None],
               ['LeadMuD0Sig10',None],
               ['METlow40',None],
@@ -384,11 +342,11 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
-              ['MuJetDphi26',None],
+              ['MuJetDphi25',None],
               ['TightJetPt35',None],
               ['LeadMuD0Sig3',None],
               ['METlow40',None],
@@ -400,12 +358,11 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
-              #['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
-              ['LeadMuIsoNotFixedCutTightTrackOnly',None],
-              ['MuJetDphi26',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
+              ['MuJetDphi25',None],
               ['TightJetPt35',None],
               ['LeadMuD0Sig10',None],
               ['METlow40',None],
@@ -420,8 +377,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -436,11 +393,10 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
-              #['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
-              ['LeadMuIsoNotFixedCutTightTrackOnly',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
               ['TightJetPt35',None],
               ['LeadMuD0Sig10',None],
@@ -456,8 +412,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -472,11 +428,10 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
-              #['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
-              ['LeadMuIsoNotFixedCutTightTrackOnly',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
               ['TightJetPt35',None],
               ['LeadMuD0Sig10',None],
@@ -493,8 +448,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -509,13 +464,47 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleMuTrigger',['GlobBJetSF','JVTSF']],
-              #['SingleMuTrigger',['JVTSF']],
+              ['BVeto',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
-              #['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
-              ['LeadMuIsoNotFixedCutTightTrackOnly',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
               ['TightJetPt40',None],
+              ['LeadMuD0Sig10',None],
+              ['METlow40',None],
+              ],
+            )
+
+    ## F9
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_NUM_F9',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['AtLeastOneBjet',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
+              ['MuJetDphi27',None],
+              ['TightJetPt35',None],
+              ['LeadMuD0Sig3',None],
+              ['METlow40',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_DEN_F9',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['AtLeastOneBjet',None],
+              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
+              ['MuJetDphi27',None],
+              ['TightJetPt35',None],
               ['LeadMuD0Sig10',None],
               ['METlow40',None],
               ],

@@ -222,17 +222,17 @@ musublead_trkd0 = Var(name = 'musublead_trkd0',
 
 mulead_trkd0sig = Var(name = 'mulead_trkd0sig',
               path    = 'muons',
-              xmin    = 0.,
+              xmin    = -10.,
               xmax    = 10.,
-              rebin   = 3,
+              rebin   = 6,
               log     = False,
               )
 
 musublead_trkd0sig = Var(name = 'musublead_trkd0sig',
               path    = 'muons',
-              xmin    = 0.,
+              xmin    = -10.,
               xmax    = 10.,
-              rebin   = 3,
+              rebin   = 6,
               log     = False,
               )
 
@@ -389,6 +389,20 @@ jetlead_pt = Var(name = 'jetlead_pt',
               rebin   = 5,
               log     = True,
               )
+jetlead_eta = Var(name = 'jetlead_eta',
+              path    = 'jets',
+              xmin    = -2.5,
+              xmax    = 2.5,
+              rebin   = 5,
+              log     = False,
+              )
+jetlead_phi = Var(name = 'jetlead_phi',
+              path    = 'jets',
+              xmin    = -3.2,
+              xmax    = 3.2,
+              rebin   = 4,
+              log     = False,
+              )
 
 
 ## MET variables
@@ -441,6 +455,13 @@ met_trk_sumet = Var(name = 'met_trk_sumet',
               log     = False,
               )
 
+met_trk_sig = Var(name = 'met_trk_sig',
+              path    = 'met',
+              xmin    = 0.,
+              xmax    = 20.,
+              rebin   = 1,
+              log     = False,
+              )
 
 
 vars_list = []
@@ -450,6 +471,7 @@ vars_list = []
 # for all studies
 # ---------------
 #"""
+"""
 vars_list.append(averageIntPerXing)
 #vars_list.append(actualIntPerXing)
 #vars_list.append(NPV)
@@ -458,21 +480,22 @@ vars_list.append(nmuons)
 vars_list.append(njets)
 #vars_list.append(nmuonpairs)
 
-vars_list.append(mulead_pt)
 vars_list.append(mulead_eta)
 vars_list.append(mulead_phi)
 vars_list.append(mulead_trkd0)
 vars_list.append(mulead_trkd0sig)
 vars_list.append(mulead_trkz0)
-#vars_list.append(mulead_trkz0sintheta)
+vars_list.append(mulead_trkz0sintheta)
 #vars_list.append(mulead_ptvarcone30)
 
 #vars_list.append(met_clus_et)
 #vars_list.append(met_clus_phi)
 #vars_list.append(met_clus_sumet)
-#"""
+"""
 vars_list.append(met_trk_et)
-
+##vars_list.append(met_trk_sig)
+#"""
+#vars_list.append(mulead_pt)
 
 # -------------
 # tag-and-probe
@@ -491,10 +514,15 @@ vars_list.append(probe_ptvarcone30)
 # just for fake-factors
 # ---------------------
 #"""
-vars_list.append(mujet_dphi)
-#vars_list.append(scdphi)
+#vars_list.append(mujet_dphi)
+##vars_list.append(scdphi)
 vars_list.append(jetlead_pt)
 #"""
+
+vars_list.append(jetlead_pt)
+vars_list.append(jetlead_eta)
+vars_list.append(jetlead_phi)
+vars_list.append(mujet_dphi)
 
 # ---------------------
 # for validation
@@ -503,19 +531,19 @@ vars_list.append(jetlead_pt)
 vars_list.append(musublead_pt)
 vars_list.append(musublead_eta)
 vars_list.append(musublead_phi)
-vars_list.append(musublead_trkd0)
-vars_list.append(musublead_trkd0sig)
-vars_list.append(musublead_trkz0)
-vars_list.append(musublead_trkz0sintheta)
-vars_list.append(musublead_ptvarcone30)
+#vars_list.append(musublead_trkd0)
+#vars_list.append(musublead_trkd0sig)
+#vars_list.append(musublead_trkz0)
+#vars_list.append(musublead_trkz0sintheta)
+#vars_list.append(musublead_ptvarcone30)
 
-vars_list.append(muons_mTtot)
+#vars_list.append(muons_mTtot)
 vars_list.append(muons_mVis)
-vars_list.append(muons_dphi)
-vars_list.append(muons_deta)
-vars_list.append(muons_dR)
-vars_list.append(muons_pTH)
-vars_list.append(muons_chargeprod)
+#vars_list.append(muons_dphi)
+#vars_list.append(muons_deta)
+#vars_list.append(muons_dR)
+#vars_list.append(muons_pTH)
+#vars_list.append(muons_chargeprod)
 """
 
 

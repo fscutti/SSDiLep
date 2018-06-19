@@ -125,20 +125,20 @@ def analyze(config):
    
     ## initialize and/or decorate objects
     ## ---------------------------------------
-    loop += ssdilep.algs.vars.DiJetVars(key_leptons='taus',key_jets='jets')   
+    loop += ssdilep.algs.vars.DiJetVars(key_leptons='taus',key_jets='jets',build_tight_jets=True)   
     
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One1PTau') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One3PTau') 
-    
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TwoTaus') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One1PTau') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One3PTau') 
     
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='MuVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleJetTrigger') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTauPt50') 
-   
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTauPt20') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsVeryLoose') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTightJet') 
 
 
     ## weights configuration
@@ -146,9 +146,14 @@ def analyze(config):
     ## event
     ## +++++++++++++++++++++++++++++++++++++++
     
-    # WARNING: no trigger correction available for HLT_mu20_L1MU15 
-    """
-    """
+    # jet weights 
+    loop += ssdilep.algs.EvWeights.GlobalBjet(
+            key       = "GlobBJetSF",
+            )
+    loop += ssdilep.algs.EvWeights.GlobalJVT(
+            key       = "JVTSF",
+            )
+
     ## objects
     ## +++++++++++++++++++++++++++++++++++++++
     """
@@ -156,7 +161,7 @@ def analyze(config):
     ## configure histograms
     ## ---------------------------------------
     hist_list = []
-    hist_list += ssdilep.hists.TauFF_hists.hist_list
+    hist_list += ssdilep.hists.OneTauFF_hists.hist_list
     #hist_list += ssdilep.hists.H2D_hists.hist_list
     #hist_list += ssdilep.hists.PtOnly_hists.hist_list
     
@@ -174,7 +179,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
+              ['LeadJetPt20', None],
               ['TauJetDphi27', None],
               ['LeadTauIsMedium', None],
               ],
@@ -185,9 +190,9 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
+              ['LeadJetPt20', None],
               ['TauJetDphi27', None],
-              ['LeadTauNotMedium', None],
+              ['LeadTauIsNotMedium', None],
               ],
             )
 
@@ -199,7 +204,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt150', None],
+              ['LeadJetPt50', None],
               ['TauJetDphi27', None],
               ['LeadTauIsMedium', None],
               ],
@@ -210,9 +215,9 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt150', None],
+              ['LeadJetPt50', None],
               ['TauJetDphi27', None],
-              ['LeadTauNotMedium', None],
+              ['LeadTauIsNotMedium', None],
               ],
             )
 
@@ -225,7 +230,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
+              ['LeadJetPt20', None],
               ['TauJetDphi27', None],
               ['LeadTauIsMedium', None],
               ['METlow40', None],
@@ -237,9 +242,9 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
+              ['LeadJetPt20', None],
               ['TauJetDphi27', None],
-              ['LeadTauNotMedium', None],
+              ['LeadTauIsNotMedium', None],
               ['METlow40', None],
               ],
             )
@@ -253,7 +258,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
+              ['LeadJetPt20', None],
               ['LeadTauIsMedium', None],
               ],
             )
@@ -263,8 +268,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
-              ['LeadTauNotMedium', None],
+              ['LeadJetPt20', None],
+              ['LeadTauIsNotMedium', None],
               ],
             )
 
@@ -276,7 +281,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
+              ['LeadJetPt20', None],
               ['LeadTauIsMedium', None],
               ['AtLeastOneJet', None],
               ],
@@ -287,8 +292,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
-              ['LeadTauNotMedium', None],
+              ['LeadJetPt20', None],
+              ['LeadTauIsNotMedium', None],
               ['AtLeastOneJet', None],
               ],
             )
@@ -301,7 +306,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
+              ['LeadJetPt20', None],
               ['LeadTauIsMedium', None],
               ['AtLeastTwoJets', None],
               ],
@@ -312,8 +317,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
-              ['LeadTauNotMedium', None],
+              ['LeadJetPt20', None],
+              ['LeadTauIsNotMedium', None],
               ['AtLeastTwoJets', None],
               ],
             )
@@ -326,7 +331,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
+              ['LeadJetPt20', None],
               ['LeadTauIsMedium', None],
               ['AtLeastThreeJets', None],
               ],
@@ -337,8 +342,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
-              ['LeadTauNotMedium', None],
+              ['LeadJetPt20', None],
+              ['LeadTauIsNotMedium', None],
               ['AtLeastThreeJets', None],
               ],
             )
@@ -351,7 +356,8 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
+              ['AtLeastOneBjet',None],
+              ['LeadJetPt20', None],
               ['TauJetDphi27', None],
               ['LeadTauIsMedium', None],
               ],
@@ -362,9 +368,37 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt50', None],
+              ['AtLeastOneBjet',None],
+              ['LeadJetPt20', None],
               ['TauJetDphi27', None],
-              ['LeadTauNotMediumButLoose', None],
+              ['LeadTauIsNotMedium', None],
+              ],
+            )
+
+    ## F9
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_NUM_F9',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['BVeto',None],
+              ['LeadJetPt20', None],
+              ['TauJetDphi27', None],
+              ['LeadTauIsMedium', None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_DEN_F9',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['BVeto',None],
+              ['LeadJetPt20', None],
+              ['TauJetDphi27', None],
+              ['LeadTauIsNotMedium', None],
               ],
             )
 
@@ -373,10 +407,16 @@ def analyze(config):
     ##-------------------------------------------------------------------------
     ## run the job
     ##-------------------------------------------------------------------------
-    loop.run(chain, 0, config['events'],
-            branches_on_file = config.get('branches_on_file'),
-            do_var_log = config.get('do_var_log'),
-            )
+    loop.run(chain, 
+             min_entry=config['minentry'], 
+             max_entry=config['maxentry'],
+             #min_entry=0, 
+             #max_entry=config['events'],
+             branches_on_file = config.get('branches_on_file'),
+             do_var_log = config.get('do_var_log'),
+             )
+    
+    
 #______________________________________________________________________________
 if __name__ == '__main__':
     pyframe.config.main(analyze)

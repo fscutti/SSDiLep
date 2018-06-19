@@ -1,4 +1,4 @@
-#PBS -l walltime=6:00:00
+#PBS -l walltime=12:00:00
 #PBS -l pmem=1gb
 
 #!/bin/bash

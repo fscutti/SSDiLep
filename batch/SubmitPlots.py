@@ -15,8 +15,38 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-indir    = 'HistFFltt'
-outdir   = 'PlotsFFltt'
+#indir    = 'HistFFOneTau'
+#outdir   = 'PlotsFFOneTau'
+
+#indir    = 'HistFFTwoTau'
+#outdir   = 'PlotsFFTwoTau'
+
+#indir    = 'HistMuFF9AprNoTrigSF'
+#outdir   = 'PlotsMuFF9AprNoTrigSF'
+
+#indir    = 'HistMuVal8AprFilter'
+#outdir   = 'PlotsMuVal8AprFilter'
+
+#indir    = 'HistMuVal14Mar'
+#outdir   = 'PlotsMuVal14MarNew'
+
+#indir    = 'HistMuVal14Mar'
+#outdir   = 'PlotsMuVal14Mar'
+
+#indir    = 'HistMuFF1May'
+#outdir   = 'PlotsNewMuFF1May'
+
+
+
+#indir = "HistFF1PTauRevThrLim"
+#outdir = "PlotsFF1PTauRevThrLim"
+
+#indir = "HistFF1PTauWin"
+#outdir = "PlotsFF1PTauWin"
+
+indir = "HistFF1PTauWinRedLim"
+outdir = "PlotsFF1PTauWinRedLim"
+
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -32,7 +62,7 @@ if not os.path.isdir(OUTDIR+"/"+"log"): os.makedirs(OUTDIR+"/"+"log")
 # Batch jobs options
 #---------------------
 AUTOBUILD = True
-QUEUE     = 'short'
+QUEUE     = 'long'
 BEXEC     = 'Plots.sh'
 JOBDIR    = "/coepp/cephfs/mel/%s/jobdir" % USER
 
@@ -56,52 +86,133 @@ regions = {}
 #regions["FOLDERNAME"]     = [icut, "plot label"]
 
 """
-regions["ProbeTight_F1"] = [4, "TruthFilter_SS",   "truthfilter_ss"]
-regions["ProbeLoose_F1"] = [4, "TruthFilter_SS",   "truthfilter_ss"]
+#regions["OSZ_TT"] = [7, "OSZ_TT",   "oszFilter"]
+regions["OSZ_LT"] = [7, "OSZ_LT",   "oszFilter"]
+regions["OSZ_TL"] = [7, "OSZ_TL",   "oszFilter"]
+regions["OSZ_LL"] = [7, "OSZ_LL",   "oszFilter"]
 
-regions["ProbeTight_F2"] = [4, "TruthFilter_OS",   "truthfilter_os"]
-regions["ProbeLoose_F2"] = [4, "TruthFilter_OS",   "truthfilter_os"]
+#regions["OSW_TT"] = [7, "OSW_TT",   "oswFilter"]
+regions["OSW_LT"] = [7, "OSW_LT",   "oswFilter"]
+regions["OSW_TL"] = [7, "OSW_TL",   "oswFilter"]
+regions["OSW_LL"] = [7, "OSW_LL",   "oswFilter"]
 
-regions["ProbeTight_R1"] = [4, "FakeFilter_SS",   "fakefilter_ss"]
-regions["ProbeLoose_R1"] = [4, "FakeFilter_SS",   "fakefilter_ss"]
+#regions["OSTop_TT"] = [7, "OSTop_TT",   "ostopFilter"]
+regions["OSTop_LT"] = [7, "OSTop_LT",   "ostopFilter"]
+regions["OSTop_TL"] = [7, "OSTop_TL",   "ostopFilter"]
+regions["OSTop_LL"] = [7, "OSTop_LL",   "ostopFilter"]
 
-regions["ProbeTight_R2"] = [4, "AntiTruth_SS",   "antitruth_ss"]
-regions["ProbeLoose_R2"] = [4, "AntiTruth_SS",   "antitruth_ss"]
+#regions["OSSig_TT"] = [7, "OSSig_TT",   "ossigFilter"]
+regions["OSSig_LT"] = [7, "OSSig_LT",   "ossigFilter"]
+regions["OSSig_TL"] = [7, "OSSig_TL",   "ossigFilter"]
+regions["OSSig_LL"] = [7, "OSSig_LL",   "ossigFilter"]
 
-regions["ProbeTight_R3"] = [4, "FakeFilter_OS",   "fakefilter_os"]
-regions["ProbeLoose_R3"] = [4, "FakeFilter_OS",   "fakefilter_os"]
 
-regions["ProbeTight_R4"] = [4, "AntiTruth_OS",   "antitruth_os"]
-regions["ProbeLoose_R4"] = [4, "AntiTruth_OS",   "antitruth_os"]
+#regions["SSZ_TT"] = [7, "SSZ_TT",   "sszFilter"]
+regions["SSZ_LT"] = [7, "SSZ_LT",   "sszFilter"]
+regions["SSZ_TL"] = [7, "SSZ_TL",   "sszFilter"]
+regions["SSZ_LL"] = [7, "SSZ_LL",   "sszFilter"]
+
+#regions["SSW_TT"] = [7, "SSW_TT",   "sswFilter"]
+regions["SSW_LT"] = [7, "SSW_LT",   "sswFilter"]
+regions["SSW_TL"] = [7, "SSW_TL",   "sswFilter"]
+regions["SSW_LL"] = [7, "SSW_LL",   "sswFilter"]
+
+#regions["SSSig_TT"] = [7, "SSSig_TT",   "sssigFilter"]
+regions["SSSig_LT"] = [7, "SSSig_LT",   "sssigFilter"]
+regions["SSSig_TL"] = [7, "SSSig_TL",   "sssigFilter"]
+regions["SSSig_LL"] = [7, "SSSig_LL",   "sssigFilter"]
 """
+
+
+#regions["FAKES_NUM_F0"]   = [3,  "tight", "final"]
+#regions["FAKES_DEN_F0"]   = [3,  "loose", "final"]
+
+"""
+regions["FAKES_NUM_F1"]   = [7,  "tight", "final"]
+regions["FAKES_DEN_F1"]   = [7,  "loose", "final"]
+regions["FAKES_NUM_F2"]   = [7,  "tight", "final"]
+regions["FAKES_DEN_F2"]   = [7,  "loose", "final"]
+
+regions["FAKES_NUM_F3"]   = [7,  "tight", "final"]
+regions["FAKES_DEN_F3"]   = [7,  "loose", "final"]
+
+regions["FAKES_NUM_F4"]   = [7,  "tight", "final"]
+regions["FAKES_DEN_F4"]   = [7,  "loose", "final"]
+
+regions["FAKES_NUM_F5"]   = [7,  "tight", "final"]
+regions["FAKES_DEN_F5"]   = [7,  "loose", "final"]
+
+regions["FAKES_NUM_F6"]   = [7,  "tight", "final"]
+regions["FAKES_DEN_F6"]   = [7,  "loose", "final"]
+
+regions["FAKES_NUM_F7"]   = [7,  "tight", "final"]
+regions["FAKES_DEN_F7"]   = [7,  "loose", "final"]
+
+regions["FAKES_NUM_F8"]   = [7,  "tight", "final"]
+regions["FAKES_DEN_F8"]   = [7,  "loose", "final"]
+
+regions["FAKES_NUM_F9"]   = [7,  "tight", "final"]
+regions["FAKES_DEN_F9"]   = [7,  "loose", "final"]
+"""
+
 #"""
-#regions["FAKES_NUM_F0"]   = [2,  "tight", "bveto"]
-#regions["FAKES_DEN_F0"]   = [2,  "loose", "bveto"]
+regions["FAKES_NUM_F1"]   = [2,  "num", "1prong"]
+regions["FAKES_DEN_F1"]   = [2,  "den", "1prong"]
 
-regions["FAKES_NUM_F1"]   = [6,  "tight", "bveto"]
-regions["FAKES_DEN_F1"]   = [6,  "loose", "bveto"]
+regions["FAKES_NUM_F2"]   = [2,  "num", "1prong"]
+regions["FAKES_DEN_F2"]   = [2,  "den", "1prong"]
 
-regions["FAKES_NUM_F2"]   = [6,  "tight", "bveto"]
-regions["FAKES_DEN_F2"]   = [6,  "loose", "bveto"]
+regions["FAKES_NUM_F3"]   = [3,  "num", "1prong"]
+regions["FAKES_DEN_F3"]   = [3,  "den", "1prong"]
 
-regions["FAKES_NUM_F3"]   = [6,  "tight", "bveto"]
-regions["FAKES_DEN_F3"]   = [6,  "loose", "bveto"]
+regions["FAKES_NUM_F4"]   = [1,  "num", "1prong"]
+regions["FAKES_DEN_F4"]   = [1,  "den", "1prong"]
 
-regions["FAKES_NUM_F4"]   = [6,  "tight", "bveto"]
-regions["FAKES_DEN_F4"]   = [6,  "loose", "bveto"]
+regions["FAKES_NUM_F5"]   = [2,  "num", "1prong"]
+regions["FAKES_DEN_F5"]   = [2,  "den", "1prong"]
 
-regions["FAKES_NUM_F5"]   = [6,  "tight", "bveto"]
-regions["FAKES_DEN_F5"]   = [6,  "loose", "bveto"]
+regions["FAKES_NUM_F6"]   = [2,  "num", "1prong"]
+regions["FAKES_DEN_F6"]   = [2,  "den", "1prong"]
 
-regions["FAKES_NUM_F6"]   = [6,  "tight", "bveto"]
-regions["FAKES_DEN_F6"]   = [6,  "loose", "bveto"]
+regions["FAKES_NUM_F7"]   = [2,  "num", "1prong"]
+regions["FAKES_DEN_F7"]   = [2,  "den", "1prong"]
 
-regions["FAKES_NUM_F7"]   = [6,  "tight", "bveto"]
-regions["FAKES_DEN_F7"]   = [6,  "loose", "bveto"]
+regions["FAKES_NUM_F8"]   = [3,  "num", "1prong"]
+regions["FAKES_DEN_F8"]   = [3,  "den", "1prong"]
 
-regions["FAKES_NUM_F8"]   = [6,  "tight", "bveto"]
-regions["FAKES_DEN_F8"]   = [6,  "loose", "bveto"]
+regions["FAKES_NUM_F9"]   = [3,  "num", "1prong"]
+regions["FAKES_DEN_F9"]   = [3,  "den", "1prong"]
+
 #"""
+
+"""
+regions["FAKES_NUM_F1"]   = [3,  "num", "twotau"]
+regions["FAKES_DEN_F1"]   = [3,  "den", "twotau"]
+
+regions["FAKES_NUM_F2"]   = [3,  "num", "twotau"]
+regions["FAKES_DEN_F2"]   = [3,  "den", "twotau"]
+
+regions["FAKES_NUM_F3"]   = [2,  "num", "twotau"]
+regions["FAKES_DEN_F3"]   = [2,  "den", "twotau"]
+
+regions["FAKES_NUM_F4"]   = [2,  "num", "twotau"]
+regions["FAKES_DEN_F4"]   = [2,  "den", "twotau"]
+
+regions["FAKES_NUM_F5"]   = [4,  "num", "twotau"]
+regions["FAKES_DEN_F5"]   = [4,  "den", "twotau"]
+
+regions["FAKES_NUM_F6"]   = [5,  "num", "twotau"]
+regions["FAKES_DEN_F6"]   = [5,  "den", "twotau"]
+
+regions["FAKES_NUM_F7"]   = [6,  "num", "twotau"]
+regions["FAKES_DEN_F7"]   = [6,  "den", "twotau"]
+
+regions["FAKES_NUM_F8"]   = [6,  "num", "twotau"]
+regions["FAKES_DEN_F8"]   = [6,  "den", "twotau"]
+
+regions["FAKES_NUM_F9"]   = [6,  "num", "twotau"]
+regions["FAKES_DEN_F9"]   = [6,  "den", "twotau"]
+"""
 
 #regions["FAKESVR1_MAINREG"] = [3, "CR_Mvis<200GeV",   "newfull"]
 """
@@ -179,8 +290,9 @@ m.communicate()[0]
 
 
 for REG,OPT in regions.iteritems():
-  vars_list = plots.vars_mumu.vars_list
+  #vars_list = plots.vars_mumu.vars_list
   #vars_list = plots.vars_fakes.vars_list
+  vars_list = plots.vars_tau.vars_list
 
   for var in vars_list:
 
@@ -189,7 +301,7 @@ for REG,OPT in regions.iteritems():
     job_vars['ICUT']     = OPT[0]
     job_vars['LAB']      = OPT[1]
     job_vars['TAG']      = OPT[2]
-    job_vars['MAKEPLOT'] = False
+    job_vars['MAKEPLOT'] = True
     job_vars['FAKEST']   = fake_estimate
     
     VARS = []
