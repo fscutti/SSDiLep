@@ -35,8 +35,21 @@ tausubleadlead_ptratio = Var(name = 'tausubleadlead_ptratio',
               log     = False,
               )
 
+jetTrigJet_ptratio = Var(name = 'jetTrigJet_ptratio',
+              path    = 'event',
+              xmin    = 0.,
+              xmax    = 2.,
+              rebin   = 1,
+              log     = False,
+              )
 
-
+jetTrigJet_deltaR = Var(name = 'jetTrigJet_deltaR',
+              path    = 'event',
+              xmin    = 0.,
+              xmax    = 5.,
+              rebin   = 1,
+              log     = False,
+              )
 
 ## Single muon variables
 ## ---------------------------------------
@@ -133,6 +146,29 @@ jetlead_eta = Var(name = 'jetlead_eta',
               )
 
 
+trigJetlead_pt = Var(name = 'trigJetlead_pt',
+              path   = 'jets',
+              xmin   = 0.,
+              xmax   = 600.,
+              rebin  = 1,
+              log    = False,
+              )
+
+trigJetlead_phi = Var(name = 'trigJetlead_phi',
+              path    = 'jets',
+              xmin    = -3.2,
+              xmax    = 3.2,
+              rebin   = 4,
+              log     = False,
+              )
+
+trigJetlead_eta = Var(name = 'trigJetlead_eta',
+              path    = 'jets',
+              xmin    = -2.5,
+              xmax    = 2.5,
+              rebin   = 5,
+              log     = False,
+              )
 
 
 
@@ -161,9 +197,15 @@ vars_list.append(jetlead_pt)
 vars_list.append(jetlead_eta)
 vars_list.append(jetlead_phi)
 
+vars_list.append(trigJetlead_pt)
+vars_list.append(trigJetlead_eta)
+vars_list.append(trigJetlead_phi)
 
 vars_list.append(taujet_ptratio)
 vars_list.append(taujet_dphi)
+
+vars_list.append(jetTrigJet_ptratio)
+vars_list.append(jetTrigJet_deltaR)
 
 vars_list.append(taulead_JetBDTScore)
 vars_list.append(taulead_JetBDTScoreSigTrans)

@@ -24,8 +24,8 @@ parser.add_option('-s', '--samp', dest='sample',
 
 # --------------
 #user  = "fscutti"
-user  = "kkarppin"
-#user  = "tadej"
+#user  = "kkarppin"
+user  = "tadej"
 
 samp  = options.sample
 
@@ -36,7 +36,8 @@ samp  = options.sample
 #jtag = "EXOT22Data.v3"
 #jtag = "EXOT22MC.v3"
 #jtag = "SUSY11Data.v4"
-#jtag = "SUSY11Data.v1"
+#jtag = "SUSY3Data.v1"
+#jtag = "SUSY3Data.v1"
 jtag = "SUSY11MC.v1"
 
 # append here any last tag 
@@ -44,14 +45,16 @@ jtag = "SUSY11MC.v1"
 append_id = "r2"
 #append_id = "r2"
 
-stag = "r10210"
+#stag = "r10210"
+stag = "*"
 
 jtagsamp  = "%s.*%s*.*%s*" % (jtag,samp,stag)
 
 
 #jtype = "SSDiLep"
-jtype = "Tau"
+#jtype = "Tau"
 #jtype = "SeeSaw"
+jtype = "MLA"
 
 sys   = None
 if not sys: sys = "nominal"

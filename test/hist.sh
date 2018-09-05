@@ -16,8 +16,9 @@
 #INPATH="/coepp/cephfs/share/atlas/SSDiLep/SUSY11Data.v4.r2/merged/nominal"
 
 #INPATH="/coepp/cephfs/share/atlas/Tau/SUSY11MC.v1.r10210.r2/merged/nominal"
-INPATH="/coepp/cephfs/share/atlas/Tau/SUSY11Data.v1.r2/merged/nominal"
+#INPATH="/coepp/cephfs/share/atlas/Tau/SUSY11Data.v1.r2/merged/nominal"
 
+INPATH="/coepp/cephfs/share/atlas/MLA/SUSY11Data.v1/merged/nominal"
 
 # EXOT22 v3
 #INPATH="/coepp/cephfs/share/atlas/SSDiLep/EXOT22Data.v3/merged/nominal"
@@ -51,8 +52,8 @@ SCRIPT="j.plotter_OneTauFF.py"
 #SCRIPT="j.plotter_VR4.py"
 #SCRIPT="j.plotter_VR5.py"
 
-python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/data16_13TeV_periodG.root --sampletype="data" --samplename="data16_13TeV_periodG"  --minentry=0 --maxentry=20000  #--config="sys:FF_DN" 
-#python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/data15_13TeV_periodD.root --sampletype="data" --samplename="data15_13TeV_periodD"  --minentry=0 --maxentry=20000  #--config="sys:FF_DN" 
+#python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/data16_13TeV_periodG.root --sampletype="data" --samplename="data16_13TeV_periodG"  --minentry=0 --maxentry=200000  #--config="sys:FF_DN" 
+python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/data15_13TeV_periodD.root --sampletype="data" --samplename="data15_13TeV_periodD"  --minentry=0 --maxentry=200000  #--config="sys:FF_DN" 
 #python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.root --sampletype="mc" --samplename="PhPy8EG_A14_ttbar_hdamp258p75_nonallhad" --minentry=0 --maxentry=20000   #--config="sys:FF_DN" 
 
 #python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_CFilterBVeto.root --sampletype="mc" --samplename="Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_CFilterBVeto" --minentry=0 --maxentry=10000   #--config="sys:FF_DN" 

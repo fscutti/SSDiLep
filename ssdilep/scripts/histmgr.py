@@ -85,7 +85,6 @@ class HistMgr():
         f_list = []
 
         for path in paths_to_files:
-           #print "This is the path ", path
            f = ROOT.TFile.Open(path)
            #print "new appending %s to list of slices"%path
            f_list.append(f)
@@ -112,7 +111,6 @@ class HistMgr():
               path_to_hist = os.path.join(path_to_hist,cutflow)
              
            path_to_hist = os.path.join(path_to_hist,histname)
-           #print "found path to hist %s"%path_to_hist
 
            h = f.Get(path_to_hist)
            #print "got histogram %s"%h.GetName()

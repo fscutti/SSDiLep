@@ -192,7 +192,7 @@ h_taujet_scdphi  = Hist1D( hname  = "h_taujet_scdphi",
                            )
 
 h_taujet_ptratio  = Hist1D( hname  = "h_taujet_ptratio",
-                            xtitle = "#Delta#phi(#tau_{lead},jet_{lead})",
+                            xtitle = "p_{T}(#tau_{lead}) / p_{T}(jet_{lead})",
                             ytitle = "Events", 
                             nbins  = 64,
                             xmin   = 0.,
@@ -202,7 +202,7 @@ h_taujet_ptratio  = Hist1D( hname  = "h_taujet_ptratio",
                             )
 
 h_tausubleadlead_ptratio  = Hist1D( hname  = "h_tausubleadlead_ptratio",
-                            xtitle = "#Delta#phi(#tau_{sublead},#tau_{lead})",
+                            xtitle = "p_{T}(#tau_{sublead}) / p_{T}(jet_{lead})",
                             ytitle = "Events", 
                             nbins  = 64,
                             xmin   = 0.,
@@ -210,6 +210,29 @@ h_tausubleadlead_ptratio  = Hist1D( hname  = "h_tausubleadlead_ptratio",
                             dir    = "event",
                             vexpr  = "self.store['tausubleadlead_ptratio']",
                             )
+
+
+h_jetTrigJet_ptratio  = Hist1D( hname  = "h_jetTrigJet_ptratio",
+                              xtitle = "p_{T}(jet_{lead}) / p_{T}(trigJet_{lead})",
+                              ytitle = "Events", 
+                              nbins  = 64,
+                              xmin   = 0.,
+                              xmax   = 2.,
+                              dir    = "event",
+                              vexpr  = "self.store['jetTrigJet_ptratio']",
+                              )
+
+
+h_jetTrigJet_deltaR  = Hist1D( hname  = "h_jetTrigJet_deltaR",
+                              xtitle = "#Delta R(jet_{lead},trigJet_{lead})",
+                              ytitle = "Events", 
+                              nbins  = 100,
+                              xmin   = 0.,
+                              xmax   = 5.,
+                              dir    = "event",
+                              vexpr  = "self.store['jetTrigJet_deltaR']",
+                              )
+
 
 # -------
 # jets
@@ -243,6 +266,39 @@ h_jetlead_phi = Hist1D( hname  = "h_jetlead_phi",
                               dir    = "jets",
                               vexpr  = "self.store['jets'][0].tlv.Phi()",
                             )
+
+
+h_trigJetlead_pt  = Hist1D( hname  = "h_trigJetlead_pt",
+                              xtitle = "p_{T}(trigJet_{lead}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.0,
+                              dir    = "jets",
+                              vexpr  = "self.store['trigJets'][0].tlv.Pt()/GeV",
+                            )
+
+h_trigJetlead_eta = Hist1D( hname  = "h_trigJetlead_eta",
+                              xtitle = "#eta(trigJet_{lead})",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 50,
+                              xmin   = -2.5,
+                              xmax   = 2.5,
+                              dir    = "jets",
+                              vexpr  = "self.store['trigJets'][0].tlv.Eta()",
+                            )
+
+h_trigJetlead_phi = Hist1D( hname  = "h_trigJetlead_phi",
+                              xtitle = "#phi(trigJet_{lead})",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 64,
+                              xmin   = -3.2,
+                              xmax   = 3.2,
+                              dir    = "jets",
+                              vexpr  = "self.store['trigJets'][0].tlv.Phi()",
+                            )
+
+
 
 h_jets_mTtot  = Hist1D( hname  = "h_jets_mTtot",
                               xtitle = "m^{tot}_{T}(j_{lead},j_{sublead}) [GeV]",

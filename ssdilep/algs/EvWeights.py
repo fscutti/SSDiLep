@@ -47,38 +47,14 @@ class TrigPresc(pyframe.core.Algorithm):
     def execute(self, weight):
         trigpresc = 1.0
         
-        # luminosity weighted prescales
-        #presc_dict = {
-        #    "HLT_mu20_L1MU15"     : 354.153, 
-        #    "HLT_mu24"            : 47.64, 
-        #    "HLT_mu50"            : 1.0,
-        #    #"HLT_mu26_imedium"    : 1.943,
-        #    "HLT_mu26_ivarmedium" : 1.098,
-        #    }
-
         if "data" in self.sampletype:
           ineff_list = []
-          for trig in self.store["reqTrig"]: 
-            
-            # used for main analysis
-            # ----------------------
-            #for mu in self.store["muons"]:
-            #  if mu.tlv.Pt()>=self.store["singleMuTrigSlice"][trig][0] and mu.tlv.Pt()<self.store["singleMuTrigSlice"][trig][1]:
-            #    ineff_list.append(1. - 1. / presc_dict[trig])
-            
-            # used for fake-factors
-            # ----------------------
-            #if trig in self.store["passTrig"].keys(): 
-            #  for mu in self.store["muons"]:
-            #    ineff_list.append(1. - 1. / presc_dict[trig])
-
-
-            # used for new fake-factors
-            # ----------------------
-            if trig in self.store["passTrig"].keys(): 
-              for p in self.store[self.particles]:
-                if self.store["passTrig"][trig]["prescale"] == 0.: continue
-                ineff_list.append(1. - 1. / self.store["passTrig"][trig]["prescale"])
+          #for trig in self.store["reqTrig"]: 
+          for trig in self.store["passTrig"].keys(): 
+            if trig in self.store["disTrig"].keys(): continue
+            #for p in self.store[self.particles]:
+            if self.store["passTrig"][trig]["prescale"] == 0.: continue
+            ineff_list.append(1. - 1. / self.store["passTrig"][trig]["prescale"])
 
           if ineff_list:
             tot_ineff = 1.0
@@ -86,7 +62,7 @@ class TrigPresc(pyframe.core.Algorithm):
             trigpresc -= tot_ineff
         
         trigpresc = 1. / trigpresc
-
+        
         if self.key:
           self.store[self.key] = trigpresc
         self.set_weight(trigpresc*weight)

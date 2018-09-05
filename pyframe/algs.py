@@ -397,6 +397,10 @@ class AttachTLVs(pyframe.core.Algorithm):
                     p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 0.0)
                 elif p.prefix.startswith('tau_'):
                     p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, p.m)
+                elif p.prefix.startswith('trigJet_a4tcemsubjesFS_'):
+                    p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 0.0)
+                elif p.prefix.startswith('trigJet_a4tcemsubjesISFS_'):
+                    p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 0.0)
                 #elif p.prefix.startswith('trig_EF_tau_'):
                 #    p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, p.m)
                 #elif p.prefix.startswith('trig_L2_tau_'):

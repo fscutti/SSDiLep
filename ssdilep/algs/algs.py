@@ -63,6 +63,13 @@ class CutAlg(pyframe.core.Algorithm):
         return result
     
     #__________________________________________________________________________
+    """
+    def cut_CutTest(self):
+      print self.chain.trigMatchMap.
+      #print self.chain.passedTriggers.__dict__
+      return True
+    """ 
+    #__________________________________________________________________________
     def cut_AtLeastTwoMuons(self):
       return self.chain.nmuon > 1
     #__________________________________________________________________________
@@ -1005,14 +1012,36 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_SingleJetTrigger(self):
-      required_triggers = self.store["reqTrig"]
-      passed_triggers   = self.store["passTrig"].keys()
-   
+      required_triggers  = self.store["reqTrig"]
+      passed_triggers    = self.store["passTrig"].keys()
+      disabled_triggers  = self.store["disTrig"].keys()
+  
+      if not 'trigJets' in self.store.keys(): return False
+
       lead_jet = self.store['jets'][0]
+      lead_trigJet = self.store['trigJets'][0]
 
       for t in required_triggers:
-        if t in passed_triggers: 
-          if lead_jet.tlv.Pt() >= self.store["passTrig"][t]["pt_slice"][0] and lead_jet.tlv.Pt() < self.store["passTrig"][t]["pt_slice"][1]:
+        if t in disabled_triggers: continue
+        if t in passed_triggers and lead_trigJet.tlv.Pt() > float(t[5:]) * GeV: 
+            return True
+      return False
+
+
+    #__________________________________________________________________________
+    def cut_SingleJetTriggerMatch(self):
+      required_triggers  = self.store["reqTrig"]
+      passed_triggers    = self.store["passTrig"].keys()
+      disabled_triggers  = self.store["disTrig"].keys()
+  
+      if not 'trigJets' in self.store.keys(): return False
+
+      lead_jet = self.store['jets'][0]
+      lead_trigJet = self.store['trigJets'][0]
+
+      for t in required_triggers:
+        if t in disabled_triggers: continue
+        if t in passed_triggers and lead_trigJet.tlv.Pt() > float(t[5:]) * GeV and lead_trigJet.tlv.DeltaR(lead_jet.tlv) < 0.5: 
             return True
       return False
 

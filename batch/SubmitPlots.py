@@ -15,38 +15,8 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-#indir    = 'HistFFOneTau'
-#outdir   = 'PlotsFFOneTau'
-
-#indir    = 'HistFFTwoTau'
-#outdir   = 'PlotsFFTwoTau'
-
-#indir    = 'HistMuFF9AprNoTrigSF'
-#outdir   = 'PlotsMuFF9AprNoTrigSF'
-
-#indir    = 'HistMuVal8AprFilter'
-#outdir   = 'PlotsMuVal8AprFilter'
-
-#indir    = 'HistMuVal14Mar'
-#outdir   = 'PlotsMuVal14MarNew'
-
-#indir    = 'HistMuVal14Mar'
-#outdir   = 'PlotsMuVal14Mar'
-
-#indir    = 'HistMuFF1May'
-#outdir   = 'PlotsNewMuFF1May'
-
-
-
-#indir = "HistFF1PTauRevThrLim"
-#outdir = "PlotsFF1PTauRevThrLim"
-
-#indir = "HistFF1PTauWin"
-#outdir = "PlotsFF1PTauWin"
-
-indir = "HistFF1PTauWinRedLim"
-outdir = "PlotsFF1PTauWinRedLim"
-
+indir    = 'HistFF1PTESTMatch'
+outdir   = 'PlotsFF1PTESTMatch'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -156,9 +126,13 @@ regions["FAKES_DEN_F9"]   = [7,  "loose", "final"]
 """
 
 #"""
-regions["FAKES_NUM_F1"]   = [2,  "num", "1prong"]
-regions["FAKES_DEN_F1"]   = [2,  "den", "1prong"]
+regions["FAKES_NUM_F1"]   = [3,  "num", "1prong"]
+regions["FAKES_DEN_F1"]   = [3,  "den", "1prong"]
 
+regions["FAKES_NUM_F2"]   = [3,  "num", "1prong"]
+regions["FAKES_DEN_F2"]   = [3,  "den", "1prong"]
+
+"""
 regions["FAKES_NUM_F2"]   = [2,  "num", "1prong"]
 regions["FAKES_DEN_F2"]   = [2,  "den", "1prong"]
 
@@ -182,7 +156,7 @@ regions["FAKES_DEN_F8"]   = [3,  "den", "1prong"]
 
 regions["FAKES_NUM_F9"]   = [3,  "num", "1prong"]
 regions["FAKES_DEN_F9"]   = [3,  "den", "1prong"]
-
+"""
 #"""
 
 """

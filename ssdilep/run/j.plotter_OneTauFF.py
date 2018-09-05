@@ -59,7 +59,10 @@ def analyze(config):
                                   outfile=config['samplename']+".root",
                                   quiet=False,
                                   )
-   
+
+    print config['samplename']
+
+
     ## configure the list of triggers 
     ## with eventual prescales and puts a
     ## trig list to the store for later cutflow
@@ -72,30 +75,31 @@ def analyze(config):
                              'HLT_j55', 
                              'HLT_j60', 
                              'HLT_j85', 
-                             'HLT_j110',
-                             'HLT_j150',
-                             'HLT_j175',
-                             'HLT_j200',
-                             'HLT_j260',
-                             'HLT_j320',
-                             'HLT_j360',
-                             'HLT_j380',
-                             'HLT_j400',
-                             'HLT_j420',
-                             'HLT_j440',
+                             'HLT_j110', 
+                             'HLT_j150', 
+                             'HLT_j175', 
+                             'HLT_j200', 
+                             'HLT_j260', 
+                             'HLT_j300', 
+                             'HLT_j320', 
+                             'HLT_j360', 
+                             'HLT_j380', 
+                             'HLT_j400', 
+                             'HLT_j420', 
+                             'HLT_j440', 
                              'HLT_j460',
                              ],
-        key               = 'jets',
-        )
+                             key               = 'jets',
+                             )
 
     ## build and pt-sort objects
     ## ---------------------------------------
     loop += pyframe.algs.ListBuilder(
-        prefixes = ['tau_','jet_'],
-        keys = ['taus','jets'],
+        prefixes = ['tau_','jet_','trigJet_a4tcemsubjesFS_','trigJet_a4tcemsubjesISFS_'],
+        keys = ['taus','jets','trigJetsFS','trigJetsISFS'],
         )
     loop += pyframe.algs.AttachTLVs(
-        keys = ['taus','jets'],
+        keys = ['taus','jets','trigJetsFS','trigJetsISFS'],
         )
     # just a decoration of particles ...
     loop += ssdilep.algs.vars.ParticlesBuilder(
@@ -125,20 +129,25 @@ def analyze(config):
    
     ## initialize and/or decorate objects
     ## ---------------------------------------
-    loop += ssdilep.algs.vars.DiJetVars(key_leptons='taus',key_jets='jets',build_tight_jets=True)   
+    loop += ssdilep.algs.vars.DiJetVars(key_leptons='taus',
+                                        key_jets='jets',
+                                        build_tight_jets=True,
+                                        build_trigger_jets=True,
+                                        )   
     
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One1PTau') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One3PTau') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One1PTau') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One3PTau') 
     
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='MuVeto') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleJetTrigger') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleJetTrigger') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTauPt20') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsVeryLoose') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTightJet') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTightJet') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneJet') 
 
 
     ## weights configuration
@@ -179,6 +188,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['SingleJetTrigger', None],
               ['LeadJetPt20', None],
               ['TauJetDphi27', None],
               ['LeadTauIsMedium', None],
@@ -190,12 +200,42 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['SingleJetTrigger', None],
               ['LeadJetPt20', None],
               ['TauJetDphi27', None],
               ['LeadTauIsNotMedium', None],
               ],
             )
-
+    
+    
+    ## F2
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_NUM_F2',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['SingleJetTriggerMatch', None],
+              ['LeadJetPt20', None],
+              ['TauJetDphi27', None],
+              ['LeadTauIsMedium', None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_DEN_F2',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['SingleJetTriggerMatch', None],
+              ['LeadJetPt20', None],
+              ['TauJetDphi27', None],
+              ['LeadTauIsNotMedium', None],
+              ],
+            )
+    
+    """
     ## F2
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -401,7 +441,7 @@ def analyze(config):
               ['LeadTauIsNotMedium', None],
               ],
             )
-
+    """
     loop += pyframe.algs.HistCopyAlg()
 
     ##-------------------------------------------------------------------------

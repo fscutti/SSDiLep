@@ -11,7 +11,8 @@ hist_list.append(h_njets)
 
 hist_list.append(h_taujet_dphi)
 hist_list.append(h_taujet_ptratio)
-
+hist_list.append(h_jetTrigJet_ptratio)
+hist_list.append(h_jetTrigJet_deltaR)
 
 # -------
 # jets
@@ -21,6 +22,10 @@ hist_list.append(h_taujet_ptratio)
 hist_list.append(h_jetlead_pt)
 hist_list.append(h_jetlead_eta)
 hist_list.append(h_jetlead_phi)
+
+hist_list.append(h_trigJetlead_pt)
+hist_list.append(h_trigJetlead_eta)
+hist_list.append(h_trigJetlead_phi)
 
 # -------
 # taus

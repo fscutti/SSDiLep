@@ -49,126 +49,93 @@ class BuildTrigConfig(pyframe.core.Algorithm):
       # -----------------------
       
       jet_trigger_slice = {}
-      """
-      jet_trigger_slice["HLT_j15" ] = (17.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j25" ] = (30.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j35" ] = (40.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j55" ] = (60.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j60" ] = (66.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j85" ] = (94.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j110"] = (120. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j150"] = (165. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j175"] = (195. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j260"] = (285. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j320"] = (350. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j360"] = (395. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j380"] = (420. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j400"] = (440. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j420"] = (465. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j440"] = (485. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j460"] = (505. * GeV, nolim * GeV)
-      """
-      
-      """
-      jet_trigger_slice["HLT_j15"]  = (15.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j25"]  = (25.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j35"]  = (35.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j55"]  = (55.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j60"]  = (60.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j85"]  = (85.  * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j110"] = (110. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j150"] = (150. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j175"] = (175. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j260"] = (260. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j320"] = (320. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j360"] = (360. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j380"] = (380. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j400"] = (400. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j420"] = (420. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j440"] = (440. * GeV, nolim * GeV)
-      jet_trigger_slice["HLT_j460"] = (460. * GeV, nolim * GeV)
-      """
+      jet_trigger_slice["mc"] = {}
+      jet_trigger_slice["data15"] = {}
+      jet_trigger_slice["data16"] = {}
+      jet_trigger_slice["data17"] = {}
 
-      # reverse threshold
-      """
-      jet_trigger_slice["HLT_j15"]  = (15.  * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j25"]  = (25.  * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j35"]  = (35.  * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j55"]  = (55.  * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j60"]  = (60.  * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j85"]  = (85.  * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j110"] = (110. * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j150"] = (150. * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j175"] = (175. * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j260"] = (260. * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j320"] = (320. * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j360"] = (360. * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j380"] = (380. * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j400"] = (400. * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j420"] = (420. * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j440"] = (440. * GeV * 0.8, nolim * GeV)
-      jet_trigger_slice["HLT_j460"] = (460. * GeV * 0.8, nolim * GeV)
-      """ 
-      """
-      # pt window
-      jet_trigger_slice["HLT_j15"]  = (15.  * GeV * 1.2, 25.  * GeV * 1.2)
-      jet_trigger_slice["HLT_j25"]  = (25.  * GeV * 1.2, 35.  * GeV * 1.2)
-      jet_trigger_slice["HLT_j35"]  = (35.  * GeV * 1.2, 55.  * GeV * 1.2)
-      jet_trigger_slice["HLT_j55"]  = (55.  * GeV * 1.2, 60.  * GeV * 1.2)
-      jet_trigger_slice["HLT_j60"]  = (60.  * GeV * 1.2, 85.  * GeV * 1.2)
-      jet_trigger_slice["HLT_j85"]  = (85.  * GeV * 1.2, 110. * GeV * 1.2)
-      jet_trigger_slice["HLT_j110"] = (110. * GeV * 1.2, 150. * GeV * 1.2)
-      jet_trigger_slice["HLT_j150"] = (150. * GeV * 1.2, 175. * GeV * 1.2)
-      jet_trigger_slice["HLT_j175"] = (175. * GeV * 1.2, 260. * GeV * 1.2)
-      jet_trigger_slice["HLT_j260"] = (260. * GeV * 1.2, 320. * GeV * 1.2)
-      jet_trigger_slice["HLT_j320"] = (320. * GeV * 1.2, 360. * GeV * 1.2)
-      jet_trigger_slice["HLT_j360"] = (360. * GeV * 1.2, 380. * GeV * 1.2)
-      jet_trigger_slice["HLT_j380"] = (380. * GeV * 1.2, 400. * GeV * 1.2)
-      jet_trigger_slice["HLT_j400"] = (400. * GeV * 1.2, 420. * GeV * 1.2)
-      jet_trigger_slice["HLT_j420"] = (420. * GeV * 1.2, 440. * GeV * 1.2)
-      jet_trigger_slice["HLT_j440"] = (440. * GeV * 1.2, 460. * GeV * 1.2)
-      jet_trigger_slice["HLT_j460"] = (460. * GeV * 1.2, nolim * GeV)
-      """
+      jet_trigger_slice["mc"]["HLT_j15"]  = (20.  * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j25"]  = (20.  * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j35"]  = (36.  * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j55"]  = (56.  * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j60"]  = (70.  * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j85"]  = (92.  * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j110"] = (120. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j150"] = (158. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j175"] = (184. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j200"] = (210. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j260"] = (266. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j300"] = (300. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j320"] = (326. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j360"] = (380. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j380"] = (414. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j400"] = (440. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j420"] = (460. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j440"] = (480. * GeV , nolim * GeV)
+      jet_trigger_slice["mc"]["HLT_j460"] = (500. * GeV , nolim * GeV)
 
-      # pt window red
-      """
-      jet_trigger_slice["HLT_j15"]  = (15.  * GeV * 1.02, 25.  * GeV * 1.02)
-      jet_trigger_slice["HLT_j25"]  = (25.  * GeV * 1.02, 35.  * GeV * 1.02)
-      jet_trigger_slice["HLT_j35"]  = (35.  * GeV * 1.02, 55.  * GeV * 1.02)
-      jet_trigger_slice["HLT_j55"]  = (55.  * GeV * 1.02, 60.  * GeV * 1.02)
-      jet_trigger_slice["HLT_j60"]  = (60.  * GeV * 1.02, 85.  * GeV * 1.02)
-      jet_trigger_slice["HLT_j85"]  = (85.  * GeV * 1.02, 110. * GeV * 1.02)
-      jet_trigger_slice["HLT_j110"] = (110. * GeV * 1.02, 150. * GeV * 1.02)
-      jet_trigger_slice["HLT_j150"] = (150. * GeV * 1.02, 175. * GeV * 1.02)
-      jet_trigger_slice["HLT_j175"] = (175. * GeV * 1.02, 260. * GeV * 1.02)
-      jet_trigger_slice["HLT_j260"] = (260. * GeV * 1.02, 320. * GeV * 1.02)
-      jet_trigger_slice["HLT_j320"] = (320. * GeV * 1.02, 360. * GeV * 1.02)
-      jet_trigger_slice["HLT_j360"] = (360. * GeV * 1.02, 380. * GeV * 1.02)
-      jet_trigger_slice["HLT_j380"] = (380. * GeV * 1.02, 400. * GeV * 1.02)
-      jet_trigger_slice["HLT_j400"] = (400. * GeV * 1.02, 420. * GeV * 1.02)
-      jet_trigger_slice["HLT_j420"] = (420. * GeV * 1.02, 440. * GeV * 1.02)
-      jet_trigger_slice["HLT_j440"] = (440. * GeV * 1.02, 460. * GeV * 1.02)
-      jet_trigger_slice["HLT_j460"] = (460. * GeV * 1.02, nolim * GeV)
-      """
 
-      # pt window red limit
-      jet_trigger_slice["HLT_j15"]  = (15.  * GeV * 1.02, 25.  * GeV * 1.2)
-      jet_trigger_slice["HLT_j25"]  = (25.  * GeV * 1.02, 35.  * GeV * 1.2)
-      jet_trigger_slice["HLT_j35"]  = (35.  * GeV * 1.02, 55.  * GeV * 1.2)
-      jet_trigger_slice["HLT_j55"]  = (55.  * GeV * 1.02, 60.  * GeV * 1.2)
-      jet_trigger_slice["HLT_j60"]  = (60.  * GeV * 1.02, 85.  * GeV * 1.2)
-      jet_trigger_slice["HLT_j85"]  = (85.  * GeV * 1.02, 110. * GeV * 1.2)
-      jet_trigger_slice["HLT_j110"] = (110. * GeV * 1.02, 150. * GeV * 1.2)
-      jet_trigger_slice["HLT_j150"] = (150. * GeV * 1.02, 175. * GeV * 1.2)
-      jet_trigger_slice["HLT_j175"] = (175. * GeV * 1.02, 260. * GeV * 1.2)
-      jet_trigger_slice["HLT_j260"] = (260. * GeV * 1.02, 320. * GeV * 1.2)
-      jet_trigger_slice["HLT_j320"] = (320. * GeV * 1.02, 360. * GeV * 1.2)
-      jet_trigger_slice["HLT_j360"] = (360. * GeV * 1.02, 380. * GeV * 1.2)
-      jet_trigger_slice["HLT_j380"] = (380. * GeV * 1.02, 400. * GeV * 1.2)
-      jet_trigger_slice["HLT_j400"] = (400. * GeV * 1.02, 420. * GeV * 1.2)
-      jet_trigger_slice["HLT_j420"] = (420. * GeV * 1.02, 440. * GeV * 1.2)
-      jet_trigger_slice["HLT_j440"] = (440. * GeV * 1.02, 460. * GeV * 1.2)
-      jet_trigger_slice["HLT_j460"] = (460. * GeV * 1.02, nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j15"]  = (20.  * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j25"]  = (20.  * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j35"]  = (36.  * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j55"]  = (56.  * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j60"]  = (70.  * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j85"]  = (92.  * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j110"] = (120. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j150"] = (158. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j175"] = (184. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j200"] = (210. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j260"] = (266. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j300"] = (300. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j320"] = (326. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j360"] = (380. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j380"] = (414. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j400"] = (440. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j420"] = (460. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j440"] = (480. * GeV , nolim * GeV)
+      jet_trigger_slice["data15"]["HLT_j460"] = (500. * GeV , nolim * GeV)
+
+
+      jet_trigger_slice["data16"]["HLT_j15"]  = (20.  * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j25"]  = (20.  * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j35"]  = (36.  * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j55"]  = (56.  * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j60"]  = (68.  * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j85"]  = (92.  * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j110"] = (120. * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j150"] = (158. * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j175"] = (186. * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j200"] = (nolim * GeV, nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j260"] = (270. * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j300"] = (nolim * GeV, nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j320"] = (330. * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j360"] = (366. * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j380"] = (412. * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j400"] = (440. * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j420"] = (470. * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j440"] = (482. * GeV , nolim * GeV)
+      jet_trigger_slice["data16"]["HLT_j460"] = (504. * GeV , nolim * GeV)
+
+
+      jet_trigger_slice["data17"]["HLT_j15"]  = (20.  * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j25"]  = (20.  * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j35"]  = (34.  * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j55"]  = (nolim * GeV, nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j60"]  = (62. * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j85"]  = (90. * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j110"] = (120. * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j150"] = (nolim * GeV, nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j175"] = (186. * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j200"] = (nolim * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j260"] = (272. * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j300"] = (nolim * GeV, nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j320"] = (nolim * GeV, nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j360"] = (366. * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j380"] = (378. * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j400"] = (406. * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j420"] = (448. * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j440"] = (478. * GeV , nolim * GeV)
+      jet_trigger_slice["data17"]["HLT_j460"] = (488. * GeV , nolim * GeV)
 
 
       # slices for muon triggers
@@ -181,7 +148,9 @@ class BuildTrigConfig(pyframe.core.Algorithm):
 
       # initialise the different slices
       pt_slice = {}
-      if self.key == "jets": pt_slice = jet_trigger_slice
+      if self.key == "jets": 
+        if self.sampletype == "mc": pt_slice = jet_trigger_slice[self.samplename["mc"]]
+        else:                       pt_slice = jet_trigger_slice[self.samplename[:6]]
       if self.key == "muons": pt_slice = mu_trigger_slice
 
       if not "reqTrig" in self.store.keys():
@@ -200,6 +169,12 @@ class BuildTrigConfig(pyframe.core.Algorithm):
           for trig,presc in zip(self.chain.passedTriggers,self.chain.triggerPrescales):
             if trig in pt_slice.keys():
               self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":pt_slice[trig]}
+
+      if not "disTrig" in self.store.keys():
+        self.store["disTrig"] = {}
+        for trig in self.chain.disabledTriggers:
+          if trig in pt_slice.keys():
+            self.store["disTrig"][trig] = {"prescale":1, "pt_slice":pt_slice[trig]}
 
       return True
 
@@ -442,12 +417,14 @@ class DiJetVars(pyframe.core.Algorithm):
                  key_jets    = 'jets',
                  key_met     = 'met_trk',
                  build_tight_jets = False,
+                 build_trigger_jets = False,
                  ):
         pyframe.core.Algorithm.__init__(self, name)
         self.key_leptons = key_leptons
         self.key_jets = key_jets
         self.key_met = key_met
         self.build_tight_jets = build_tight_jets
+        self.build_trigger_jets = build_trigger_jets
 
     #__________________________________________________________________________
     def execute(self, weight):
@@ -520,6 +497,20 @@ class DiJetVars(pyframe.core.Algorithm):
              assert jets_nontight[0].tlv.Pt() >= jets_nontight[1].tlv.Pt(), "jets_nontight not sorted.."
            self.store['jets_tight'] = jets_tight        
            self.store['jets_nontight'] = jets_nontight        
+
+        # -------------------------
+        # build trigger jets
+        # -------------------------
+        if self.build_trigger_jets:
+          if len(self.store['trigJetsISFS']) > 0: 
+            self.store['trigJets'] = self.store['trigJetsISFS']
+          elif len(self.store['trigJetsFS']) > 0: 
+            self.store['trigJets'] = self.store['trigJetsFS']
+
+          if 'trigJets' in self.store:
+            self.store['jetTrigJet_ptratio'] = self.store['jets'][0].tlv.Pt() / self.store['trigJets'][0].tlv.Pt()
+            self.store['jetTrigJet_deltaR'] = self.store['jets'][0].tlv.DeltaR(self.store['trigJets'][0].tlv)
+
         return True
 
        

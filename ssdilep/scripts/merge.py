@@ -134,13 +134,10 @@ if reg_suffix == "MAINREG":
 
     fake_subtraction_regions = []
     fake_subtraction_regions += ["LLT","LTL","TLL"]
-
-
-else:
   
-  if options.fakest == "Subtraction":
-    main_addition_regions =  fake_addition_regions = [""]
-    reg_prefix            =  options.region
+if options.fakest == "Subtraction":
+  main_addition_regions =  fake_addition_regions = [""]
+  reg_prefix            =  options.region
 
 fakes.estimator = histmgr.AddRegEstimator(
       hm                  = hm, 
@@ -194,6 +191,7 @@ if options.makeplot == "True":
     backgrounds   = plot_ord_bkg,
     signal        = signals, 
     data          = recom_data,
+    #data          = None,
     region        = options.region,
     label         = options.label,
     histname      = os.path.join(vardict[options.vname]['path'],vardict[options.vname]['hname']),
@@ -214,6 +212,7 @@ else:
          backgrounds = plot_ord_bkg,
          signal      = signals, # This can be a list
          data        = recom_data,
+         #data        = None,
          region      = options.region,
          icut        = int(options.icut),
          histname    = os.path.join(vardict[options.vname]['path'],vardict[options.vname]['hname']),
