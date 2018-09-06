@@ -152,7 +152,7 @@ class CutAlg(pyframe.core.Algorithm):
         return self.chain.tau_pt.size() == 1
     #__________________________________________________________________________
     def cut_TwoTaus(self):
-        if self.chain.ntaus == 2:
+        if self.chain.ntau == 2:
           return self.store["taus"][0].ntrk in [1, 3] and self.store["taus"][1].ntrk in [1, 3]
         return False
     
@@ -855,7 +855,7 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_TauPPMedium(self):
       taus = self.store['taus']
       lead_pass_medium    = bool(taus[0].isJetBDTSigMedium)
-      sublead_pass_medium = bool(muons[1].isJetBDTSigMedium)
+      sublead_pass_medium = bool(taus[1].isJetBDTSigMedium)
       pass_mc_filter      = True
       
       if self.sampletype=="mc":
@@ -870,7 +870,7 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_TauPFMedium(self):
       taus = self.store['taus']
       lead_pass_medium    = bool(taus[0].isJetBDTSigMedium)
-      sublead_fail_medium = not bool(muons[1].isJetBDTSigMedium)
+      sublead_fail_medium = bool(taus[1].isJetBDTSigVeryLoose) and not bool(taus[1].isJetBDTSigMedium)
       pass_mc_filter      = True
       
       if self.sampletype=="mc":
@@ -883,8 +883,8 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_TauFPMedium(self):
       taus = self.store['taus']
-      lead_fail_medium    = not bool(taus[0].isJetBDTSigMedium)
-      sublead_pass_medium = bool(muons[1].isJetBDTSigMedium)
+      lead_fail_medium    = bool(taus[0].isJetBDTSigVeryLoose) and not bool(taus[0].isJetBDTSigMedium)
+      sublead_pass_medium = bool(taus[1].isJetBDTSigMedium)
       pass_mc_filter      = True
       
       if self.sampletype=="mc":
@@ -897,8 +897,8 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_TauFFMedium(self):
       taus = self.store['taus']
-      lead_fail_medium    = not bool(taus[0].isJetBDTSigMedium)
-      sublead_fail_medium = not bool(muons[1].isJetBDTSigMedium)
+      lead_fail_medium    = bool(taus[0].isJetBDTSigVeryLoose) and not bool(taus[0].isJetBDTSigMedium)
+      sublead_fail_medium = bool(taus[1].isJetBDTSigVeryLoose) and not bool(taus[1].isJetBDTSigMedium)
       pass_mc_filter      = True
       
       if self.sampletype=="mc":
@@ -1094,11 +1094,15 @@ class CutAlg(pyframe.core.Algorithm):
       disabled_triggers  = self.store["disTrig"].keys()
 
       lead_tau = self.store['taus'][0]
-
-      for t in required_triggers:
-        if t in disabled_triggers: continue
-        if t in passed_triggers and lead_tau.tlv.Pt() > float(t[7:]) * 1.1 * GeV: 
+      
+      for trig in required_triggers:
+        if trig in disabled_triggers: continue
+        if trig in self.store["ChainsWithTau"].keys():
+          tau_is_matched     = bool( lead_tau.isTrigMatchedToChain.at(self.store["ChainsWithTau"][trig]) )
+          event_is_triggered = bool( trig in passed_triggers )
+          if tau_is_matched and event_is_triggered and lead_tau.tlv.Pt() > float(trig.split("_")[1][3:]) * 1.1 * GeV: 
             return True
+
       return False
 
 
@@ -1217,51 +1221,6 @@ class CutAlg(pyframe.core.Algorithm):
 
       return False
     
-    """ 
-    #__________________________________________________________________________
-    def cut_LeadIsMatchedPresc(self):
-      required_triggers = self.store["reqTrig"]
-      passed_triggers   = self.store["passTrig"].keys()
-      
-      lead_mu = self.store['muons'][0]
-      for trig in required_triggers:
-        if trig in self.store["singleMuTrigList"].keys():
-          lead_mu_is_matched = bool( lead_mu.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
-          event_is_triggered = bool( trig in passed_triggers )
-          if lead_mu_is_matched and event_is_triggered: 
-            if lead_mu.tlv.Pt()>=self.store["singleMuTrigSlice"][trig][0] and lead_mu.tlv.Pt()<self.store["singleMuTrigSlice"][trig][1]:
-              return True
-      return False
-    #__________________________________________________________________________
-    def cut_SubLeadIsMatchedPresc(self):
-      required_triggers = self.store["reqTrig"]
-      passed_triggers   = self.store["passTrig"].keys()
-      
-      sublead_mu = self.store['muons'][1]
-      for trig in required_triggers:
-        if trig in self.store["singleMuTrigList"].keys():
-          sublead_mu_is_matched = bool( sublead_mu.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
-          event_is_triggered = bool( trig in passed_triggers )
-          if sublead_mu_is_matched and event_is_triggered: 
-            if sublead_mu.tlv.Pt()>=self.store["singleMuTrigSlice"][trig][0] and sublead_mu.tlv.Pt()<self.store["singleMuTrigSlice"][trig][1]:
-              return True
-      return False
-    
-    #__________________________________________________________________________
-    def cut_ThirdLeadIsMatchedPresc(self):
-      required_triggers = self.store["reqTrig"]
-      passed_triggers   = self.store["passTrig"].keys()
-      
-      thirdlead_mu = self.store['muons'][2]
-      for trig in required_triggers:
-        if trig in self.store["singleMuTrigList"].keys():
-          thirdlead_mu_is_matched = bool( thirdlead_mu.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
-          event_is_triggered = bool( trig in passed_triggers )
-          if thirdlead_mu_is_matched and event_is_triggered: 
-            if thirdlead_mu.tlv.Pt()>=self.store["singleMuTrigSlice"][trig][0] and thirdlead_mu.tlv.Pt()<self.store["singleMuTrigSlice"][trig][1]:
-              return True
-      return False
-    """ 
     
     #__________________________________________________________________________
     def cut_LeadMuTruthFilter(self):

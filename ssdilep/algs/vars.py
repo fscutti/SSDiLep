@@ -146,18 +146,21 @@ class BuildTrigConfig(pyframe.core.Algorithm):
       mu_trigger_slice["HLT_mu50"]  = (43. * GeV,  nolim * GeV)
 
 
-      if self.key == "taus": self.store["singleTauTrigList"] = {} 
+      if self.key == "taus": self.store["ChainsWithTau"] = {} 
       
       for i,trig in enumerate(self.chain.tau_listTrigChains):
-        if trig in self.store["singleTauTrigList"].keys(): continue
-        self.store["singleTauTrigList"][trig] = i
+        if trig in self.store["ChainsWithTau"].keys(): continue
+        self.store["ChainsWithTau"][trig] = i
+
 
       # initialise the different slices
+      """
       pt_slice = {}
       if self.key == "jets": 
         if self.sampletype == "mc": pt_slice = jet_trigger_slice[self.samplename["mc"]]
         else:                       pt_slice = jet_trigger_slice[self.samplename[:6]]
       if self.key == "muons": pt_slice = mu_trigger_slice
+      """
 
       if not "reqTrig" in self.store.keys():
         self.store["reqTrig"] = self.required_triggers
@@ -167,20 +170,23 @@ class BuildTrigConfig(pyframe.core.Algorithm):
         if not "passTrig" in self.store.keys():
           self.store["passTrig"] = {}
           for trig,presc in zip(self.chain.passedTriggers,self.chain.passedTriggers):
-            if trig in pt_slice.keys():
-              self.store["passTrig"][trig] = {"prescale":1, "pt_slice":pt_slice[trig]}
+            self.store["passTrig"][trig] = {"prescale":1, "pt_slice":(0., nolim * GeV)}
+            #if trig in pt_slice.keys():
+            #self.store["passTrig"][trig] = {"prescale":1, "pt_slice":pt_slice[trig]}
       else:
         if not "passTrig" in self.store.keys():
           self.store["passTrig"] = {}
           for trig,presc in zip(self.chain.passedTriggers,self.chain.triggerPrescales):
-            if trig in pt_slice.keys():
-              self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":pt_slice[trig]}
+            self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":(0., nolim * GeV)}
+            #if trig in pt_slice.keys():
+            #self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":pt_slice[trig]}
 
       if not "disTrig" in self.store.keys():
         self.store["disTrig"] = {}
         for trig in self.chain.disabledTriggers:
-          if trig in pt_slice.keys():
-            self.store["disTrig"][trig] = {"prescale":1, "pt_slice":pt_slice[trig]}
+          self.store["disTrig"][trig] = {"prescale":1, "pt_slice":(0., nolim * GeV)}
+          #if trig in pt_slice.keys():
+          #self.store["disTrig"][trig] = {"prescale":1, "pt_slice":pt_slice[trig]}
 
       return True
 
@@ -450,7 +456,7 @@ class DiTauVars(pyframe.core.Algorithm):
         # ---------------------------
         # at least a lepton and a jet
         # ---------------------------
-        
+
         self.store['ditau_dphi'] = taus[0].tlv.DeltaPhi(taus[1].tlv)
         scdphi = 0.0
         scdphi += ROOT.TMath.Cos(met.tlv.Phi() - taus[0].tlv.Phi())
