@@ -146,6 +146,12 @@ class BuildTrigConfig(pyframe.core.Algorithm):
       mu_trigger_slice["HLT_mu50"]  = (43. * GeV,  nolim * GeV)
 
 
+      if self.key == "taus": self.store["singleTauTrigList"] = {} 
+      
+      for i,trig in enumerate(self.chain.tau_listTrigChains):
+        if trig in self.store["singleTauTrigList"].keys(): continue
+        self.store["singleTauTrigList"][trig] = i
+
       # initialise the different slices
       pt_slice = {}
       if self.key == "jets": 
@@ -403,12 +409,96 @@ class ProbeVars(pyframe.core.Algorithm):
 
         return True
 
+
+#------------------------------------------------------------------------------
+class DiTauVars(pyframe.core.Algorithm):
+          
+    """
+    computes variables for the di-tau selection
+    """
+    #__________________________________________________________________________
+    def __init__(self, 
+                 name        = 'VarsAlg',
+                 key_leptons = 'taus',
+                 key_jets    = 'jets',
+                 key_met     = 'met_trk',
+                 build_tight_jets = False,
+                 ):
+        pyframe.core.Algorithm.__init__(self, name)
+        self.key_leptons = key_leptons
+        self.key_jets = key_jets
+        self.key_met = key_met
+        self.build_tight_jets = build_tight_jets
+
+    #__________________________________________________________________________
+    def execute(self, weight):
+        pyframe.core.Algorithm.execute(self, weight)
+        """
+        computes variables and puts them in the store
+        """
+
+        ## get objects from event candidate
+        ## --------------------------------------------------
+        assert self.store.has_key(self.key_leptons), "leptons key: %s not found in store!" % (self.key_leptons)
+        taus = self.store[self.key_leptons] # well duh ...
+        met = self.store[self.key_met]
+        jets = self.store[self.key_jets]
+       
+        prefix = ""
+        if self.key_leptons == "taus": prefix = "tau"
+
+        # ---------------------------
+        # at least a lepton and a jet
+        # ---------------------------
+        
+        self.store['ditau_dphi'] = taus[0].tlv.DeltaPhi(taus[1].tlv)
+        scdphi = 0.0
+        scdphi += ROOT.TMath.Cos(met.tlv.Phi() - taus[0].tlv.Phi())
+        scdphi += ROOT.TMath.Cos(met.tlv.Phi() - taus[1].tlv.Phi())
+        self.store['ditau_scdphi'] = scdphi
+       
+        self.store['ditau_ptratio'] = taus[0].tlv.Pt() / taus[1].tlv.Pt()
+      
+        # -------------------------
+        # build tight jets
+        # -------------------------
+        if self.build_tight_jets:
+           jets_tight = []
+           jets_nontight = []
+           for jet in jets:
+             if jet.JvtPass_Medium and jet.fJvtPass_Medium and abs(jet.eta) <= 2.8:
+               jets_tight += [jet]
+             else:
+               jets_nontight += [jet]
+           
+           jets_tight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
+           jets_nontight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
+           
+           if len(jets_tight) > 1:
+             assert jets_tight[0].tlv.Pt() >= jets_tight[1].tlv.Pt(), "jets_tight not sorted.."
+             jet1 = self.store['jets'][0]
+             jet2 = self.store['jets'][1] 
+             jet1T = ROOT.TLorentzVector()
+             jet1T.SetPtEtaPhiM( jet1.tlv.Pt(), 0., jet1.tlv.Phi(), jet1.tlv.M() )
+             jet2T = ROOT.TLorentzVector()
+             jet2T.SetPtEtaPhiM( jet2.tlv.Pt(), 0., jet2.tlv.Phi(), jet2.tlv.M() )
+             
+             self.store['mVisJJ']           = (jet2.tlv+jet1.tlv).M()
+             self.store['mTtotJJ']          = (jet1T + jet2T + met.tlv).M()  
+
+           if len(jets_nontight) > 1:
+             assert jets_nontight[0].tlv.Pt() >= jets_nontight[1].tlv.Pt(), "jets_nontight not sorted.."
+           self.store['jets_tight'] = jets_tight        
+           self.store['jets_nontight'] = jets_nontight        
+
+        return True
+
 #------------------------------------------------------------------------------
 class DiJetVars(pyframe.core.Algorithm):
           
     """
     computes variables for the di-jet selection used for
-    muon fake-factor measurement
+    tau fake-factor measurement
     """
     #__________________________________________________________________________
     def __init__(self, 

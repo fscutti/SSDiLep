@@ -152,7 +152,9 @@ class CutAlg(pyframe.core.Algorithm):
         return self.chain.tau_pt.size() == 1
     #__________________________________________________________________________
     def cut_TwoTaus(self):
-        return self.chain.tau_pt.size() == 2
+        if self.chain.ntaus == 2:
+          return self.store["taus"][0].ntrk in [1, 3] and self.store["taus"][1].ntrk in [1, 3]
+        return False
     
     #__________________________________________________________________________
     def cut_OneJet(self):
@@ -850,6 +852,63 @@ class CutAlg(pyframe.core.Algorithm):
 
 
     #__________________________________________________________________________
+    def cut_TauPPMedium(self):
+      taus = self.store['taus']
+      lead_pass_medium    = bool(taus[0].isJetBDTSigMedium)
+      sublead_pass_medium = bool(muons[1].isJetBDTSigMedium)
+      pass_mc_filter      = True
+      
+      if self.sampletype=="mc":
+        lead_is_real     = taus[0].isTrueHadronicTau
+        sublead_is_real  = taus[1].isTrueHadronicTau
+        pass_mc_filter   = lead_is_real and sublead_is_real     
+
+      return lead_pass_medium and sublead_pass_medium and pass_mc_filter
+
+
+    #__________________________________________________________________________
+    def cut_TauPFMedium(self):
+      taus = self.store['taus']
+      lead_pass_medium    = bool(taus[0].isJetBDTSigMedium)
+      sublead_fail_medium = not bool(muons[1].isJetBDTSigMedium)
+      pass_mc_filter      = True
+      
+      if self.sampletype=="mc":
+        sublead_is_real  = taus[1].isTrueHadronicTau
+        pass_mc_filter   = sublead_is_real     
+
+      return lead_pass_medium and sublead_fail_medium and pass_mc_filter
+
+
+    #__________________________________________________________________________
+    def cut_TauFPMedium(self):
+      taus = self.store['taus']
+      lead_fail_medium    = not bool(taus[0].isJetBDTSigMedium)
+      sublead_pass_medium = bool(muons[1].isJetBDTSigMedium)
+      pass_mc_filter      = True
+      
+      if self.sampletype=="mc":
+        lead_is_real     = taus[0].isTrueHadronicTau
+        pass_mc_filter   = lead_is_real     
+
+      return lead_fail_medium and sublead_pass_medium and pass_mc_filter
+
+
+    #__________________________________________________________________________
+    def cut_TauFFMedium(self):
+      taus = self.store['taus']
+      lead_fail_medium    = not bool(taus[0].isJetBDTSigMedium)
+      sublead_fail_medium = not bool(muons[1].isJetBDTSigMedium)
+      pass_mc_filter      = True
+      
+      if self.sampletype=="mc":
+        lead_is_real     = taus[0].isTrueHadronicTau
+        sublead_is_real  = taus[1].isTrueHadronicTau
+        pass_mc_filter   = lead_is_real or sublead_is_real     
+
+      return lead_fail_medium and sublead_fail_medium and pass_mc_filter
+
+    #__________________________________________________________________________
     def cut_LeadMuIsLoose(self):
       muons = self.store['muons']
       lead_mu = muons[0]
@@ -1024,6 +1083,21 @@ class CutAlg(pyframe.core.Algorithm):
       for t in required_triggers:
         if t in disabled_triggers: continue
         if t in passed_triggers and lead_trigJet.tlv.Pt() > float(t[5:]) * GeV: 
+            return True
+      return False
+
+
+    #__________________________________________________________________________
+    def cut_SingleTauTrigger(self):
+      required_triggers  = self.store["reqTrig"]
+      passed_triggers    = self.store["passTrig"].keys()
+      disabled_triggers  = self.store["disTrig"].keys()
+
+      lead_tau = self.store['taus'][0]
+
+      for t in required_triggers:
+        if t in disabled_triggers: continue
+        if t in passed_triggers and lead_tau.tlv.Pt() > float(t[7:]) * 1.1 * GeV: 
             return True
       return False
 
@@ -1289,7 +1363,7 @@ class CutAlg(pyframe.core.Algorithm):
       return self.store["met_trk"].sig >= 10
 
     #__________________________________________________________________________
-    def cut_TauTauDphi27(self):
+    def cut_DiTauDphi27(self):
       lead_tau = self.store["taus"][0]
       sublead_tau = self.store["taus"][1]
       if abs(lead_tau.tlv.DeltaPhi(sublead_tau.tlv)) > 2.7: return True
