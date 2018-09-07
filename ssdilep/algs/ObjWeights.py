@@ -49,7 +49,7 @@ class MuAllSF(pyframe.core.Algorithm):
         self.key       = key
         self.scale     = scale
 
-        assert key, "Must provide key for storing mu iso sf"
+        assert key, "Must provide key for storing mu sf"
     
     #_________________________________________________________________________
     def initialize(self): 
@@ -69,7 +69,6 @@ class MuAllSF(pyframe.core.Algorithm):
         
           if "mc" in self.sampletype: 
             
-            #if muon.isTruthMatchedToMuon:
             if muon.isTrueIsoMuon():
               if not ("Not" in self.mu_iso):
                 sf *= getattr(muon,"_".join(["IsoEff","SF","Iso"+self.mu_iso])).at(0)
@@ -87,6 +86,52 @@ class MuAllSF(pyframe.core.Algorithm):
         if self.key: 
           self.store[self.key] = sf
         return True
+
+
+#------------------------------------------------------------------------------
+class TauAllSF(pyframe.core.Algorithm):
+    """
+    Single tau efficiencies: reco + eleOLR + ID 
+    """
+    #__________________________________________________________________________
+    def __init__(self, name="TauAllSF",
+            tau_index = None,
+            tau_eolr  = None,
+            tau_id    = None,
+            key       = None,
+            scale     = None,
+            ):
+        pyframe.core.Algorithm.__init__(self, name=name)
+        self.tau_index = tau_index
+        self.tau_eolr  = tau_eolr
+        self.tau_id    = tau_id
+        self.key       = key
+        self.scale     = scale
+
+        assert key, "Must provide key for storing tau sf"
+    
+    #_________________________________________________________________________
+    def initialize(self): 
+      pass
+    
+    #_________________________________________________________________________
+    def execute(self, weight):
+        
+        sf=1.0
+        taus = self.store['taus']
+        
+        if self.tau_index < len(taus): 
+          tau = taus[self.tau_index]
+        
+          if "mc" in self.sampletype: 
+            sf *= getattr(tau,"_".join(["TauEff","SF","EleOLRElectronEleBDT"+self.tau_eolr,"TauID"+self.tau_id])).at(0)
+          
+            if self.scale: pass
+
+        if self.key: 
+          self.store[self.key] = sf
+        return True
+
 
 
 #------------------------------------------------------------------------------
