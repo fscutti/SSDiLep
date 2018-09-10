@@ -155,7 +155,14 @@ class CutAlg(pyframe.core.Algorithm):
         if self.chain.ntau == 2:
           return self.store["taus"][0].ntrk in [1, 3] and self.store["taus"][1].ntrk in [1, 3]
         return False
-    
+   
+    #__________________________________________________________________________
+    def cut_AllTausEleBDTMedium(self):
+
+        for tau in self.store['taus']:
+          if not bool(tau.isEleBDTMedium):
+            return False
+        return True
     #__________________________________________________________________________
     def cut_OneJet(self):
         return self.chain.jet_pt.size() == 1

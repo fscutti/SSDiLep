@@ -2,8 +2,8 @@ import os
 import sys
 import subprocess
 
-from pyutils.utils import recreplace, mcstrings
-
+from pyutils.utils import recreplace, mcstrings, prepare_sample_list
+            
 from SamplesID import SampleID
 
 ## list jobs output
@@ -29,20 +29,12 @@ user  = "tadej"
 
 samp  = options.sample
 
-##jtag = "EX12MC.v3.sys.003"
-#jtag = "HIGG3D3MC.v2.fakes"
-#jtag = "EXOT22MC.v1a"
-#jtag = "EXOT12Data.v1a"
-#jtag = "EXOT22Data.v3"
-#jtag = "EXOT22MC.v3"
-#jtag = "SUSY11Data.v4"
-#jtag = "SUSY3Data.v1"
-#jtag = "SUSY3Data.v1"
-jtag = "SUSY11MC.v1"
+#jtag = "SUSY3MC.v1"
+jtag = "SUSY3Data.v1"
 
 # append here any last tag 
 # before the file type identifyier
-append_id = "r2"
+append_id = "r*"
 #append_id = "r2"
 
 #stag = "r10210"
@@ -144,7 +136,11 @@ with open(infile_cutflow,"w") as f:
   print m.communicate()[0]
 f.close()
 
-outputs = {}
+#outputs = {}
+out_tree = {}
+out_metadata = {}
+out_cutflow = {}
+
 
 rep = []
 rep.append([" ",""])
@@ -158,9 +154,8 @@ for l in lines:
   if not "CONTAINER" in l: continue
   if "duplicates" in l: continue
   key = recreplace(l.replace("_tree",""),rep)
-  outputs[key] = {}
-  print "Grouping files for %s"%key
-  outputs[key]["tree"] = recreplace(l,rep)
+  #outputs[key] = {}
+  out_tree[key] = recreplace(l,rep)        
 f.close()
 
 
@@ -169,16 +164,16 @@ for l in lines:
   if not "CONTAINER" in l: continue
   if "duplicates" in l: continue
   key = recreplace(l.replace("_metadata",""),rep)
-  outputs[key]["metadata"] = recreplace(l,rep)
+  out_metadata[key] = recreplace(l,rep)
 f.close()
+
 
 with open(infile_cutflow) as f: lines = f.readlines()
 for l in lines:
   if not "CONTAINER" in l: continue
   if "duplicates" in l: continue
   key = recreplace(l.replace("_cutflow",""),rep)
-  print "This is the cutflow ",key
-  outputs[key]["cutflow"] = recreplace(l,rep)
+  out_cutflow[key] = recreplace(l,rep)
 f.close()
 
 jrep = []
@@ -188,43 +183,44 @@ jrep.append([":",""])
 jrep.append(["..",""])
 jrep.append([".root",""])
 
-for k,v in outputs.iteritems():
-  print 'downloading %s ...' % k
+
+out_tree_dict     = prepare_sample_list(out_tree)
+out_metadata_dict = prepare_sample_list(out_metadata)
+out_cutflow_dict  = prepare_sample_list(out_cutflow)
+
+assert set(out_tree_dict.keys())==set(out_metadata_dict.keys()) and set(out_tree_dict.keys())==set(out_metadata_dict.keys()), "ERROR: dicitionaries with different keys"
+
+for k in out_tree_dict.keys():
   job_name = recreplace(k,jrep)
   if job_name.startswith("."): job_name = job_name[1:]
   
-  # my config
-  #if "physics_Main" in job_name: id = k.split(".")[7]+"_"+k.split(".")[6]
-  #else: id = k.split(".")[5]
-  
-  # tadej config
-  if "physics_Main" in job_name: id = k.split(".")[6]+"_"+k.split(".")[7]
-  else: id = k.split(".")[6]
+  id = k
   
   # replace number with name of sample
-  if use_sample_id  and not "physics_Main" in job_name:
-    if int(id) in SampleID.keys():
-     id = SampleID[int(id)]
-    else: 
-      print "id %s is not in SamplesID keys" % id  
-      continue
+  if use_sample_id:
+    #if "period" in job_name: id = SampleID[str(id).split("_period")[0]]
+    if "period" in job_name: pass
+    else:                    id = SampleID[int(id)]
   
-  merged = recreplace(id, mcstrings)
+  print
+  print 'downloading %s ...' % id
+
+  merged = recreplace(str(id), mcstrings)
   
   vars=[]
-  vars+=["JOBTMP=%s"        % JOBTMP                 ]
-  vars+=["NCORES=%d"        % NCORES                 ]
-  vars+=["TREEFILE=%s"      % v["tree"]              ]
-  vars+=["METAFILE=%s"      % v["metadata"]          ]
-  vars+=["CUTFLOWFILE=%s"   % v["cutflow"]           ]
-  vars+=["MERGEDTREE=%s"    % merged+"_tree.root"    ] 
-  vars+=["MERGEDMETA=%s"    % merged+"_metadata.root"] 
-  vars+=["MERGEDCUTFLOW=%s" % merged+"_cutflow.root" ] 
-  vars+=["OUTTREE=%s"       % OUTTREE                ]
-  vars+=["OUTMETA=%s"       % OUTMETA                ]
-  vars+=["OUTCUTFLOW=%s"    % OUTCUTFLOW             ]
-  vars+=["MERGED=%s"        % merged+".root"         ]
-  vars+=["OUTMERGED=%s"     % OUTMERGED              ]
+  vars+=["JOBTMP=%s"        % JOBTMP                         ]
+  vars+=["NCORES=%d"        % NCORES                         ]
+  vars+=["TREEFILE=%s"      % " ".join(out_tree_dict[k])     ]
+  vars+=["METAFILE=%s"      % " ".join(out_metadata_dict[k]) ]
+  vars+=["CUTFLOWFILE=%s"   % " ".join(out_cutflow_dict[k])  ]
+  vars+=["MERGEDTREE=%s"    % merged+"_tree.root"            ] 
+  vars+=["MERGEDMETA=%s"    % merged+"_metadata.root"        ] 
+  vars+=["MERGEDCUTFLOW=%s" % merged+"_cutflow.root"         ] 
+  vars+=["OUTTREE=%s"       % OUTTREE                        ]
+  vars+=["OUTMETA=%s"       % OUTMETA                        ]
+  vars+=["OUTCUTFLOW=%s"    % OUTCUTFLOW                     ]
+  vars+=["MERGED=%s"        % merged+".root"                 ]
+  vars+=["OUTMERGED=%s"     % OUTMERGED                      ]
 
   VARS = ','.join(vars)
 
@@ -240,3 +236,5 @@ for k,v in outputs.iteritems():
   print cmd
   m = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
   print m.communicate()[0]
+
+

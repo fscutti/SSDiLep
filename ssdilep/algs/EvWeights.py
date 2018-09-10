@@ -131,6 +131,57 @@ class LPXKfactor(pyframe.core.Algorithm):
 
 
 #------------------------------------------------------------------------------
+class TauTrigSF(pyframe.core.Algorithm):
+    """
+    Tau trigger scale factor 
+    """
+    #__________________________________________________________________________
+    def __init__(self, name="TauTrigSF",
+            trig_list   = None,
+            match_all   = False,
+            tau_eolr    = None,
+            tau_id      = None,
+            tau_index   = None,
+            key         = None,
+            scale       = None,
+            ):
+        pyframe.core.Algorithm.__init__(self, name=name)
+        self.trig_list   = trig_list # if for some reason a different list is needed
+        self.match_all   = match_all
+        self.tau_eolr    = tau_eolr
+        self.tau_id      = tau_id
+        self.tau_index   = tau_index
+        self.key         = key
+        self.scale       = scale
+
+        assert key, "Must provide key for storing tau trig sf"
+    #_________________________________________________________________________
+    def initialize(self):
+      
+      if not self.trig_list: self.trig_list = self.store["reqTrig"]
+
+    #_________________________________________________________________________
+    def execute(self, weight):
+        
+        trig_sf=1.0
+        taus = self.store['taus'] 
+
+        if self.tau_index < len(taus): 
+          tau = taus[self.tau_index]
+        
+          if "mc" in self.sampletype: 
+            for trig in self.trig_list:
+              if tau.isTrigMatchedToChain.at(self.store["ChainsWithTau"][trig]):
+                sf *= getattr(tau,"_".join(["TauTrigEff","SF","EleOLRElectronEleBDT"+self.tau_eolr,"TauID"+self.tau_id,"Trig"+trig])).at(0)
+                break
+          
+            if self.scale: pass
+        
+        if self.key: 
+          self.store[self.key] = trig_sf
+        return True
+
+#------------------------------------------------------------------------------
 class MuTrigSF(pyframe.core.Algorithm):
     """
     Muon trigger scale factor (OR of signle muon triggers)

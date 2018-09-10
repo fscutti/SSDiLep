@@ -63,24 +63,14 @@ echo $$ > /cgroup/memory/user/${USER}/${PBS_JOBID}/tasks
 
 echo "executing job..."
 
-#echo "-----> ls ${JOBTMP} -la"
-#ls ${JOBTMP} -la
-
-#echo "-----> rm -rf ${MYDIR}"
-#rm -rf ${MYDIR}
-
-#echo "-----> rm -rf *.root"
-#rm -rf *.root
-
-#echo "-----> ls ${JOBTMP} -la"
-#ls ${JOBTMP} -la
-
 echo "-----> mkdir ${JOBTMP}/${MYDIR} "
 mkdir ${JOBTMP}/${MYDIR} 
 
 echo "-----> ls ${JOBTMP} -la"
 ls ${JOBTMP} -la
 
+echo "-----> cd ${JOBTMP}/${MYDIR} "
+cd ${JOBTMP}/${MYDIR} 
 
 # -------------------
 # download with rucio
@@ -92,33 +82,33 @@ lsetup rucio
 echo "-----> rucio download --dir=${JOBTMP}/${MYDIR} ${TREEFILE}"
 rucio download --dir=${JOBTMP}/${MYDIR} ${TREEFILE}
 
-echo "-----> ls ${JOBTMP}/${MYDIR}/${TREEFILE} -la"
-ls ${JOBTMP}/${MYDIR}/${TREEFILE} -la
+echo "-----> ls ${JOBTMP}/${MYDIR}/*_tree.root -la"
+ls ${JOBTMP}/${MYDIR}/*_tree.root -la
 
-echo "-----> cp -rf ${JOBTMP}/${MYDIR}/${TREEFILE} ${OUTTREE}"
-cp -rf ${JOBTMP}/${MYDIR}/${TREEFILE} ${OUTTREE}
+echo "-----> cp -rf ${JOBTMP}/${MYDIR}/*_tree.root ${OUTTREE}"
+cp -rf ${JOBTMP}/${MYDIR}/*_tree.root ${OUTTREE}
 
 # meta file
 # ---------
 echo "-----> rucio download --dir=${JOBTMP}/${MYDIR} ${METAFILE}"
 rucio download --dir=${JOBTMP}/${MYDIR} ${METAFILE}
 
-echo "-----> ls ${JOBTMP}/${MYDIR}/${METAFILE} -la"
-ls ${JOBTMP}/${MYDIR}/${METAFILE} -la
+echo "-----> ls ${JOBTMP}/${MYDIR}/*_metadata.root -la"
+ls ${JOBTMP}/${MYDIR}/*_metadata.root -la
 
-echo "-----> cp -rf ${JOBTMP}/${MYDIR}/${METAFILE} ${OUTMETA}"
-cp -rf ${JOBTMP}/${MYDIR}/${METAFILE} ${OUTMETA}
+echo "-----> cp -rf ${JOBTMP}/${MYDIR}/*_metadata.root ${OUTMETA}"
+cp -rf ${JOBTMP}/${MYDIR}/*_metadata.root ${OUTMETA}
 
 # cutflow file
 # ------------
-echo "-----> rucio -v get --dir=${JOBTMP}/${MYDIR} ${CUTFLOWFILE}"
-rucio -v get --dir=${JOBTMP}/${MYDIR} ${CUTFLOWFILE}
+echo "-----> rucio download --dir=${JOBTMP}/${MYDIR} ${CUTFLOWFILE}"
+rucio download --dir=${JOBTMP}/${MYDIR} ${CUTFLOWFILE}
 
-echo "-----> ls ${JOBTMP}/${MYDIR}/${CUTFLOWFILE} -la"
-ls ${JOBTMP}/${MYDIR}/${CUTFLOWFILE} -la
+echo "-----> ls ${JOBTMP}/${MYDIR}/*_cutflow.root -la"
+ls ${JOBTMP}/${MYDIR}/*_cutflow.root -la
 
-echo "-----> cp -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE} ${OUTCUTFLOW}"
-cp -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE} ${OUTCUTFLOW}
+echo "-----> cp -rf ${JOBTMP}/${MYDIR}/*_cutflow.root ${OUTCUTFLOW}"
+cp -rf ${JOBTMP}/${MYDIR}/*_cutflow.root ${OUTCUTFLOW}
 
 
 # --------------
@@ -126,64 +116,44 @@ cp -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE} ${OUTCUTFLOW}
 # --------------
 lsetup root
 
+replace=".root/*.root*"
+
+TREEFILE=${TREEFILE//.root/$replace}
+METAFILE=${METAFILE//.root/$replace}
+CUTFLOWFILE=${CUTFLOWFILE//.root/$replace}
+
+
 # tree file
 # ---------
-echo "-----> cd ${JOBTMP}/${MYDIR}/${TREEFILE}"
-cd ${JOBTMP}/${MYDIR}/${TREEFILE}
+echo "-----> hadd ${MERGEDTREE} ${TREEFILE}"
+hadd ${MERGEDTREE} ${TREEFILE}
 
-echo "-----> hadd ${MERGEDTREE} *.root*"
-hadd ${MERGEDTREE} *.root*
-
-echo "-----> cp ${MERGEDTREE} ${JOBTMP}/${MYDIR}"
-cp ${MERGEDTREE} ${JOBTMP}/${MYDIR}
-
-echo "-----> cd ${JOBTMP}/${MYDIR}"
-cd ${JOBTMP}/${MYDIR}
-
-echo "-----> rm -rf ${JOBTMP}/${MYDIR}/${TREEFILE}"
-rm -rf ${JOBTMP}/${MYDIR}/${TREEFILE}
+echo "-----> rm -rf ${JOBTMP}/${MYDIR}/*_tree.root/"
+rm -rf ${JOBTMP}/${MYDIR}/*_tree.root/
 
 echo "-----> ls ${JOBTMP}/${MYDIR} -la"
 ls ${JOBTMP}/${MYDIR} -la
 
 
 # meta file
-# ------------
-echo "-----> cd ${JOBTMP}/${MYDIR}/${METAFILE}"
-cd ${JOBTMP}/${MYDIR}/${METAFILE}
+# ---------
+echo "-----> hadd ${MERGEDMETA} ${METAFILE}"
+hadd ${MERGEDMETA} ${METAFILE}
 
-echo "-----> hadd ${MERGEDMETA} *.root*"
-hadd ${MERGEDMETA} *.root*
-
-echo "-----> cp ${MERGEDMETA} ${JOBTMP}/${MYDIR}"
-cp ${MERGEDMETA} ${JOBTMP}/${MYDIR}
-
-echo "-----> cd ${JOBTMP}/${MYDIR}"
-cd ${JOBTMP}/${MYDIR}
-
-echo "-----> rm -rf ${JOBTMP}/${MYDIR}/${METAFILE}"
-rm -rf ${JOBTMP}/${MYDIR}/${METAFILE}
+echo "-----> rm -rf ${JOBTMP}/${MYDIR}/*_metadata.root/"
+rm -rf ${JOBTMP}/${MYDIR}/*_metadata.root/
 
 echo "-----> ls ${JOBTMP}/${MYDIR} -la"
 ls ${JOBTMP}/${MYDIR} -la
 
 
 # cutflow file
-# ---------
-echo "-----> cd ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}"
-cd ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}
+# ------------
+echo "-----> hadd ${MERGEDCUTFLOW} ${CUTFLOWFILE}"
+hadd ${MERGEDCUTFLOW} ${CUTFLOWFILE}
 
-echo "-----> hadd ${MERGEDCUTFLOW} *.root*"
-hadd ${MERGEDCUTFLOW} *.root*
-
-echo "-----> cp ${MERGEDCUTFLOW} ${JOBTMP}/${MYDIR}"
-cp ${MERGEDCUTFLOW} ${JOBTMP}/${MYDIR}
-
-echo "-----> cd ${JOBTMP}/${MYDIR}"
-cd ${JOBTMP}/${MYDIR}
-
-echo "-----> rm -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}"
-rm -rf ${JOBTMP}/${MYDIR}/${CUTFLOWFILE}
+echo "-----> rm -rf ${JOBTMP}/${MYDIR}/*_cutflow.root/"
+rm -rf ${JOBTMP}/${MYDIR}/*_cutflow.root/
 
 echo "-----> ls ${JOBTMP}/${MYDIR} -la"
 ls ${JOBTMP}/${MYDIR} -la
