@@ -64,8 +64,8 @@ def analyze(config):
 
     single_tau_triggers = [
          #'HLT_tau80_medium1_tracktwo_L1TAU60',   
-         'HLT_tau125_medium1_tracktwo',           
-         #'HLT_tau160_medium1_tracktwo',          
+         #'HLT_tau125_medium1_tracktwo',           
+         'HLT_tau160_medium1_tracktwo',          
          #'HLT_tau160_medium1_tracktwo_L1TAU100', 
         ]
 
