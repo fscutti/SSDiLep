@@ -85,6 +85,7 @@ def analyze(config):
                              'HLT_j440',
                              'HLT_j460',
                              ],
+        get_prescales     = True,
         key               = 'jets',
         )
 
