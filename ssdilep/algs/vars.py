@@ -28,10 +28,12 @@ class BuildTrigConfig(pyframe.core.Algorithm):
     def __init__(self, 
           cutflow           = None,
           required_triggers = None,
+          get_prescales     = None,
           key               = None):
         pyframe.core.Algorithm.__init__(self, name="TrigConfig", isfilter=True)
         self.cutflow           = cutflow
         self.required_triggers = required_triggers
+        self.get_prescales     = get_prescales
         self.key               = key
     
     #__________________________________________________________________________
@@ -164,22 +166,20 @@ class BuildTrigConfig(pyframe.core.Algorithm):
 
       if not "reqTrig" in self.store.keys():
         self.store["reqTrig"] = self.required_triggers
-     
-      if self.sampletype=="mc":
-        # there is no triggerPrescales branch for mc
-        if not "passTrig" in self.store.keys():
-          self.store["passTrig"] = {}
-          for trig,presc in zip(self.chain.passedTriggers,self.chain.passedTriggers):
-            self.store["passTrig"][trig] = {"prescale":1, "pt_slice":(0., nolim * GeV)}
-            #if trig in pt_slice.keys():
-            #self.store["passTrig"][trig] = {"prescale":1, "pt_slice":pt_slice[trig]}
-      else:
-        if not "passTrig" in self.store.keys():
-          self.store["passTrig"] = {}
-          for trig,presc in zip(self.chain.passedTriggers,self.chain.triggerPrescales):
-            self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":(0., nolim * GeV)}
-            #if trig in pt_slice.keys():
-            #self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":pt_slice[trig]}
+    
+      prescale_info = None
+      if self.sampletype == "mc" or not self.get_prescales:
+        prescale_info = self.chain.passedTriggers
+      elif self.get_prescales:
+        prescale_info = self.chain.triggerPrescales
+
+
+      if not "passTrig" in self.store.keys():
+        self.store["passTrig"] = {}
+        for trig,presc in zip(self.chain.passedTriggers,prescale_info):
+          self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":(0., nolim * GeV)}
+          #if trig in pt_slice.keys():
+          #self.store["passTrig"][trig] = {"prescale":presc, "pt_slice":pt_slice[trig]}
 
       if not "disTrig" in self.store.keys():
         self.store["disTrig"] = {}
