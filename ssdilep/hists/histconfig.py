@@ -61,6 +61,16 @@ h_nmuons = Hist1D( hname  = "h_nmuons",
                               vexpr  = "self.chain.muon_pt.size()",
                             )
 
+h_ntaus = Hist1D( hname  = "h_ntaus",
+                              xtitle = "N_{#tau}",
+                              ytitle = "Events", 
+                              nbins  = 8,
+                              xmin   = 0,
+                              xmax   = 8,
+                              dir    = "event",
+                              vexpr  = "self.chain.ntau",
+                            )
+
 h_nelectrons = Hist1D( hname  = "h_nelectrons",
                               xtitle = "N_{e}",
                               ytitle = "Events", 
@@ -408,6 +418,45 @@ h_tausublead_phi = Hist1D( hname  = "h_tausublead_phi",
                               vexpr  = "self.store['taus'][1].tlv.Phi()",
                             )
 
+h_ditau_ptratio  = Hist1D( hname  = "h_ditau_ptratio",
+                            xtitle = "p_{T}(#tau_{lead}) / p_{T}(#tau_{lead})",
+                            ytitle = "Events", 
+                            nbins  = 64,
+                            xmin   = 0.,
+                            xmax   = 2.,
+                            dir    = "event",
+                            vexpr  = "self.store['ditau_ptratio']",
+                            )
+
+h_ditau_scdphi  = Hist1D( hname  = "h_ditau_scdphi",
+                           xtitle = "#Sigma cos#Delta#phi(#tau,#tau)",
+                           ytitle = "Events", 
+                           nbins  = 400,
+                           xmin   = -2.,
+                           xmax   = 2.,
+                           dir    = "event",
+                           vexpr  = "self.store['ditau_scdphi']",
+                           )
+
+h_taus_mVis  = Hist1D( hname  = "h_taus_mVis",
+                              xtitle = "m_{vis}(#tau_{lead},#tau_{sublead}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "event",
+                              vexpr  = "self.store['mVisTT']/GeV",
+                           )
+
+h_taus_mTtot  = Hist1D( hname  = "h_taus_mTtot",
+                              xtitle = "m^{tot}_{T}(#tau_{lead},#tau_{sublead}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "event",
+                              vexpr  = "self.store['mTtotTT']/GeV",
+                            )
 
 # -------
 # muons

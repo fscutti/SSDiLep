@@ -175,6 +175,24 @@ def analyze(config):
             )
 
     # add Fake-factors here
+    loop += ssdilep.algs.ObjWeights.TauFakeFactorGraph(
+            config_file = [
+                           os.path.join(main_path,'ssdilep/data/sys_ff_taulead_pt_fullSYS_MediumTau1P.root'),
+                           os.path.join(main_path,'ssdilep/data/sys_ff_taulead_pt_fullSYS_MediumTau3P.root'),
+                           ],
+            tau_index   = 0,
+            key         = 'Tau0FF',
+            scale       = None,
+            )
+    loop += ssdilep.algs.ObjWeights.TauFakeFactorGraph(
+            config_file = [
+                          os.path.join(main_path,'ssdilep/data/sys_ff_taulead_pt_fullSYS_MediumTau1P.root'),
+                          os.path.join(main_path,'ssdilep/data/sys_ff_taulead_pt_fullSYS_MediumTau3P.root'),
+                          ],
+            tau_index   = 1,
+            key         = 'Tau1FF',
+            scale       = None,
+            )
 
 
     ## configure histograms
@@ -214,7 +232,7 @@ def analyze(config):
               ['TwoOSTaus',['LeadTauTrigSF']],
               ['BVeto',['GlobBJetSF','JVTSF']],
               ['DiTauDphi27',None],
-              ['TauPFMedium',['Tau0AllSF']],
+              ['TauPFMedium',['Tau0AllSF','Tau1FF']],
               ],
             )
     
@@ -227,7 +245,7 @@ def analyze(config):
               ['TwoOSTaus',['LeadTauTrigSF']],
               ['BVeto',['GlobBJetSF','JVTSF']],
               ['DiTauDphi27',None],
-              ['TauFPMedium',['Tau1AllSF']],
+              ['TauFPMedium',['Tau1AllSF','Tau0FF']],
               ],
             )
     
@@ -240,7 +258,7 @@ def analyze(config):
               ['TwoOSTaus',['LeadTauTrigSF']],
               ['BVeto',['GlobBJetSF','JVTSF']],
               ['DiTauDphi27',None],
-              ['TauFFMedium',None],
+              ['TauFFMedium',['Tau0FF','Tau1FF']],
               ],
             )
     

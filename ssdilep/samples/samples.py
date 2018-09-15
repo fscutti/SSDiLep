@@ -129,7 +129,7 @@ Wenu = Sample( name =   'Wenu',
                   marker_color =  ROOT.kRed+2,
                   daughters = [
                                Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_CVetoBVeto,        
-                               Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_CVetoBVeto,                                    
+                               Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_CVetoBVeto, 
                                Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_CVetoBVeto,     
                                Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_CVetoBVeto,     
                                Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_CFilterBVeto,      
@@ -220,17 +220,17 @@ Wtaunu = Sample( name =   'Wtaunu',
                   daughters = [
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CVetoBVeto,        
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CVetoBVeto,                                    
-                               #Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CVetoBVeto,     
+                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CVetoBVeto,     
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CVetoBVeto,     
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CFilterBVeto,      
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CFilterBVeto,    
-                               #Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CFilterBVeto,   
+                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CFilterBVeto,   
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CFilterBVeto,   
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_BFilter,           
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_BFilter,         
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_BFilter,        
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_BFilter,        
-                               #Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV500_1000,        
+                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV500_1000,        
                                Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV1000_E_CMS,       
                               ],
                 ) 
@@ -392,10 +392,10 @@ Ztautau = Sample( name =   'Ztautau',
 # Notes:
 #       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryTTbar 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_nonallhad = Sample( name =  "PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_nonallhad", xsec = 452.2944528,  )
-#PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad  = Sample( name =  "PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad", xsec = 452.69355909,  )
 
-PhPy8EG_A14_ttbar_hdamp258p75_nonallhad = Sample( name =  "PhPy8EG_A14_ttbar_hdamp258p75_nonallhad", xsec = 452.2944528,  )
+PhPy8EG_A14_ttbar_hdamp258p75_nonallhad = Sample( name =  "PhPy8EG_A14_ttbar_hdamp258p75_nonallhad", xsec = 452.336040799,)
+PhPy8EG_A14_ttbar_hdamp258p75_allhad    = Sample( name =  "PhPy8EG_A14_ttbar_hdamp258p75_allhad",    xsec = 379.501934906,)
+PhPy8EG_A14_ttbar_hdamp258p75_dil       = Sample( name =  "PhPy8EG_A14_ttbar_hdamp258p75_dil",       xsec = 87.709092,    )
 
 ttbar = Sample( name =  'ttbar',
                     tlatex = 'ttbar',
@@ -403,9 +403,9 @@ ttbar = Sample( name =  'ttbar',
                     line_color =  ROOT.kCyan+2,
                     marker_color =  ROOT.kCyan+2,
                     daughters = [
-                                 #PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad,                              
-                                 #PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_nonallhad,                              
                                  PhPy8EG_A14_ttbar_hdamp258p75_nonallhad,
+                                 PhPy8EG_A14_ttbar_hdamp258p75_allhad,
+                                 PhPy8EG_A14_ttbar_hdamp258p75_dil      
                                 ],
                     ) 
 
@@ -415,13 +415,12 @@ ttbar = Sample( name =  'ttbar',
 # Notes:
 #       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummarySingleTop
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#PowhegPythiaEvtGen_P2012_singletop_tchan_lept_antitop = Sample( name = "PowhegPythiaEvtGen_P2012_singletop_tchan_lept_antitop", xsec = 26.276,   )
-#PowhegPythiaEvtGen_P2012_singletop_tchan_lept_top     = Sample( name = "PowhegPythiaEvtGen_P2012_singletop_tchan_lept_top",     xsec = 44.152,   )
-PowhegPythiaEvtGen_P2012_Wt_inclusive_antitop         = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_inclusive_antitop",         xsec = 35.824406,)
-PowhegPythiaEvtGen_P2012_Wt_inclusive_top             = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_inclusive_top",             xsec = 35.845486,)
-#PowhegPythiaEvtGen_P2012_Wt_dilepton_top              = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_dilepton_top",              xsec = 3.777009, )
-#PowhegPythiaEvtGen_P2012_Wt_dilepton_antitop          = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_dilepton_antitop",          xsec = 3.7747956,) 
-
+PowhegPythiaEvtGen_P2012_Wt_inclusive_top             = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_inclusive_top",             xsec = 35.845486, )
+PowhegPythiaEvtGen_P2012_Wt_inclusive_antitop         = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_inclusive_antitop",         xsec = 35.824406, )
+PowhegPythiaEvtGen_P2012_Wt_dilepton_top              = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_dilepton_top",              xsec = 3.777009, )
+PowhegPythiaEvtGen_P2012_Wt_dilepton_antitop          = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_dilepton_antitop",          xsec = 3.7747956, )
+PowhegPythiaEvtGen_P2012_singletop_tchan_lept_top     = Sample( name = "PowhegPythiaEvtGen_P2012_singletop_tchan_lept_top",     xsec = 44.152, )
+PowhegPythiaEvtGen_P2012_singletop_tchan_lept_antitop = Sample( name = "PowhegPythiaEvtGen_P2012_singletop_tchan_lept_antitop", xsec = 26.276, )
 
 singletop = Sample( name =   'singletop',
                     tlatex = 'single-top',
@@ -429,10 +428,10 @@ singletop = Sample( name =   'singletop',
                     line_color =  ROOT.kRed+4,
                     marker_color =  ROOT.kRed+4,
                     daughters = [
-                                 #PowhegPythiaEvtGen_P2012_singletop_tchan_lept_antitop,
-                                 #PowhegPythiaEvtGen_P2012_singletop_tchan_lept_top,    
                                  PowhegPythiaEvtGen_P2012_Wt_inclusive_antitop,        
                                  PowhegPythiaEvtGen_P2012_Wt_inclusive_top,            
+                                 #PowhegPythiaEvtGen_P2012_singletop_tchan_lept_antitop,
+                                 #PowhegPythiaEvtGen_P2012_singletop_tchan_lept_top,    
                                  #PowhegPythiaEvtGen_P2012_Wt_dilepton_top,
                                  #PowhegPythiaEvtGen_P2012_Wt_dilepton_antitop,
                                 ],
@@ -500,16 +499,16 @@ all_data = data.daughters
 
 all_mc = []
 
-#all_mc += ttbar.daughters
-#all_mc += singletop.daughters
+all_mc += ttbar.daughters
+all_mc += singletop.daughters
 
-#all_mc += Wenu.daughters
-#all_mc += Wmunu.daughters
+all_mc += Wenu.daughters
+all_mc += Wmunu.daughters
 all_mc += Wtaunu.daughters
 
-##all_mc += Zee.daughters
-#all_mc += Zmumu.daughters
-#all_mc += Ztautau.daughters
+all_mc += Zee.daughters
+all_mc += Zmumu.daughters
+all_mc += Ztautau.daughters
 
 #all_mc += diboson.daughters
 

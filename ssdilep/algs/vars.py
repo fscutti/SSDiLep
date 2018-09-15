@@ -28,7 +28,7 @@ class BuildTrigConfig(pyframe.core.Algorithm):
     def __init__(self, 
           cutflow           = None,
           required_triggers = None,
-          get_prescales     = None,
+          get_prescales     = False,
           key               = None):
         pyframe.core.Algorithm.__init__(self, name="TrigConfig", isfilter=True)
         self.cutflow           = cutflow
@@ -464,7 +464,17 @@ class DiTauVars(pyframe.core.Algorithm):
         self.store['ditau_scdphi'] = scdphi
        
         self.store['ditau_ptratio'] = taus[0].tlv.Pt() / taus[1].tlv.Pt()
-      
+
+        tau1 = taus[0]
+        tau2 = taus[1] 
+        tau1T = ROOT.TLorentzVector()
+        tau1T.SetPtEtaPhiM( tau1.tlv.Pt(), 0., tau1.tlv.Phi(), tau1.tlv.M() )
+        tau2T = ROOT.TLorentzVector()
+        tau2T.SetPtEtaPhiM( tau2.tlv.Pt(), 0., tau2.tlv.Phi(), tau2.tlv.M() )
+        
+        self.store['mVisTT']           = (tau2.tlv+tau1.tlv).M()
+        self.store['mTtotTT']          = (tau1T + tau2T + met.tlv).M()  
+
         # -------------------------
         # build tight jets
         # -------------------------

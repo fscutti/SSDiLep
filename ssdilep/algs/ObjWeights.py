@@ -188,6 +188,74 @@ class MuFakeFactorGraph(pyframe.core.Algorithm):
 
         return True
 
+
+
+#------------------------------------------------------------------------------
+class TauFakeFactorGraph(pyframe.core.Algorithm):
+    """
+    Applies the fake-factors to tau pairs
+    """
+    #__________________________________________________________________________
+    def __init__(self, name="TauFakeFactor",config_file=None,tau_index=None,key=None,scale=None):
+        pyframe.core.Algorithm.__init__(self,name=name)
+        self.config_file    = config_file
+        self.tau_index      = tau_index
+        self.key            = key
+        self.scale          = scale
+
+        assert config_file, "Must provide config file!"
+        assert key, "Must provide key for storing fakefactor"
+    #_________________________________________________________________________
+    def initialize(self):
+        f1P = ROOT.TFile.Open(self.config_file[0])
+        f3P = ROOT.TFile.Open(self.config_file[1])
+        
+        assert f1P, "Failed to open fake-factor config file: %s"%(self.config_file[0])
+        assert f3P, "Failed to open fake-factor config file: %s"%(self.config_file[1])
+        
+        g_ff_1P = f1P.Get("g_ff_stat_sys")
+        g_ff_3P = f3P.Get("g_ff_stat_sys")
+        
+        assert g_ff_1P, "Failed to get 'g_ff' from %s"%(self.config_file)
+        assert g_ff_3P, "Failed to get 'g_ff' from %s"%(self.config_file)
+
+        self.g_ff_1P = g_ff_1P.Clone()
+        self.g_ff_3P = g_ff_3P.Clone()
+
+        f1P.Close()
+        f3P.Close()
+    #_________________________________________________________________________
+    def execute(self, weight):
+
+        ff_tau = 1.0
+        taus = self.store['taus']
+
+        if self.tau_index < len(taus):
+
+          tau = taus[self.tau_index]
+          pt_tau = tau.tlv.Pt() / GeV
+          if tau.ntrk == 1:
+            self.g_ff = self.g_ff_1P
+          if tau.ntrk == 3:
+            self.g_ff = self.g_ff_3P
+          for ibin_tau in xrange(1,self.g_ff.GetN()):
+            edlow = self.g_ff.GetX()[ibin_tau] - self.g_ff.GetEXlow()[ibin_tau]
+            edhi  = self.g_ff.GetX()[ibin_tau] + self.g_ff.GetEXhigh()[ibin_tau]
+            if pt_tau>=edlow and pt_tau<edhi: break
+
+          # error bars are asymmetric
+          ff_tau = self.g_ff.GetY()[ibin_tau]
+          eff_up_tau = self.g_ff.GetEYhigh()[ibin_tau]
+          eff_dn_tau = self.g_ff.GetEYlow()[ibin_tau]
+
+          if self.scale == 'up': ff_tau +=eff_up_tau
+          if self.scale == 'dn': ff_tau -=eff_dn_tau
+
+        if self.key:
+          self.store[self.key] = ff_tau
+
+        return True
+
 #------------------------------------------------------------------------------
 class JetPtWeightHist(pyframe.core.Algorithm):
     """
