@@ -9,9 +9,13 @@
 #pragma link C++ class vector<string>;
 #pragma link C++ class vector<vector<string> >;
 #pragma link C++ class vector<vector<int> >;
+#pragma link C++ class vector<vector<vector<int>> >;
 #pragma link C++ class vector<vector<unsigned int> >;
+#pragma link C++ class vector<vector<vector<unsigned int>> >;
 #pragma link C++ class vector<vector<float> >;
+#pragma link C++ class vector<vector<vector<float>> >;
 #pragma link C++ class vector<vector<double> >;
+#pragma link C++ class vector<vector<vector<double>> >;
 #pragma link C++ class pair<set<int>::iterator,bool>;
 #else
 template class std::vector<std::vector<float> >;

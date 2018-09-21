@@ -502,12 +502,12 @@ all_mc = []
 all_mc += ttbar.daughters
 all_mc += singletop.daughters
 
-all_mc += Wenu.daughters
-all_mc += Wmunu.daughters
+#all_mc += Wenu.daughters
+#all_mc += Wmunu.daughters
 all_mc += Wtaunu.daughters
 
-all_mc += Zee.daughters
-all_mc += Zmumu.daughters
+#all_mc += Zee.daughters
+#all_mc += Zmumu.daughters
 all_mc += Ztautau.daughters
 
 #all_mc += diboson.daughters
@@ -518,18 +518,16 @@ all_mc += Ztautau.daughters
 
 mc_bkg = []
 
-##mc_bkg.append( Wenu )
-#mc_bkg.append( Wtaunu )
-"""
-mc_bkg.append( Wmunu )
+#mc_bkg.append( Wenu )
+#mc_bkg.append( Wmunu )
+mc_bkg.append( Wtaunu )
 
-##mc_bkg.append( Zee ) 
-mc_bkg.append( Zmumu )
+#mc_bkg.append( Zee ) 
+#mc_bkg.append( Zmumu )
 mc_bkg.append( Ztautau )
 
-mc_bkg.append( singletop )
+#mc_bkg.append( singletop )
 mc_bkg.append( ttbar )
 
-mc_bkg.append( diboson )
-"""
+#mc_bkg.append( diboson )
 ## EOF

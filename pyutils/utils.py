@@ -12,7 +12,6 @@ def recreplace(s=None,l=[]):
   return ns
 
 
-
 def prepare_sample_list(dic={}):
   
   sample_dic={}
@@ -26,6 +25,7 @@ def prepare_sample_list(dic={}):
     else: 
       sample_id = k.split(".")[6]
       run_id = k.split(".")[8]
+    
     if not sample_id in sample_dic.keys(): 
       sample_dic[sample_id] = [str(v)]
     else: 
@@ -34,6 +34,7 @@ def prepare_sample_list(dic={}):
       remove_sample = ""
 
       for s in sample_dic[sample_id]:
+        # the prefix includes the sample id + container tags
         s_prefix = s.split(".r",1)[0]
         s_version = re.search('%s.r(.*)_'%(s_prefix), s).group(1)
         

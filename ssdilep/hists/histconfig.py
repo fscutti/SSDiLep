@@ -418,6 +418,26 @@ h_tausublead_phi = Hist1D( hname  = "h_tausublead_phi",
                               vexpr  = "self.store['taus'][1].tlv.Phi()",
                             )
 
+h_tausublead_JetBDTScore = Hist1D( hname  = "h_tausublead_JetBDTScore",
+                              xtitle = "BDT Score (#tau_{sublead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 200,
+                              xmin   = -1.,
+                              xmax   = 1.,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][1].JetBDTScore",
+                            )
+
+h_tausublead_JetBDTScoreSigTrans = Hist1D( hname  = "h_tausublead_JetBDTScoreSigTrans",
+                              xtitle = "Trans. BDT Score (#tau_{sublead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 100,
+                              xmin   = 0.,
+                              xmax   = 1.,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][1].JetBDTScoreSigTrans",
+                            )
+
 h_ditau_ptratio  = Hist1D( hname  = "h_ditau_ptratio",
                             xtitle = "p_{T}(#tau_{lead}) / p_{T}(#tau_{lead})",
                             ytitle = "Events", 

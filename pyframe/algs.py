@@ -395,30 +395,13 @@ class AttachTLVs(pyframe.core.Algorithm):
                 elif p.prefix.startswith('jet_'):
                     #p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, p.m)
                     p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 0.0)
+
                 elif p.prefix.startswith('tau_'):
                     p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, p.m)
                 elif p.prefix.startswith('trigJet_a4tcemsubjesFS_'):
                     p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 0.0)
                 elif p.prefix.startswith('trigJet_a4tcemsubjesISFS_'):
                     p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 0.0)
-                #elif p.prefix.startswith('trig_EF_tau_'):
-                #    p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, p.m)
-                #elif p.prefix.startswith('trig_L2_tau_'):
-                #    p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 0.0)
-                #elif p.prefix.startswith('trig_L1_emtau_') and self.obj == "tau":
-                #    p.tlv.SetPtEtaPhiM(p.tauClus, p.eta, p.phi, 0.0)
-                #elif p.prefix.startswith('trig_L1_emtau_') and self.obj == "EM":
-                #    p.tlv.SetPtEtaPhiM(p.EMClus, p.eta, p.phi, 0.0)
-                #elif p.prefix.startswith('trig_L1_jet_'):
-                #    p.tlv.SetPtEtaPhiM(p.et8x8 if hasattr(p, "et8x8") else 1.0, p.eta, p.phi, 0.0)
-                #elif p.prefix.startswith('trig_L1_mu_'):
-                #    p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 0.0)
-                #elif p.prefix.startswith('trueTau_'):
-                #    p.tlv.SetPtEtaPhiM(et_to_pt(p.vis_Et,p.vis_eta,p.vis_m), p.vis_eta, p.vis_phi, p.vis_m)
-                #elif p.prefix.startswith('jet_antikt4truth_'):
-                #    p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, p.m)
-                #elif p.prefix.startswith('trk_'):
-                #    p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 139.6)
                 else:
                     log.error('attach_tlv: unrecognized prefix = %s' % p.prefix)
 

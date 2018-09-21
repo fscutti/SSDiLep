@@ -30,7 +30,10 @@ user  = "tadej"
 samp  = options.sample
 
 #jtag = "SUSY3MC.v1"
-jtag = "SUSY3Data.v1"
+#jtag = "SUSY11Data.v1"
+#jtag = "SUSY11MC.v1"
+
+jtag = "EXOT22MC.v1"
 
 # append here any last tag 
 # before the file type identifyier
@@ -41,7 +44,6 @@ append_id = "r*"
 stag = "*"
 
 jtagsamp  = "%s.*%s*.*%s*" % (jtag,samp,stag)
-
 
 #jtype = "SSDiLep"
 #jtype = "Tau"
@@ -136,7 +138,6 @@ with open(infile_cutflow,"w") as f:
   print m.communicate()[0]
 f.close()
 
-#outputs = {}
 out_tree = {}
 out_metadata = {}
 out_cutflow = {}
@@ -154,7 +155,6 @@ for l in lines:
   if not "CONTAINER" in l: continue
   if "duplicates" in l: continue
   key = recreplace(l.replace("_tree",""),rep)
-  #outputs[key] = {}
   out_tree[key] = recreplace(l,rep)        
 f.close()
 
@@ -187,6 +187,7 @@ jrep.append([".root",""])
 out_tree_dict     = prepare_sample_list(out_tree)
 out_metadata_dict = prepare_sample_list(out_metadata)
 out_cutflow_dict  = prepare_sample_list(out_cutflow)
+
 
 assert set(out_tree_dict.keys())==set(out_metadata_dict.keys()) and set(out_tree_dict.keys())==set(out_metadata_dict.keys()), "ERROR: dicitionaries with different keys"
 

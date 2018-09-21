@@ -11,6 +11,13 @@ from var import Var
 
 ## Event variables
 ## ---------------------------------------
+ntaus = Var(name = 'ntaus',
+              path  = 'event',
+              xmin  = 0,
+              xmax  = 6,
+              log   = False,
+              )
+
 taujet_dphi = Var(name = 'taujet_dphi',
               path    = 'event',
               xmin    = -3.2,
@@ -27,10 +34,10 @@ taujet_ptratio = Var(name = 'taujet_ptratio',
               log     = False,
               )
 
-tausubleadlead_ptratio = Var(name = 'tausubleadlead_ptratio',
+ditau_ptratio = Var(name = 'ditau_ptratio',
               path    = 'event',
               xmin    = 0.,
-              xmax    = 1.,
+              xmax    = 2.,
               rebin   = 4,
               log     = False,
               )
@@ -51,7 +58,24 @@ jetTrigJet_deltaR = Var(name = 'jetTrigJet_deltaR',
               log     = False,
               )
 
-## Single muon variables
+taus_mVis = Var(name     = 'taus_mVis',
+              path    = 'event',
+              xmin    = 100.,
+              xmax    = 1800.,
+              rebin   = 40,
+              log     = False,
+              )
+
+taus_mTtot = Var(name     = 'taus_mTtot',
+              path    = 'event',
+              xmin    = 100.,
+              xmax    = 1800.,
+              rebin   = 40,
+              log     = False,
+              )
+
+
+## Single tau variables
 ## ---------------------------------------
 taulead_JetBDTScore = Var(name = 'taulead_JetBDTScore',
               path   = 'taus',
@@ -69,11 +93,27 @@ taulead_JetBDTScoreSigTrans = Var(name = 'taulead_JetBDTScoreSigTrans',
               log    = False,
               )
 
+tausublead_JetBDTScore = Var(name = 'tausublead_JetBDTScore',
+              path   = 'taus',
+              xmin   = -1.,
+              xmax   = 1.,
+              rebin  = 2,
+              log    = False,
+              )
+
+tausublead_JetBDTScoreSigTrans = Var(name = 'tausublead_JetBDTScoreSigTrans',
+              path   = 'taus',
+              xmin   = 0.,
+              xmax   = 1.,
+              rebin  = 2,
+              log    = False,
+              )
+
 taulead_pt = Var(name = 'taulead_pt',
               path   = 'taus',
               xmin   = 0.,
               xmax   = 600.,
-              rebin  = 5,
+              rebin  = 10,
               log    = False,
               )
 
@@ -188,24 +228,23 @@ vars_list = []
 # ---------------
 # One tau
 # ---------------
-
 vars_list.append(taulead_pt)
 vars_list.append(taulead_eta)
 vars_list.append(taulead_phi)
 vars_list.append(met_trk_et)
-vars_list.append(jetlead_pt)
-vars_list.append(jetlead_eta)
-vars_list.append(jetlead_phi)
+#vars_list.append(jetlead_pt)
+#vars_list.append(jetlead_eta)
+#vars_list.append(jetlead_phi)
 
-vars_list.append(trigJetlead_pt)
-vars_list.append(trigJetlead_eta)
-vars_list.append(trigJetlead_phi)
+#vars_list.append(trigJetlead_pt)
+#vars_list.append(trigJetlead_eta)
+#vars_list.append(trigJetlead_phi)
 
-vars_list.append(taujet_ptratio)
-vars_list.append(taujet_dphi)
+#vars_list.append(taujet_ptratio)
+#vars_list.append(taujet_dphi)
 
-vars_list.append(jetTrigJet_ptratio)
-vars_list.append(jetTrigJet_deltaR)
+#vars_list.append(jetTrigJet_ptratio)
+#vars_list.append(jetTrigJet_deltaR)
 
 vars_list.append(taulead_JetBDTScore)
 vars_list.append(taulead_JetBDTScoreSigTrans)
@@ -213,12 +252,17 @@ vars_list.append(taulead_JetBDTScoreSigTrans)
 # ---------------
 # Two taus
 # ---------------
+vars_list.append(tausublead_pt)
+vars_list.append(tausublead_eta)
+vars_list.append(tausublead_phi)
+vars_list.append(ditau_ptratio)
+vars_list.append(tausublead_JetBDTScore)
+vars_list.append(tausublead_JetBDTScoreSigTrans)
 
-#vars_list.append(tausublead_pt)
-#vars_list.append(tausublead_eta)
-#vars_list.append(tausublead_phi)
-#vars_list.append(tausubleadlead_ptratio)
+vars_list.append(taus_mVis)
+vars_list.append(taus_mTtot)
 
+vars_list.append(ntaus)
 
 vars_dict = {}
 for var in vars_list: vars_dict[var.name] = var.__dict__

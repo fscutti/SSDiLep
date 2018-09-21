@@ -123,7 +123,7 @@ def analyze(config):
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausEleBDTMedium') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='MuVeto') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleTauTrigger') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleTauTriggerMatch') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTauPt20') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
 

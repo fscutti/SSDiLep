@@ -66,6 +66,7 @@ def analyze(config):
     ## ---------------------------------------
     loop += ssdilep.algs.vars.BuildTrigConfig(
         required_triggers = ["HLT_mu24", "HLT_mu50"],
+        get_prescales     = True,
         key               = 'muons',
         )
     
@@ -176,7 +177,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ],
@@ -189,7 +190,7 @@ def analyze(config):
             do_var_check = True,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ],
@@ -203,7 +204,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -219,7 +220,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -238,7 +239,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -254,7 +255,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -273,7 +274,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -289,7 +290,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -308,7 +309,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi29',None],
@@ -324,7 +325,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi29',None],
@@ -343,7 +344,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi25',None],
@@ -359,7 +360,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi25',None],
@@ -378,7 +379,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -394,7 +395,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -413,7 +414,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -429,7 +430,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -449,7 +450,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -465,7 +466,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['BVeto',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -484,7 +485,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['AtLeastOneBjet',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],
@@ -500,7 +501,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['AtLeastOneBjet',None],
-              ['SingleMuTriggerPresc',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
+              ['SingleMuTriggerMatch',['GlobBJetSF','JVTSF','MuTrigSFMedium']],
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyMedium']],
               ['MuJetDphi27',None],

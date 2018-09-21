@@ -60,8 +60,6 @@ def analyze(config):
                                   quiet=False,
                                   )
 
-    print config['samplename']
-
 
     ## configure the list of triggers 
     ## with eventual prescales and puts a
