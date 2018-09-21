@@ -178,6 +178,7 @@ class BuildTrigConfig(pyframe.core.Algorithm):
         prescale_info = self.chain.passedTriggers
       elif self.get_prescales:
         prescale_info = self.chain.triggerPrescalesLumi
+        #prescale_info = self.chain.triggerPrescales
 
 
       if not "passTrig" in self.store.keys():
