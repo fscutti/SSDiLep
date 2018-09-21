@@ -42,10 +42,6 @@ parser.add_option('-t', '--tag', dest='tag',
 #-----------------
 # Configuration
 #-----------------
-#lumi =  18232.8
-#lumi =  (33257.2 + 3212.96) * 1.05
-#lumi =  (33257.2 + 3212.96) * 0.95
-#lumi = 32861.6 + 3212.96
 lumi = 79800.  
 
 
@@ -134,7 +130,24 @@ if reg_suffix == "MAINREG":
 
     fake_subtraction_regions = []
     fake_subtraction_regions += ["LLT","LTL","TLL"]
-  
+
+
+  # leading lepton region
+  # ---------------------------------------------
+  if options.fakest == "LeadLepRegions":
+    
+    main_addition_regions    = ["TT"]
+    fake_addition_regions    = ["TL"]
+    fake_subtraction_regions = []
+
+  # leading lepton region
+  # ---------------------------------------------
+  if options.fakest == "MixedRegions":
+    
+    main_addition_regions    = ["TT"]
+    fake_addition_regions    = ["TL","LT"]
+    fake_subtraction_regions = []
+
 if options.fakest == "Subtraction":
   main_addition_regions =  fake_addition_regions = [""]
   reg_prefix            =  options.region
@@ -191,7 +204,6 @@ if options.makeplot == "True":
     backgrounds   = plot_ord_bkg,
     signal        = signals, 
     data          = recom_data,
-    #data          = None,
     region        = options.region,
     label         = options.label,
     histname      = os.path.join(vardict[options.vname]['path'],vardict[options.vname]['hname']),
@@ -202,7 +214,7 @@ if options.makeplot == "True":
     icut          = int(options.icut),
     sys_dict      = sys_dict,
     #sys_dict      = None,
-    #do_ratio_plot = True,
+    do_ratio_plot = True,
     save_eps      = True,
     plotsfile     = plotsfile,
     )

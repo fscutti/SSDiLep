@@ -19,14 +19,11 @@ USER   = os.getenv('USER')
 
 ## global config
 # inputs
-#NTUPDATA='/coepp/cephfs/share/atlas/SSDiLep/EXOT22Data.v1a/merged'
-#NTUPMC='/coepp/cephfs/share/atlas/SSDiLep/EXOT22MC.v3/merged'
-
-#NTUPDATA='/coepp/cephfs/share/atlas/Tau/SUSY11Data.v1.r2/merged'
-#NTUPMC='/coepp/cephfs/share/atlas/Tau/SUSY11MC.v1.r10210.r2/merged'
-
 NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY11Data.v1/merged'
 NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY11MC.v1/merged'
+
+#NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY3Data.v1/merged'
+#NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY3MC.v1/merged'
 
 JOBDIR = "/coepp/cephfs/mel/%s/jobdir" % USER # Alright this is twisted...
 INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%m_y%Y_H%H_M%M_S%S")) )
@@ -34,9 +31,7 @@ INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-RUN = "HistFF1PTESTMatch"
-
-#RUN = "HistFF3PTauLow08"
+RUN = "HistTEST"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 
@@ -44,11 +39,11 @@ OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) #
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
 
 # pick your script!!!
-SCRIPT="./ssdilep/run/j.plotter_OneTauFF.py"  
-#SCRIPT="./ssdilep/run/j.plotter_TwoTauFF.py"  
+SCRIPT="./ssdilep/run/j.plotter_FF_OneTau.py"  
+#SCRIPT="./ssdilep/run/j.plotter_VR_OneTauPair.py"  
 
-#SCRIPT="./ssdilep/run/j.plotter_MuFF.py"  
-#SCRIPT="./ssdilep/run/j.plotter_MuVal.py"  
+#SCRIPT="./ssdilep/run/j.plotter_FF_TwoTau.py"  
+
 
 BEXEC="Hist.sh"                      # exec script (probably dont change) 
 
@@ -89,9 +84,7 @@ def main():
     all_data = samples.all_data
     all_mc   = samples.all_mc
 
-    #nominal = all_data + all_mc 
-    #nominal = all_mc
-    nominal = all_data
+    nominal = all_data + all_mc 
 
     
     ntup_sys = [
