@@ -825,7 +825,39 @@ class CutAlg(pyframe.core.Algorithm):
 
       return lead_fail_medium and sublead_fail_medium and pass_mc_filter
 
+   
+    #__________________________________________________________________________
+    def cut_LeadMuIsLoose(self):
+      muons = self.store['muons']
+      lead_mu = muons[0]
+      is_loose = bool(lead_mu.isLoose) or bool(lead_mu.isMedium) or bool(lead_mu.isTight)
+      return is_loose
+    #__________________________________________________________________________
+    def cut_LeadMuIsMedium(self):
+      return bool(self.store['muons'][0].isMedium) 
     
+    #__________________________________________________________________________
+    def cut_LeadMuIsTight(self):
+      muons = self.store['muons']
+      lead_mu = muons[0]
+      is_tight = bool(lead_mu.isTight)
+      return is_tight
+
+    #__________________________________________________________________________
+    def cut_LeadMuTruthFilter(self):
+      muons = self.store['muons'] 
+      if self.sampletype == "mc":
+        return muons[0].isTrueIsoMuon()
+      return True
+    #__________________________________________________________________________
+    def cut_LeadMuFakeFilter(self):
+      muons = self.store['muons'] 
+      if self.sampletype == "mc":
+        return muons[0].isTrueNonIsoMuon()
+      return True
+
+
+
     #__________________________________________________________________________
     def cut_LeadMuIsoFixedCutTightTrackOnly(self):
       muons = self.store['muons']
