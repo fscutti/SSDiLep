@@ -66,24 +66,20 @@ def analyze(config):
     ## ---------------------------------------
     loop += ssdilep.algs.vars.BuildTrigConfig(
         required_triggers = [
-                             'HLT_j15', 
-                             'HLT_j25', 
-                             'HLT_j35', 
-                             'HLT_j55', 
-                             'HLT_j60', 
-                             'HLT_j85', 
-                             'HLT_j110',
-                             'HLT_j150',
-                             'HLT_j175',
-                             'HLT_j200',
-                             'HLT_j260',
-                             'HLT_j320',
-                             'HLT_j360',
-                             'HLT_j380',
-                             'HLT_j400',
-                             'HLT_j420',
-                             'HLT_j440',
-                             'HLT_j460',
+                             'HLT_j15'
+                             'HLT_j25'
+                             'HLT_j35'
+                             'HLT_j55'  # 2015-2016 only
+                             'HLT_j60'
+                             'HLT_j85'
+                             'HLT_j110'
+                             'HLT_j150' # 2015-2016 only
+                             'HLT_j175'
+                             'HLT_j260' # 2017- only
+                             'HLT_j360' # 2017- only
+                             'HLT_j380' # 2015-2016 only
+                             'HLT_j400'
+                             'HLT_j420'
                              ],
         get_prescales     = True,
         key               = 'jets',

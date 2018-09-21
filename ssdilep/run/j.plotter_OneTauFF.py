@@ -69,26 +69,22 @@ def analyze(config):
     ## ---------------------------------------
     loop += ssdilep.algs.vars.BuildTrigConfig(
         required_triggers = [
-                             'HLT_j15', 
-                             'HLT_j25', 
-                             'HLT_j35', 
-                             'HLT_j55', 
-                             'HLT_j60', 
-                             'HLT_j85', 
-                             'HLT_j110', 
-                             'HLT_j150', 
-                             'HLT_j175', 
-                             'HLT_j200', 
-                             'HLT_j260', 
-                             'HLT_j300', 
-                             'HLT_j320', 
-                             'HLT_j360', 
-                             'HLT_j380', 
-                             'HLT_j400', 
-                             'HLT_j420', 
-                             'HLT_j440', 
-                             'HLT_j460',
+                             'HLT_j15',
+                             'HLT_j25',
+                             'HLT_j35',
+                             'HLT_j55',  # 2015-2016 only
+                             'HLT_j60',
+                             'HLT_j85',
+                             'HLT_j110',
+                             'HLT_j150', # 2015-2016 only
+                             'HLT_j175',
+                             'HLT_j260', # 2017- only
+                             'HLT_j360', # 2017- only
+                             'HLT_j380', # 2015-2016 only
+                             'HLT_j400',
+                             'HLT_j420',
                              ],
+                             get_prescales     = True,
                              key               = 'jets',
                              )
 
@@ -137,14 +133,14 @@ def analyze(config):
     
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsVeryLoose') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One1PTau') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One3PTau') 
     
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='MuVeto') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleJetTrigger') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleJetTrigger') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTauPt20') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsVeryLoose') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTightJet') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneJet') 
@@ -188,7 +184,6 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleJetTrigger', None],
               ['LeadJetPt20', None],
               ['TauJetDphi27', None],
               ['LeadTauIsMedium', None],
@@ -200,42 +195,12 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['SingleJetTrigger', None],
               ['LeadJetPt20', None],
               ['TauJetDphi27', None],
               ['LeadTauIsNotMedium', None],
               ],
             )
     
-    
-    ## F2
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_NUM_F2',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['SingleJetTriggerMatch', None],
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsMedium', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_DEN_F2',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['SingleJetTriggerMatch', None],
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsNotMedium', None],
-              ],
-            )
-    
-    """
     ## F2
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -441,7 +406,6 @@ def analyze(config):
               ['LeadTauIsNotMedium', None],
               ],
             )
-    """
     loop += pyframe.algs.HistCopyAlg()
 
     ##-------------------------------------------------------------------------
