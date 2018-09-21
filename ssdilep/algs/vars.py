@@ -154,6 +154,12 @@ class BuildTrigConfig(pyframe.core.Algorithm):
           if trig in self.store["ChainsWithTau"].keys(): continue
           self.store["ChainsWithTau"][trig] = i
 
+      if self.key == "muons": 
+        self.store["ChainsWithMuon"] = {} 
+        for i,trig in enumerate(self.chain.muon_listTrigChains):
+          if trig in self.store["ChainsWithMuon"].keys(): continue
+          self.store["ChainsWithMuon"][trig] = i
+
 
       # initialise the different slices
       """
@@ -229,6 +235,7 @@ class Particle(pyframe.core.ParticleProxy):
 
 
 
+#------------------------------------------------------------------------------
 class ParticlesBuilder(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def __init__(self, name="ParticlesBuilder", key=""):
@@ -240,6 +247,8 @@ class ParticlesBuilder(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def execute(self,weight):
         self.store[self.key] = [Particle(copy(l)) for l in self.store[self.key]]
+
+
 
 
 #------------------------------------------------------------------------------
