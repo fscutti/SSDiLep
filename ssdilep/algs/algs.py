@@ -140,16 +140,16 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_One1PTau(self):
-        return self.chain.tau_pt.size() == 1 and self.store["taus"][0].ntrk == 1
+        return self.chain.ntau == 1 and self.store["taus"][0].ntrk == 1
     #__________________________________________________________________________
     def cut_One3PTau(self):
-        return self.chain.tau_pt.size() == 1 and self.store["taus"][0].ntrk == 3
+        return self.chain.ntau == 1 and self.store["taus"][0].ntrk == 3
     
     
     
     #__________________________________________________________________________
     def cut_OneTau(self):
-        return self.chain.tau_pt.size() == 1
+        return self.chain.ntau == 1
     #__________________________________________________________________________
     def cut_TwoTaus(self):
         if self.chain.ntau == 2:
@@ -788,74 +788,106 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_LeadTauIsTight(self):
-      return self.store['taus'][0].isJetBDTSigTight
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][0].isTrueHadTau()
+      return pass_mc_filter and self.store['taus'][0].isJetBDTSigTight
     #__________________________________________________________________________
     def cut_SubLeadTauIsTight(self):
-      return self.store['taus'][1].isJetBDTSigTight
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][1].isTrueHadTau()
+      return pass_mc_filter and self.store['taus'][1].isJetBDTSigTight
     #__________________________________________________________________________
     def cut_LeadTauNotTight(self):
-      return not self.store['taus'][0].isJetBDTSigTight
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][0].isTrueHadTau() 
+      return pass_mc_filter and not self.store['taus'][0].isJetBDTSigTight
     #__________________________________________________________________________
     def cut_SubLeadTauNotTight(self):
-      return not self.store['taus'][1].isJetBDTSigTight
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][1].isTrueHadTau()
+      return pass_mc_filter and not self.store['taus'][1].isJetBDTSigTight
     
     
     #__________________________________________________________________________
     def cut_LeadTauIsMedium(self):
-      return self.store['taus'][0].isJetBDTSigMedium
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][0].isTrueHadTau() 
+      return pass_mc_filter and self.store['taus'][0].isJetBDTSigMedium
     #__________________________________________________________________________
     def cut_SubLeadTauIsMedium(self):
-      return self.store['taus'][1].isJetBDTSigMedium
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][1].isTrueHadTau() 
+      return pass_mc_filter and self.store['taus'][1].isJetBDTSigMedium
     #__________________________________________________________________________
     def cut_LeadTauIsNotMedium(self):
-      return not self.store['taus'][0].isJetBDTSigMedium
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][0].isTrueHadTau() 
+      return pass_mc_filter and not self.store['taus'][0].isJetBDTSigMedium
     #__________________________________________________________________________
     def cut_SubLeadTauIsNotMedium(self):
-      return not self.store['taus'][1].isJetBDTSigMedium
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][1].isTrueHadTau() 
+      return pass_mc_filter and not self.store['taus'][1].isJetBDTSigMedium
    
 
     #__________________________________________________________________________
     def cut_LeadTauIsLoose(self):
-      return self.store['taus'][0].isJetBDTSigLoose
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][0].isTrueHadTau() 
+      return pass_mc_filter and self.store['taus'][0].isJetBDTSigLoose
     #__________________________________________________________________________
     def cut_SubLeadTauIsLoose(self):
-      return self.store['taus'][1].isJetBDTSigLoose
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][1].isTrueHadTau() 
+      return pass_mc_filter and self.store['taus'][1].isJetBDTSigLoose
     #__________________________________________________________________________
     def cut_LeadTauNotLoose(self):
-      return not self.store['taus'][0].isJetBDTSigLoose
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][0].isTrueHadTau() 
+      return pass_mc_filter and not self.store['taus'][0].isJetBDTSigLoose
     #__________________________________________________________________________
     def cut_SubLeadTauNotLoose(self):
-      return not self.store['taus'][1].isJetBDTSigLoose
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][1].isTrueHadTau() 
+      return pass_mc_filter and not self.store['taus'][1].isJetBDTSigLoose
 
+  
     #__________________________________________________________________________
     def cut_LeadTauIsVeryLoose(self):
-      return self.store['taus'][0].isJetBDTSigVeryLoose
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][0].isTrueHadTau() 
+      return pass_mc_filter and self.store['taus'][0].isJetBDTSigVeryLoose
     #__________________________________________________________________________
     def cut_SubLeadTauIsVeryLoose(self):
-      return self.store['taus'][1].isJetBDTSigVeryLoose
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][1].isTrueHadTau() 
+      return pass_mc_filter and self.store['taus'][1].isJetBDTSigVeryLoose
     #__________________________________________________________________________
     def cut_LeadTauNotVeryLoose(self):
-      return not self.store['taus'][0].isJetBDTSigVeryLoose
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][0].isTrueHadTau() 
+      return pass_mc_filter and not self.store['taus'][0].isJetBDTSigVeryLoose
     #__________________________________________________________________________
     def cut_SubLeadTauNotVeryLoose(self):
-      return not self.store['taus'][1].isJetBDTSigVeryLoose
-   
-
-    #__________________________________________________________________________
-    def cut_LeadTauNotTightButLoose(self):
-      return self.store['taus'][0].isJetBDTSigLoose and not self.store['taus'][0].isJetBDTSigTight
-    #__________________________________________________________________________
-    def cut_SubLeadTauNotTightButLoose(self):
-      return self.store['taus'][1].isJetBDTSigLoose and not self.store['taus'][1].isJetBDTSigTight
-
-
-    #__________________________________________________________________________
-    def cut_LeadTauIsNotMediumButLoose(self):
-      return self.store['taus'][0].isJetBDTSigLoose and not self.store['taus'][0].isJetBDTSigMedium
-    #__________________________________________________________________________
-    def cut_SubLeadTauIsNotMediumButLoose(self):
-      return self.store['taus'][1].isJetBDTSigLoose and not self.store['taus'][1].isJetBDTSigMedium
-
+      pass_mc_filter = True
+      if self.sampletype=="mc":
+        pass_mc_filter = self.store['taus'][1].isTrueHadTau() 
+      return pass_mc_filter and not self.store['taus'][1].isJetBDTSigVeryLoose
 
 
     #__________________________________________________________________________
@@ -866,8 +898,8 @@ class CutAlg(pyframe.core.Algorithm):
       pass_mc_filter      = True
       
       if self.sampletype=="mc":
-        lead_is_real     = taus[0].isTrueHadronicTau
-        sublead_is_real  = taus[1].isTrueHadronicTau
+        lead_is_real     = taus[0].isTrueHadTau() 
+        sublead_is_real  = taus[1].isTrueHadTau() 
         pass_mc_filter   = lead_is_real and sublead_is_real     
 
       return lead_pass_medium and sublead_pass_medium and pass_mc_filter
@@ -881,7 +913,7 @@ class CutAlg(pyframe.core.Algorithm):
       pass_mc_filter      = True
       
       if self.sampletype=="mc":
-        sublead_is_real  = taus[1].isTrueHadronicTau
+        sublead_is_real  = taus[1].isTrueHadTau() 
         pass_mc_filter   = sublead_is_real     
 
       return lead_pass_medium and sublead_fail_medium and pass_mc_filter
@@ -895,7 +927,7 @@ class CutAlg(pyframe.core.Algorithm):
       pass_mc_filter      = True
       
       if self.sampletype=="mc":
-        lead_is_real     = taus[0].isTrueHadronicTau
+        lead_is_real     = taus[0].isTrueHadTau() 
         pass_mc_filter   = lead_is_real     
 
       return lead_fail_medium and sublead_pass_medium and pass_mc_filter
@@ -909,8 +941,8 @@ class CutAlg(pyframe.core.Algorithm):
       pass_mc_filter      = True
       
       if self.sampletype=="mc":
-        lead_is_real     = taus[0].isTrueHadronicTau
-        sublead_is_real  = taus[1].isTrueHadronicTau
+        lead_is_real     = taus[0].isTrueHadTau() 
+        sublead_is_real  = taus[1].isTrueHadTau() 
         pass_mc_filter   = lead_is_real or sublead_is_real     
 
       return lead_fail_medium and sublead_fail_medium and pass_mc_filter
@@ -1081,7 +1113,7 @@ class CutAlg(pyframe.core.Algorithm):
       required_triggers  = self.store["reqTrig"]
       passed_triggers    = self.store["passTrig"].keys()
       disabled_triggers  = self.store["disTrig"].keys()
-  
+      
       if not 'trigJets' in self.store.keys(): return False
 
       lead_jet = self.store['jets'][0]
@@ -1100,6 +1132,34 @@ class CutAlg(pyframe.core.Algorithm):
       passed_triggers    = self.store["passTrig"].keys()
       disabled_triggers  = self.store["disTrig"].keys()
 
+      taus = self.store['taus']
+      tau_lead = self.store['taus'][0] 
+      tau_sublead = self.store['taus'][1] 
+
+
+      for trig in required_triggers:
+        if trig in disabled_triggers: continue
+        if trig in self.store["ChainsWithTau"].keys():
+          event_is_triggered = bool( trig in passed_triggers )
+          if bool( tau_lead.isTrigMatchedToChain.at(self.store["ChainsWithTau"][trig]) ) and bool( tau_sublead.isTrigMatchedToChain.at(self.store["ChainsWithTau"][trig]) ):
+            print "Tau lead pt ", float(tau_lead.tlv.Pt() / GeV)
+            print "Tau sublead pt ", float(tau_sublead.tlv.Pt() / GeV)
+            print "Both taus are trigger matched"
+          for tau in taus:
+            tau_is_matched      = bool( tau.isTrigMatchedToChain.at(self.store["ChainsWithTau"][trig]) )
+            tau_is_above_trigPt = tau.tlv.Pt() > float(trig.split("_")[1][3:]) * 1.1 * GeV
+            if event_is_triggered and tau_is_matched and tau_is_above_trigPt: 
+              return True
+
+      return False
+
+
+    #__________________________________________________________________________
+    def cut_SingleLeadTauTrigger(self):
+      required_triggers  = self.store["reqTrig"]
+      passed_triggers    = self.store["passTrig"].keys()
+      disabled_triggers  = self.store["disTrig"].keys()
+
       lead_tau = self.store['taus'][0]
       
       for trig in required_triggers:
@@ -1111,7 +1171,6 @@ class CutAlg(pyframe.core.Algorithm):
             return True
 
       return False
-
 
     #__________________________________________________________________________
     def cut_SingleJetTriggerMatch(self):
