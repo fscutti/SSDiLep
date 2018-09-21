@@ -35,12 +35,10 @@ class TrigPresc(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def __init__(self, 
           cutflow     = None,
-          #use_avg     = None,
           particles   = None,
           key         = None):
         pyframe.core.Algorithm.__init__(self, name="TrigPresc", isfilter=True)
         self.cutflow     = cutflow
-        #self.use_avg     = use_avg
         self.particles   = particles
         self.key         = key
     #__________________________________________________________________________
@@ -49,13 +47,11 @@ class TrigPresc(pyframe.core.Algorithm):
         
         if "data" in self.sampletype:
           ineff_list = []
-          #for trig in self.store["reqTrig"]: 
-          for trig in self.store["passTrig"].keys(): 
-            if trig in self.store["disTrig"].keys(): continue
-            #for p in self.store[self.particles]:
-            if self.store["passTrig"][trig]["prescale"] == 0.: continue
-            ineff_list.append(1. - 1. / self.store["passTrig"][trig]["prescale"])
-
+          for trig in self.store["reqTrig"]: 
+            if trig in self.store["passTrig"].keys():
+              if self.store["passTrig"][trig]["prescale"] in [0., -1.]: continue
+              ineff_list.append(1. - 1. / self.store["passTrig"][trig]["prescale"])
+            
           if ineff_list:
             tot_ineff = 1.0
             for ineff in ineff_list: tot_ineff *= ineff
@@ -63,6 +59,8 @@ class TrigPresc(pyframe.core.Algorithm):
         
         trigpresc = 1. / trigpresc
         
+        print trigpresc
+
         if self.key:
           self.store[self.key] = trigpresc
         self.set_weight(trigpresc*weight)
@@ -172,7 +170,7 @@ class TauTrigSF(pyframe.core.Algorithm):
           if "mc" in self.sampletype: 
             for trig in self.trig_list:
               if tau.isTrigMatchedToChain.at(self.store["ChainsWithTau"][trig]):
-                sf *= getattr(tau,"_".join(["TauTrigEff","SF","EleOLRElectronEleBDT"+self.tau_eolr,"TauID"+self.tau_id,"Trig"+trig])).at(0)
+                trig_sf *= getattr(tau,"_".join(["TauTrigEff","SF","EleOLRElectronEleBDT"+self.tau_eolr,"TauID"+self.tau_id,"Trig"+trig])).at(0)
                 break
           
             if self.scale: pass
