@@ -438,17 +438,39 @@ class ParticleProxy(object):
     """
     #_________________________________________________________________________
     def __init__(self, tree_proxy, index, prefix=""):
-        self.tree_proxy = tree_proxy
-        self.index = index
-        self.prefix = prefix
+        self.tree_proxy  = tree_proxy
+        self.index       = index
+        self.prefix      = prefix
     #_________________________________________________________________________
     def __getattr__(self, name):
+        tree_proxy = object.__getattribute__(self, "tree_proxy")
         prefix_and_name = object.__getattribute__(self, "prefix") + name
-        tree_proxy =  object.__getattribute__(self, "tree_proxy")
         if prefix_and_name in tree_proxy.branches:
             index = object.__getattribute__(self, "index")
             return getattr(tree_proxy, prefix_and_name)[index]
         return object.__getattribute__(self, name)
+
+
+#-----------------------------------------------------------------------------
+class DetailProxy(object):
+    """
+    This is money laundering.
+    """
+    #_________________________________________________________________________
+    def __init__(self, particle_proxy, index, attr_prefix=""):
+        self.particle_proxy = particle_proxy
+        self.index          = index
+        self.attr_prefix    = attr_prefix
+    #_________________________________________________________________________
+    def __getattr__(self, name):
+        particle_proxy =  object.__getattribute__(self, "particle_proxy")
+        attr_prefix_and_name = object.__getattribute__(self, "attr_prefix") + name
+        if attr_prefix_and_name in particle_proxy.tree_proxy.branches:
+            index = object.__getattribute__(self, "index")
+            obj_name = attr_prefix_and_name[len(particle_proxy.prefix):]
+            return getattr(particle_proxy, obj_name)[index]
+        return object.__getattribute__(self, name)
+
 
 
 #-----------------------------------------------------------------------------
@@ -479,6 +501,19 @@ def buildParticleProxies(chain, n, prefix=""):
         for el in electrons:
             print '  pt, eta, phi =', el.pt, el.eta, el.phi
     """
+
+
     return [ ParticleProxy(chain, i, prefix) for i in xrange(n) ]
+
+
+#_____________________________________________________________________________
+def buildDetailsProxies(particle_proxy, nobj, attr_prefix=""):
+    """
+    This funcion creates a list of attributes for each particle proxy.
+    It is used to handle information nested in vectors. For examples
+    list of tracks associated to objects.
+    """
+    return [ DetailProxy(particle_proxy, i, attr_prefix) for i in xrange(nobj) ]
+
 
 # EOF

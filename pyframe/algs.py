@@ -53,13 +53,15 @@ class ListMerger(pyframe.core.Algorithm):
 #------------------------------------------------------------------------------
 class ListBuilder(pyframe.core.Algorithm):
     #__________________________________________________________________________
-    def __init__(self, name='ListBuilder', prefixes=None, keys=None):
+    def __init__(self, name='ListBuilder', prefixes=None, keys=None, attr_prefixes=None):
         pyframe.core.Algorithm.__init__(self, name)
-        if not len(keys) == len(prefixes) : fatal("Need equal number of keys and prefixes in ListBuilder")
-        if not isinstance(keys, list)     : fatal("Need keys to be list in ListBuilder")
-        if not isinstance(prefixes, list) : fatal("Need prefixes to be list in ListBuilder")
-        self.keys     = keys
-        self.prefixes = prefixes
+        if not len(keys) == len(prefixes)     : fatal("Need equal number of keys and prefixes in ListBuilder")
+        if not isinstance(keys, list)         : fatal("Need keys to be list in ListBuilder")
+        if not isinstance(prefixes, list)     : fatal("Need prefixes to be list in ListBuilder")
+        if not isinstance(attr_prefixes, list): fatal("Need att_prefixes to be list in ListBuilder")
+        self.keys          = keys
+        self.prefixes      = prefixes
+        self.attr_prefixes = attr_prefixes
     #__________________________________________________________________________
     def execute(self, weight):
         for prefix, key in zip(self.prefixes, self.keys):
@@ -72,12 +74,16 @@ class ListBuilder(pyframe.core.Algorithm):
             """
             #else: nparts = "n"+prefix.replace("_","") 
             nparts = prefix+"pt" 
-
             # This is a dirty hack to use the pt branch to get the number of particles
             #parts = pyframe.core.buildParticleProxies(self.chain, getattr(self.chain, nparts), prefix) 
-            parts = pyframe.core.buildParticleProxies(self.chain, getattr(self.chain, nparts).size(), prefix) 
-            self.store[key] = parts
 
+            self.store[key] = pyframe.core.buildParticleProxies(self.chain, getattr(self.chain, nparts).size(), prefix) 
+            
+            for attr_prefix in self.attr_prefixes:
+              if prefix in attr_prefix:
+                for p in self.store[key]:
+                  attr_list = pyframe.core.buildDetailsProxies(p, getattr(p, attr_prefix[len(prefix):]+"pt").size(), attr_prefix)
+                  setattr(p, attr_prefix[len(prefix):].strip("_"), attr_list)
 
 
 #------------------------------------------------------------------------------
@@ -395,7 +401,6 @@ class AttachTLVs(pyframe.core.Algorithm):
                 elif p.prefix.startswith('jet_'):
                     #p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, p.m)
                     p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 0.0)
-
                 elif p.prefix.startswith('tau_'):
                     p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, p.m)
                 elif p.prefix.startswith('trigJet_a4tcemsubjesFS_'):
@@ -404,6 +409,7 @@ class AttachTLVs(pyframe.core.Algorithm):
                     p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 0.0)
                 else:
                     log.error('attach_tlv: unrecognized prefix = %s' % p.prefix)
+          
 
 #------------------------------------------------------------------------------
 class PtSort(pyframe.core.Algorithm):
