@@ -26,15 +26,17 @@ class BuildTrigConfig(pyframe.core.Algorithm):
     """
     #__________________________________________________________________________
     def __init__(self, 
-          cutflow           = None,
-          required_triggers = None,
-          get_prescales     = False,
-          key               = None):
+          cutflow            = None,
+          required_triggers  = None,
+          get_prescales_lumi = False,
+          get_prescales_std  = False,
+          key                = None):
         pyframe.core.Algorithm.__init__(self, name="TrigConfig", isfilter=True)
-        self.cutflow           = cutflow
-        self.required_triggers = required_triggers
-        self.get_prescales     = get_prescales
-        self.key               = key
+        self.cutflow            = cutflow
+        self.required_triggers  = required_triggers
+        self.get_prescales_lumi = get_prescales_lumi
+        self.get_prescales_std  = get_prescales_std
+        self.key                = key
     
     #__________________________________________________________________________
     def initialize(self):
@@ -174,11 +176,12 @@ class BuildTrigConfig(pyframe.core.Algorithm):
         self.store["reqTrig"] = self.required_triggers
     
       prescale_info = None
-      if self.sampletype == "mc" or not self.get_prescales:
+      if self.sampletype == "mc" or not (self.get_prescales_lumi or self.get_prescales_std):
         prescale_info = self.chain.passedTriggers
-      elif self.get_prescales:
+      elif self.get_prescales_lumi:
         prescale_info = self.chain.triggerPrescalesLumi
-        #prescale_info = self.chain.triggerPrescales
+      elif self.get_prescales_std:
+        prescale_info = self.chain.triggerPrescales
 
 
       if not "passTrig" in self.store.keys():
@@ -234,6 +237,16 @@ class Particle(pyframe.core.ParticleProxy):
         matchtype = self.isTrueHadronicTau in [1]
       return matchtype
 
+    #__________________________________________________________________________
+    def width(self):
+      assert "tau" in self.prefix, "ERROR: accessing tracks but particle is not a tau" 
+      
+      num = den = 0.
+      tracks = self.tracks
+      for track in tracks:
+        num += self.tlv.DeltaR(track.tlv) * track.tlv.Pt()
+        den += track.tlv.Pt()
+      return num/ den
 
 
 #------------------------------------------------------------------------------
@@ -250,6 +263,61 @@ class ParticlesBuilder(pyframe.core.Algorithm):
         self.store[self.key] = [Particle(copy(l)) for l in self.store[self.key]]
 
 
+#------------------------------------------------------------------------------
+class MuTauVars(pyframe.core.Algorithm):
+          
+    """
+    computes variables for the di-tau selection
+    """
+    #__________________________________________________________________________
+    def __init__(self, 
+                 name        = 'VarsAlg',
+                 key_taus    = 'taus',
+                 key_muons   = 'muons',
+                 key_met     = 'met_trk',
+                 ):
+        pyframe.core.Algorithm.__init__(self, name)
+        self.key_muons = key_muons
+        self.key_taus = key_taus
+        self.key_met = key_met
+
+    #__________________________________________________________________________
+    def execute(self, weight):
+        pyframe.core.Algorithm.execute(self, weight)
+        """
+        computes variables and puts them in the store
+        """
+
+        ## get objects from event candidate
+        ## --------------------------------------------------
+        taus  = self.store[self.key_taus] 
+        muons = self.store[self.key_muons]
+        met   = self.store[self.key_met]
+       
+        # ---------------------------
+        # at least a lepton and a jet
+        # ---------------------------
+
+        self.store['mutau_dphi'] = muons[0].tlv.DeltaPhi(taus[0].tlv)
+        scdphi = 0.0
+        scdphi += ROOT.TMath.Cos(met.tlv.Phi() - muons[0].tlv.Phi())
+        scdphi += ROOT.TMath.Cos(met.tlv.Phi() - taus[0].tlv.Phi())
+        self.store['mutau_scdphi'] = scdphi
+       
+        self.store['mutau_ptratio'] = muons[0].tlv.Pt() / taus[0].tlv.Pt()
+
+        muon = muons[0]
+        tau = taus[0] 
+        muonT = ROOT.TLorentzVector()
+        muonT.SetPtEtaPhiM( muon.tlv.Pt(), 0., muon.tlv.Phi(), muon.tlv.M() )
+        tauT = ROOT.TLorentzVector()
+        tauT.SetPtEtaPhiM( tau.tlv.Pt(), 0., tau.tlv.Phi(), tau.tlv.M() )
+        
+        self.store['mVisMT']     = (tau.tlv+muon.tlv).M()
+        self.store['mTtotMT']    = (muonT + tauT + met.tlv).M()  
+
+        return True
+
 
 
 #------------------------------------------------------------------------------
@@ -264,13 +332,11 @@ class DiTauVars(pyframe.core.Algorithm):
                  key_leptons = 'taus',
                  key_jets    = 'jets',
                  key_met     = 'met_trk',
-                 build_tight_jets = False,
                  ):
         pyframe.core.Algorithm.__init__(self, name)
         self.key_leptons = key_leptons
         self.key_jets = key_jets
         self.key_met = key_met
-        self.build_tight_jets = build_tight_jets
 
     #__________________________________________________________________________
     def execute(self, weight):
@@ -311,37 +377,78 @@ class DiTauVars(pyframe.core.Algorithm):
         self.store['mVisTT']           = (tau2.tlv+tau1.tlv).M()
         self.store['mTtotTT']          = (tau1T + tau2T + met.tlv).M()  
 
+        return True
+
+
+#------------------------------------------------------------------------------
+class JetsBuilder(pyframe.core.Algorithm):
+          
+    """
+    builds tight jet collection
+    """
+    #__________________________________________________________________________
+    def __init__(self, 
+                 name        = 'BuildJets',
+                 key_met     = 'met_trk',
+                 build_trigger_jets = False,
+                 ):
+        pyframe.core.Algorithm.__init__(self, name)
+        self.key_met = key_met
+        self.build_trigger_jets = build_trigger_jets
+
+    #__________________________________________________________________________
+    def execute(self, weight):
+        pyframe.core.Algorithm.execute(self, weight)
+        """
+        computes variables and puts them in the store
+        """
+        jets_tight = []
+        jets_nontight = []
+        
+        met = self.store[self.key_met]
+        jets = self.store['jets']
+        
         # -------------------------
         # build tight jets
         # -------------------------
-        if self.build_tight_jets:
-           jets_tight = []
-           jets_nontight = []
-           for jet in jets:
-             if jet.JvtPass_Medium and jet.fJvtPass_Medium and abs(jet.eta) <= 2.8:
-               jets_tight += [jet]
-             else:
-               jets_nontight += [jet]
-           
-           jets_tight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
-           jets_nontight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
-           
-           if len(jets_tight) > 1:
-             assert jets_tight[0].tlv.Pt() >= jets_tight[1].tlv.Pt(), "jets_tight not sorted.."
-             jet1 = self.store['jets'][0]
-             jet2 = self.store['jets'][1] 
-             jet1T = ROOT.TLorentzVector()
-             jet1T.SetPtEtaPhiM( jet1.tlv.Pt(), 0., jet1.tlv.Phi(), jet1.tlv.M() )
-             jet2T = ROOT.TLorentzVector()
-             jet2T.SetPtEtaPhiM( jet2.tlv.Pt(), 0., jet2.tlv.Phi(), jet2.tlv.M() )
-             
-             self.store['mVisJJ']           = (jet2.tlv+jet1.tlv).M()
-             self.store['mTtotJJ']          = (jet1T + jet2T + met.tlv).M()  
+        for jet in jets:
+          if jet.JvtPass_Medium and jet.fJvtPass_Medium and abs(jet.eta) <= 2.8:
+            jets_tight += [jet]
+          else:
+            jets_nontight += [jet]
+        
+        jets_tight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
+        jets_nontight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
+        
+        if len(jets_tight) > 1:
+          assert jets_tight[0].tlv.Pt() >= jets_tight[1].tlv.Pt(), "jets_tight not sorted.."
+          jet1 = jets[0]
+          jet2 = jets[1] 
+          jet1T = ROOT.TLorentzVector()
+          jet1T.SetPtEtaPhiM( jet1.tlv.Pt(), 0., jet1.tlv.Phi(), jet1.tlv.M() )
+          jet2T = ROOT.TLorentzVector()
+          jet2T.SetPtEtaPhiM( jet2.tlv.Pt(), 0., jet2.tlv.Phi(), jet2.tlv.M() )
+          
+          self.store['mVisJJ']           = (jet2.tlv+jet1.tlv).M()
+          self.store['mTtotJJ']          = (jet1T + jet2T + met.tlv).M()  
 
-           if len(jets_nontight) > 1:
-             assert jets_nontight[0].tlv.Pt() >= jets_nontight[1].tlv.Pt(), "jets_nontight not sorted.."
-           self.store['jets_tight'] = jets_tight        
-           self.store['jets_nontight'] = jets_nontight        
+        if len(jets_nontight) > 1:
+          assert jets_nontight[0].tlv.Pt() >= jets_nontight[1].tlv.Pt(), "jets_nontight not sorted.."
+        self.store['jets_tight'] = jets_tight        
+        self.store['jets_nontight'] = jets_nontight        
+        
+        # -------------------------
+        # build trigger jets
+        # -------------------------
+        if self.build_trigger_jets:
+          if len(self.store['trigJetsISFS']) > 0: 
+            self.store['trigJets'] = self.store['trigJetsISFS']
+          elif len(self.store['trigJetsFS']) > 0: 
+            self.store['trigJets'] = self.store['trigJetsFS']
+
+          if 'trigJets' in self.store:
+            self.store['jetTrigJet_ptratio'] = self.store['jets'][0].tlv.Pt() / self.store['trigJets'][0].tlv.Pt()
+            self.store['jetTrigJet_deltaR'] = self.store['jets'][0].tlv.DeltaR(self.store['trigJets'][0].tlv)
 
         return True
 
@@ -358,14 +465,12 @@ class DiJetVars(pyframe.core.Algorithm):
                  key_leptons = 'taus',
                  key_jets    = 'jets',
                  key_met     = 'met_trk',
-                 build_tight_jets = False,
                  build_trigger_jets = False,
                  ):
         pyframe.core.Algorithm.__init__(self, name)
         self.key_leptons = key_leptons
         self.key_jets = key_jets
         self.key_met = key_met
-        self.build_tight_jets = build_tight_jets
         self.build_trigger_jets = build_trigger_jets
 
     #__________________________________________________________________________
@@ -406,52 +511,6 @@ class DiJetVars(pyframe.core.Algorithm):
 
         if len(leptons)>1:
           self.store['%ssubleadlead_ptratio'%prefix] = leptons[1].tlv.Pt() / leptons[0].tlv.Pt()
-
-
-        # -------------------------
-        # build tight jets
-        # -------------------------
-        if self.build_tight_jets:
-           jets_tight = []
-           jets_nontight = []
-           for jet in jets:
-             if jet.JvtPass_Medium and jet.fJvtPass_Medium and abs(jet.eta) <= 2.8:
-               jets_tight += [jet]
-             else:
-               jets_nontight += [jet]
-           
-           jets_tight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
-           jets_nontight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
-           
-           if len(jets_tight) > 1:
-             assert jets_tight[0].tlv.Pt() >= jets_tight[1].tlv.Pt(), "jets_tight not sorted.."
-             jet1 = self.store['jets'][0]
-             jet2 = self.store['jets'][1] 
-             jet1T = ROOT.TLorentzVector()
-             jet1T.SetPtEtaPhiM( jet1.tlv.Pt(), 0., jet1.tlv.Phi(), jet1.tlv.M() )
-             jet2T = ROOT.TLorentzVector()
-             jet2T.SetPtEtaPhiM( jet2.tlv.Pt(), 0., jet2.tlv.Phi(), jet2.tlv.M() )
-             
-             self.store['mVisJJ']           = (jet2.tlv+jet1.tlv).M()
-             self.store['mTtotJJ']          = (jet1T + jet2T + met.tlv).M()  
-
-           if len(jets_nontight) > 1:
-             assert jets_nontight[0].tlv.Pt() >= jets_nontight[1].tlv.Pt(), "jets_nontight not sorted.."
-           self.store['jets_tight'] = jets_tight        
-           self.store['jets_nontight'] = jets_nontight        
-
-        # -------------------------
-        # build trigger jets
-        # -------------------------
-        if self.build_trigger_jets:
-          if len(self.store['trigJetsISFS']) > 0: 
-            self.store['trigJets'] = self.store['trigJetsISFS']
-          elif len(self.store['trigJetsFS']) > 0: 
-            self.store['trigJets'] = self.store['trigJetsFS']
-
-          if 'trigJets' in self.store:
-            self.store['jetTrigJet_ptratio'] = self.store['jets'][0].tlv.Pt() / self.store['trigJets'][0].tlv.Pt()
-            self.store['jetTrigJet_deltaR'] = self.store['jets'][0].tlv.DeltaR(self.store['trigJets'][0].tlv)
 
         return True
 
