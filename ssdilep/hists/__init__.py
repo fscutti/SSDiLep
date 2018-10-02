@@ -9,4 +9,5 @@ import TwoTauFF_hists
 import MuFF_hists
 import PtOnly_hists
 import H2D_hists
-import TAndP_hists
+import MuTauVR_hists
+import TauTracks_hists
