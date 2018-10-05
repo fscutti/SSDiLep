@@ -702,10 +702,10 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_SubLeadTauIsTight(self):
       return self.store['taus'][1].isJetBDTSigTight
     #__________________________________________________________________________
-    def cut_LeadTauNotTight(self):
+    def cut_LeadTauIsNotTight(self):
       return self.store['taus'][0].isJetBDTSigTight
     #__________________________________________________________________________
-    def cut_SubLeadTauNotTight(self):
+    def cut_SubLeadTauIsNotTight(self):
       return self.store['taus'][1].isJetBDTSigTight
     
     
@@ -730,10 +730,10 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_SubLeadTauIsLoose(self):
       return self.store['taus'][1].isJetBDTSigLoose
     #__________________________________________________________________________
-    def cut_LeadTauNotLoose(self):
+    def cut_LeadTauIsNotLoose(self):
       return self.store['taus'][0].isJetBDTSigLoose
     #__________________________________________________________________________
-    def cut_SubLeadTauNotLoose(self):
+    def cut_SubLeadTauIsNotLoose(self):
       return self.store['taus'][1].isJetBDTSigLoose
 
   
