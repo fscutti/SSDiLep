@@ -437,6 +437,45 @@ singletop = Sample( name =   'singletop',
                                 ],
                 ) 
 
+
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W",      xsec =   76498710000.0,   )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W",      xsec =   52653540.6,      )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W",      xsec =   813248.436,      )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W",      xsec =   8469.51264,      )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W",      xsec =   135.3052894,     )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W",      xsec =   4.207843815,     )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W",      xsec =   0.2427014226,    )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W",      xsec =   0.006369252,     )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W",      xsec =   0.00636030528,   )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W",      xsec =   0.000237160564,  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W  = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W",     xsec =   7.06798694e-06,  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W  = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W",     xsec =   1.130893099e-07, )  
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W  = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W",     xsec =   4.41551264e-10,  )
+
+
+dijet = Sample( name =   'dijet',
+                    tlatex = 'Di-Jet',
+                    fill_color = ROOT.kRed+3,
+                    line_color =  ROOT.kRed+4,
+                    marker_color =  ROOT.kRed+4,
+                    daughters = [
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W,         
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W,
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W,
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W,
+                              ],
+                ) 
+
+
 #-----------------------------------------------------------------------------
 # Diboson (list of samples might be incomplete!)
 #-----------------------------------------------------------------------------
@@ -500,14 +539,14 @@ all_data = data.daughters
 all_mc = []
 
 all_mc += ttbar.daughters
-all_mc += singletop.daughters
+#all_mc += singletop.daughters
 
-#all_mc += Wenu.daughters
-#all_mc += Wmunu.daughters
+all_mc += Wenu.daughters
+all_mc += Wmunu.daughters
 all_mc += Wtaunu.daughters
 
-#all_mc += Zee.daughters
-#all_mc += Zmumu.daughters
+all_mc += Zee.daughters
+all_mc += Zmumu.daughters
 all_mc += Ztautau.daughters
 
 #all_mc += diboson.daughters
@@ -524,7 +563,7 @@ mc_bkg.append( Wtaunu )
 
 #mc_bkg.append( Zee ) 
 #mc_bkg.append( Zmumu )
-mc_bkg.append( Ztautau )
+#mc_bkg.append( Ztautau )
 
 #mc_bkg.append( singletop )
 mc_bkg.append( ttbar )
