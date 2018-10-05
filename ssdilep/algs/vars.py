@@ -220,6 +220,10 @@ class Particle(pyframe.core.ParticleProxy):
 
     # https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
     # https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier 
+    
+    # -------------- 
+    # Muon variables 
+    # -------------- 
     #__________________________________________________________________________
     def isTrueNonIsoMuon(self):
       matchtype = self.truthType in [5,7,8]
@@ -230,23 +234,67 @@ class Particle(pyframe.core.ParticleProxy):
       matchtype = self.truthType in [6]
       #return self.isTruthMatchedToMuon and matchtype
       return matchtype
+    
+    # ------------- 
+    # Tau variables 
+    # ------------- 
+    #__________________________________________________________________________
+    def isTrueTau(self):
+      matchtype = self.truthPdgId in [10,11,12]
+      return matchtype
     #__________________________________________________________________________
     def isTrueHadTau(self):
       matchtype = False
       if hasattr(self, 'isTrueHadronicTau'):
         matchtype = self.isTrueHadronicTau in [1]
       return matchtype
+    #__________________________________________________________________________
+    def isQuarkFake(self):
+      # -----------------------
+      # d=1,u=2,s=3,c=4,b=5,t=6
+      # -----------------------
+      matchtype = self.PartonTruthLabelID in [1,2,3,4,5,6]
+      return matchtype and not self.isTrueTau()
+    #__________________________________________________________________________
+    def isGluonFake(self):
+      # -----------------------
+      # g=21
+      # -----------------------
+      matchtype = self.PartonTruthLabelID in [21]
+      return matchtype and not self.isTrueTau()
+    #__________________________________________________________________________
+    def isEleFake(self):
+      matchtype = self.truthType in [2,3,4]
+      return matchtype
+    #__________________________________________________________________________
+    def isMuonFake(self):
+      matchtype = self.truthType in [6,7,8]
+      return matchtype
+
 
     #__________________________________________________________________________
-    def width(self):
-      assert "tau" in self.prefix, "ERROR: accessing tracks but particle is not a tau" 
+    def width(self, flags=['isClCharged']):
+      """
+      Flags are checked with AND logic. Standard tau tracks are
+      selected with the flag isClCharged only. This can be overridden 
+      in the variable definition.
+      """
+      assert "tau" in self.prefix, "ERROR: accessing tracks but particle is not a tau !!!" 
       
-      num = den = 0.
+      pass_flags = True 
+      num = 0
+      den = 1.
       tracks = self.tracks
+      
       for track in tracks:
-        num += self.tlv.DeltaR(track.tlv) * track.tlv.Pt()
-        den += track.tlv.Pt()
-      return num/ den
+        if flags:
+          for fl in flags:
+            assert hasattr(track,str(fl)), "ERROR: requested flag %s for tau tracks does not exist !!!" 
+            if not getattr(track,str(fl))==1: pass_flags = False
+        if pass_flags:
+         num += self.tlv.DeltaR(track.tlv) * track.tlv.Pt()
+         den += track.tlv.Pt()
+      return num / den
 
 
 #------------------------------------------------------------------------------
