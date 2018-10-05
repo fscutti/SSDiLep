@@ -51,12 +51,21 @@ class HistMgr():
         common_file_path = os.path.join(self.basedir,syspath)
         
         for infile in os.listdir(common_file_path):
+          
           if get_slices:
-            if os.path.isfile(os.path.join(common_file_path,infile)) and samplename+"_slice" in infile:
-              paths_to_files.append(os.path.join(common_file_path,infile))
-          else: 
-            if os.path.isfile(os.path.join(common_file_path,infile)) and samplename+"." in infile:
-              paths_to_files.append(os.path.join(common_file_path,infile))
+            if os.path.isfile(os.path.join(common_file_path,infile)):
+              if samplename+"_slice" in infile:
+                paths_to_files.append(os.path.join(common_file_path,infile))
+            else:
+              print "WARNING: file %s does not exist"%os.path.join(common_file_path,infile)
+          
+          else:  
+            if os.path.isfile(os.path.join(common_file_path,infile)):
+              if samplename+"." in infile:
+                paths_to_files.append(os.path.join(common_file_path,infile))
+            else: 
+              print "WARNING: file %s does not exist"%os.path.join(common_file_path,infile)
+        
         if get_first_item:
           return paths_to_files[0]
         else:
@@ -86,7 +95,6 @@ class HistMgr():
 
         for path in paths_to_files:
            f = ROOT.TFile.Open(path)
-           #print "new appending %s to list of slices"%path
            f_list.append(f)
            assert f, 'Failed to open input file!'
            
@@ -94,7 +102,6 @@ class HistMgr():
            path_to_hist = ''
            
            if region != None:
-              #print "looking for region %s"%region
               path_to_hist = os.path.join('regions',region)
 
               ## check region exists
@@ -113,26 +120,17 @@ class HistMgr():
            path_to_hist = os.path.join(path_to_hist,histname)
 
            h = f.Get(path_to_hist)
-           #print "got histogram %s"%h.GetName()
            
            if not h:
                f.Close()
-               #print 'failed retrieveing hist: %s:%s'%(path_to_file,path_to_hist)
                return None
            
            h = h.Clone()
-           #h.SetDirectory(0)
-           #print "This is the histogram"
-           #print h
-           #h_list.append(h)
            h_list += [h]
         
-        #print "This is the list outside"
-        #print h_list        
+        print "Retrieving histograms for %s"%samplename
         h_sum = h_list[0]
         for h in h_list[1:]: h_sum.Add(h)
-
-        #for f in f_list: f.Close()
         
         ## apply flat sys (if specified)
         if sys and sys.flat_err:

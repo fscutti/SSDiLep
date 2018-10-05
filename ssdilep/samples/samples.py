@@ -459,19 +459,19 @@ dijet = Sample( name =   'dijet',
                     line_color =  ROOT.kRed+4,
                     marker_color =  ROOT.kRed+4,
                     daughters = [
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W,         
+                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W,         
                               Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W, 
                               Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W, 
                               Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W, 
                               Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W, 
                               Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W, 
                               Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W,
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W,
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W,
+                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W, 
+                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W, 
+                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W, 
+                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W,
+                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W,
+                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W,
                               ],
                 ) 
 
@@ -541,15 +541,16 @@ all_mc = []
 all_mc += ttbar.daughters
 #all_mc += singletop.daughters
 
-all_mc += Wenu.daughters
-all_mc += Wmunu.daughters
+#all_mc += Wenu.daughters
+#all_mc += Wmunu.daughters
 all_mc += Wtaunu.daughters
 
-all_mc += Zee.daughters
-all_mc += Zmumu.daughters
-all_mc += Ztautau.daughters
+#all_mc += Zee.daughters
+#all_mc += Zmumu.daughters
+#all_mc += Ztautau.daughters
 
 #all_mc += diboson.daughters
+all_mc += dijet.daughters
 
 
 # Samples loaded for SubmitPlot.py
@@ -569,4 +570,5 @@ mc_bkg.append( Wtaunu )
 mc_bkg.append( ttbar )
 
 #mc_bkg.append( diboson )
+#mc_bkg.append( dijet )
 ## EOF

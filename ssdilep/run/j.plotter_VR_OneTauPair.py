@@ -96,9 +96,7 @@ def analyze(config):
         keys = ['taus','jets','muons','electrons'],
         )
     # just a decoration of particles ...
-    loop += ssdilep.algs.vars.ParticlesBuilder(
-        key='taus',
-        )
+    loop += ssdilep.algs.vars.ParticlesBuilder(key='taus')
 
     ## build MET
     ## ---------------------------------------
@@ -132,8 +130,8 @@ def analyze(config):
     ## ---------------------------------------
     loop += ssdilep.algs.vars.DiTauVars(key_leptons='taus',
                                         key_jets='jets',
-                                        build_tight_jets=True,
                                         )   
+    loop += ssdilep.algs.vars.JetsBuilder()
     
     ## weights configuration
     ## ---------------------------------------

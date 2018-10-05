@@ -113,7 +113,7 @@ taulead_pt = Var(name = 'taulead_pt',
               path   = 'taus',
               xmin   = 0.,
               xmax   = 600.,
-              rebin  = 10,
+              rebin  = 5,
               log    = False,
               )
 
@@ -190,7 +190,7 @@ trigJetlead_pt = Var(name = 'trigJetlead_pt',
               path   = 'jets',
               xmin   = 0.,
               xmax   = 600.,
-              rebin  = 1,
+              rebin  = 5,
               log    = False,
               )
 
@@ -232,11 +232,11 @@ vars_list.append(taulead_pt)
 vars_list.append(taulead_eta)
 vars_list.append(taulead_phi)
 vars_list.append(met_trk_et)
-#vars_list.append(jetlead_pt)
+vars_list.append(jetlead_pt)
 #vars_list.append(jetlead_eta)
 #vars_list.append(jetlead_phi)
 
-#vars_list.append(trigJetlead_pt)
+vars_list.append(trigJetlead_pt)
 #vars_list.append(trigJetlead_eta)
 #vars_list.append(trigJetlead_phi)
 

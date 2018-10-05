@@ -90,12 +90,12 @@ def analyze(config):
     ## ---------------------------------------
     loop += pyframe.algs.ListBuilder(
         prefixes = ['tau_','jet_','trigJet_a4tcemsubjesFS_','trigJet_a4tcemsubjesISFS_'],
-        attr_prefixes = ['tau_tracks_'],
+        #attr_prefixes = ['tau_tracks_'],
         keys = ['taus','jets','trigJetsFS','trigJetsISFS'],
         )
     loop += pyframe.algs.AttachTLVs(
         keys = ['taus','jets','trigJetsFS','trigJetsISFS'],
-        attr_keys = ['tau_tracks'],
+        #attr_keys = ['tau_tracks'],
         )
     # just a decoration of particles ...
     loop += ssdilep.algs.vars.ParticlesBuilder(key='taus')
@@ -131,19 +131,14 @@ def analyze(config):
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTau') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One1PTau') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One3PTau') 
-    
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsVeryLoose') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='MuVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleJetTrigger') 
-    #"""
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTauPt20') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTightJet') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneJet') 
-    #"""
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastOneJet') 
 
     
     ## weights configuration
@@ -167,291 +162,286 @@ def analyze(config):
     ## ---------------------------------------
     hist_list = []
     hist_list += ssdilep.hists.OneTauFF_hists.hist_list
-    hist_list += ssdilep.hists.TauTracks_hists.hist_list
+    #hist_list += ssdilep.hists.TauTracks_hists.hist_list
     
     ##-------------------------------------------------------------------------
     ## make plots
     ##-------------------------------------------------------------------------
-
-    ## GLUONS
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_GLUONS',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['GluonFilter', None],
-              ],
-            )
     
-    ## QUARKS
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_QUARKS',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['QuarkFilter', None],
-              ],
-            )
-   
-    """ 
-    ## F1
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_NUM_F1',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsMedium', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_DEN_F1',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsNotMedium', None],
-              ],
-            )
-    
-    ## F2
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_NUM_F2',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt50', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsMedium', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_DEN_F2',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt50', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsNotMedium', None],
-              ],
-            )
+    for tauType in ["1P","3P"]:
+
+       ## F1
+       ## ---------------------------------------
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_NUM_%sF1'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['OneJet', None],
+                 ['LeadJetPt20', None],
+                 ['TauJetDphi27', None],
+                 ['LeadTauIsMedium', None],
+                 ],
+               )
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_DEN_%sF1'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['OneJet', None],
+                 ['LeadJetPt20', None],
+                 ['TauJetDphi27', None],
+                 ['LeadTauIsNotMedium', None],
+                 ],
+               )
+       
+       ## F2
+       ## ---------------------------------------
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_NUM_%sF2'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['OneJet', None],
+                 ['LeadJetPt20', None],
+                 ['TauJetPtRatioHigh1', None],
+                 ['TauJetDphi27', None],
+                 ['LeadTauIsMedium', None],
+                 ],
+               )
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_DEN_%sF2'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['OneJet', None],
+                 ['LeadJetPt20', None],
+                 ['TauJetPtRatioHigh1', None],
+                 ['TauJetDphi27', None],
+                 ['LeadTauIsNotMedium', None],
+                 ],
+               )
+       
+       ## F3
+       ## ---------------------------------------
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_NUM_%sF3'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['OneJet', None],
+                 ['LeadJetPt20', None],
+                 ['TauJetPtRatioLow1', None],
+                 ['TauJetDphi27', None],
+                 ['LeadTauIsMedium', None],
+                 ],
+               )
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_DEN_%sF3'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['OneJet', None],
+                 ['LeadJetPt20', None],
+                 ['TauJetPtRatioLow1', None],
+                 ['TauJetDphi27', None],
+                 ['LeadTauIsNotMedium', None],
+                 ],
+               )
+       
+       ## F4
+       ## ---------------------------------------
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_NUM_%sF4'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['TwoJets', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsMedium', None],
+                 ],
+               )
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_DEN_%sF4'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['TwoJets', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsNotMedium', None],
+                 ],
+               )
+       
+       ## F5
+       ## ---------------------------------------
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_NUM_%sF5'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['AtLeastTwoJets', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsMedium', None],
+                 ],
+               )
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_DEN_%sF5'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['AtLeastTwoJets', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsNotMedium', None],
+                 ],
+               )
+       
+       ## F6
+       ## ---------------------------------------
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_NUM_%sF6'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['AtLeastOneBjet', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsMedium', None],
+                 ],
+               )
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_DEN_%sF6'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['AtLeastOneBjet', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsNotMedium', None],
+                 ],
+               )
+       
+       ## F7
+       ## ---------------------------------------
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_NUM_%sF7'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['BVeto', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsMedium', None],
+                 ],
+               )
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_DEN_%sF7'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['BVeto', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsNotMedium', None],
+                 ],
+               )
+       
+       ## F8
+       ## ---------------------------------------
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_NUM_%sF8'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['METlow30', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsMedium', None],
+                 ],
+               )
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_DEN_%sF8'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['METlow30', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsNotMedium', None],
+                 ],
+               )
+       
+       ## F9
+       ## ---------------------------------------
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_NUM_%sF9'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['METhigh30', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsMedium', None],
+                 ],
+               )
+       loop += ssdilep.algs.algs.PlotAlg(
+               region       = 'FAKES_DEN_%sF9'%tauType,
+               plot_all     = False,
+               do_var_check = True,
+               hist_list    = hist_list,
+               cut_flow     = [
+                 ['TrueTauHadFilter', None],
+                 ['One%sTau'%tauType, None],
+                 ['METhigh30', None],
+                 ['LeadJetPt20', None],
+                 ['LeadTauIsNotMedium', None],
+                 ],
+               )
 
 
-    ## F3
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_NUM_F3',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsMedium', None],
-              ['METlow40', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_DEN_F3',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsNotMedium', None],
-              ['METlow40', None],
-              ],
-            )
-
-
-    ## F4
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_NUM_F4',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['LeadTauIsMedium', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_DEN_F4',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['LeadTauIsNotMedium', None],
-              ],
-            )
-
-    ## F5
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_NUM_F5',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['LeadTauIsMedium', None],
-              ['AtLeastOneJet', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_DEN_F5',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['LeadTauIsNotMedium', None],
-              ['AtLeastOneJet', None],
-              ],
-            )
-
-    ## F6
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_NUM_F6',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['LeadTauIsMedium', None],
-              ['AtLeastTwoJets', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_DEN_F6',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['LeadTauIsNotMedium', None],
-              ['AtLeastTwoJets', None],
-              ],
-            )
-
-    ## F7
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_NUM_F7',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['LeadTauIsMedium', None],
-              ['AtLeastThreeJets', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_DEN_F7',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['LeadJetPt20', None],
-              ['LeadTauIsNotMedium', None],
-              ['AtLeastThreeJets', None],
-              ],
-            )
-
-    ## F8
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_NUM_F8',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['AtLeastOneBjet',None],
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsMedium', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_DEN_F8',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['AtLeastOneBjet',None],
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsNotMedium', None],
-              ],
-            )
-
-    ## F9
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_NUM_F9',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['BVeto',None],
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsMedium', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKES_DEN_F9',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list,
-            cut_flow     = [
-              ['TrueTauHadFilter', None],
-              ['BVeto',None],
-              ['LeadJetPt20', None],
-              ['TauJetDphi27', None],
-              ['LeadTauIsNotMedium', None],
-              ],
-            )
-
-    """
     loop += pyframe.algs.HistCopyAlg()
 
     ##-------------------------------------------------------------------------

@@ -181,6 +181,36 @@ h_mujet_scdphi  = Hist1D( hname  = "h_mujet_scdphi",
                               vexpr  = "self.store['mujet_scdphi']",
                             )
 
+h_mutau_scdphi  = Hist1D( hname  = "h_mutau_scdphi",
+                              xtitle = "#Sigma cos#Delta#phi(#mu,#tau)",
+                              ytitle = "Events", 
+                              nbins  = 400,
+                              xmin   = -2.,
+                              xmax   = 2.,
+                              dir    = "event",
+                              vexpr  = "self.store['mutau_scdphi']",
+                            )
+
+h_mutau_mVis  = Hist1D( hname  = "h_mutau_mVis",
+                              xtitle = "m_{vis}(#mu_{lead},#tau_{lead}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "event",
+                              vexpr  = "self.store['mVisMT']/GeV",
+                            )
+
+h_mutau_mTtot  = Hist1D( hname  = "h_mutau_mTtot",
+                              xtitle = "m^{tot}_{T}(#mu_{lead},#tau_{lead}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "event",
+                              vexpr  = "self.store['mTtotMT']/GeV",
+                            )
+
 h_taujet_dphi  = Hist1D( hname  = "h_taujet_dphi",
                               xtitle = "#Delta#phi(#tau_{lead},jet_{lead})",
                               ytitle = "Events", 
@@ -386,6 +416,37 @@ h_taulead_JetBDTScoreSigTrans = Hist1D( hname  = "h_taulead_JetBDTScoreSigTrans"
                               dir    = "taus",
                               vexpr  = "self.store['taus'][0].JetBDTScoreSigTrans",
                             )
+
+h_taulead_width = Hist1D( hname  = "h_taulead_width",
+                              xtitle = "Width(#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 100,
+                              xmin   = 0.0,
+                              xmax   = 1.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].width()",
+                            )
+h_taulead_widthalt = Hist1D( hname  = "h_taulead_widthalt",
+                              xtitle = "WidthAlt(#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 100,
+                              xmin   = 0.0,
+                              xmax   = 1.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].width(['isClCharged'])",
+                            )
+
+
+h_taulead_jetwidth = Hist1D( hname  = "h_taulead_jetwidth",
+                              xtitle = "JetWidth(#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 100,
+                              xmin   = 0.0,
+                              xmax   = 1.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].matchedJetWidth",
+                            )
+
 
 
 h_tausublead_pt = Hist1D( hname  = "h_tausublead_pt",

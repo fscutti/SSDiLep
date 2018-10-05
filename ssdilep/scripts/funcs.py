@@ -403,7 +403,8 @@ def plot_hist(
        if sig_rescale: hists[s].Scale(sig_rescale)
        hists[s].Draw("SAME,HIST")
 
-    if data: h_data.Draw("SAME")
+    if data: 
+      h_data.Draw("SAME")
     pad1.SetLogy(log)
     pad1.SetLogx(logx)
     leg.Draw()

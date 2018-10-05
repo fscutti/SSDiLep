@@ -59,8 +59,6 @@ class TrigPresc(pyframe.core.Algorithm):
         
         trigpresc = 1. / trigpresc
         
-        print trigpresc
-
         if self.key:
           self.store[self.key] = trigpresc
         self.set_weight(trigpresc*weight)

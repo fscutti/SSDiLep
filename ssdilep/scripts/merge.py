@@ -136,8 +136,8 @@ if reg_suffix == "MAINREG":
   # ---------------------------------------------
   if options.fakest == "LeadLepRegions":
     
-    main_addition_regions    = ["TT"]
-    fake_addition_regions    = ["TL"]
+    main_addition_regions    = ["PP"]
+    fake_addition_regions    = ["PF"]
     fake_subtraction_regions = []
 
   # leading lepton region

@@ -30,10 +30,11 @@ user  = "tadej"
 samp  = options.sample
 
 #jtag = "SUSY3MC.v1"
+#jtag = "SUSY3Data.v1"
 #jtag = "SUSY11Data.v1"
-#jtag = "SUSY11MC.v1"
+jtag = "SUSY11MC.v1"
 
-jtag = "EXOT22MC.v1"
+#jtag = "EXOT22MC.v1"
 
 # append here any last tag 
 # before the file type identifyier

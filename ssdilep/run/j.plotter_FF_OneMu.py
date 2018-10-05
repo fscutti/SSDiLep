@@ -65,9 +65,9 @@ def analyze(config):
     ## trig list to the store for later cutflow
     ## ---------------------------------------
     loop += ssdilep.algs.vars.BuildTrigConfig(
-        required_triggers = ["HLT_mu24", "HLT_mu50"],
-        get_prescales     = True,
-        key               = 'muons',
+        required_triggers  = ["HLT_mu24", "HLT_mu50"],
+        get_prescales_lumi = True,
+        key                = 'muons',
         )
     
     ## build and pt-sort objects
@@ -80,10 +80,8 @@ def analyze(config):
         keys = ['muons','jets'],
         )
     # just a decoration of particles ...
-    loop += ssdilep.algs.vars.ParticlesBuilder(
-        key='muons',
-        )
-
+    loop += ssdilep.algs.vars.ParticlesBuilder(key='muons')
+    
     ## build MET
     ## ---------------------------------------
     #loop += ssdilep.algs.met.METCLUS(
@@ -107,7 +105,8 @@ def analyze(config):
    
     ## initialize and/or decorate objects
     ## ---------------------------------------
-    loop += ssdilep.algs.vars.DiJetVars(key_leptons='muons',key_jets='jets',build_tight_jets=True)   
+    loop += ssdilep.algs.vars.DiJetVars(key_leptons='muons',key_jets='jets')   
+    loop += ssdilep.algs.vars.JetsBuilder()
     
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++

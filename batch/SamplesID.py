@@ -311,24 +311,7 @@ SampleID[410647]="PowhegPythia8EvtGen_A14_Wt_DR_inclusive_antitop"
 SampleID[410658]="PhPy8EG_A14_tchan_BW50_lept_top"
 SampleID[410659]="PhPy8EG_A14_tchan_BW50_lept_antitop"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# EOF
 
 
 
