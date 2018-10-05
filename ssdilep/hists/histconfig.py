@@ -417,26 +417,63 @@ h_taulead_JetBDTScoreSigTrans = Hist1D( hname  = "h_taulead_JetBDTScoreSigTrans"
                               vexpr  = "self.store['taus'][0].JetBDTScoreSigTrans",
                             )
 
-h_taulead_width = Hist1D( hname  = "h_taulead_width",
+
+
+
+h_taulead_ntracks = Hist1D( hname  = "h_taulead_ntracks",
+                              xtitle = "NTracks(#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 30,
+                              xmin   = 0,
+                              xmax   = 30,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].NTracks()",
+                            )
+h_taulead_trackwidth = Hist1D( hname  = "h_taulead_trackwidth",
                               xtitle = "Width(#tau_{lead})",
                               ytitle = "Events / (0.01)", 
                               nbins  = 100,
                               xmin   = 0.0,
                               xmax   = 1.0,
                               dir    = "taus",
-                              vexpr  = "self.store['taus'][0].width()",
+                              vexpr  = "self.store['taus'][0].TrackWidth()",
                             )
-h_taulead_widthalt = Hist1D( hname  = "h_taulead_widthalt",
-                              xtitle = "WidthAlt(#tau_{lead})",
+h_taulead_angeec0 = Hist1D( hname  = "h_taulead_angeec0",
+                              xtitle = "Ang^{0.0}_{EEC}(#tau_{lead})",
                               ytitle = "Events / (0.01)", 
                               nbins  = 100,
                               xmin   = 0.0,
                               xmax   = 1.0,
                               dir    = "taus",
-                              vexpr  = "self.store['taus'][0].width(['isClCharged'])",
+                              vexpr  = "self.store['taus'][0].AngEEC([],0.0)",
                             )
-
-
+h_taulead_angeec02 = Hist1D( hname  = "h_taulead_angeec02",
+                              xtitle = "Ang^{0.2}_{EEC}(#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 100,
+                              xmin   = 0.0,
+                              xmax   = 1.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].AngEEC([],0.2)",
+                            )
+h_taulead_angeec05 = Hist1D( hname  = "h_taulead_angeec05",
+                              xtitle = "Ang^{0.5}_{EEC}(#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 100,
+                              xmin   = 0.0,
+                              xmax   = 1.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].AngEEC([],0.5)",
+                            )
+h_taulead_angeec1 = Hist1D( hname  = "h_taulead_angeec1",
+                              xtitle = "Ang^{1.0}_{EEC}(#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 100,
+                              xmin   = 0.0,
+                              xmax   = 1.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].AngEEC([],1.0)",
+                            )
 h_taulead_jetwidth = Hist1D( hname  = "h_taulead_jetwidth",
                               xtitle = "JetWidth(#tau_{lead})",
                               ytitle = "Events / (0.01)", 
@@ -446,6 +483,16 @@ h_taulead_jetwidth = Hist1D( hname  = "h_taulead_jetwidth",
                               dir    = "taus",
                               vexpr  = "self.store['taus'][0].matchedJetWidth",
                             )
+h_taulead_tracksum = Hist1D( hname  = "h_taulead_tracksum",
+                              xtitle = "TrackSum(#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 1000,
+                              xmin   = 0.0,
+                              xmax   = 1000.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].TrackSum()",
+                            )
+
 
 
 

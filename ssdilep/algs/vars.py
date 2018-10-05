@@ -271,9 +271,8 @@ class Particle(pyframe.core.ParticleProxy):
       matchtype = self.truthType in [6,7,8]
       return matchtype
 
-
     #__________________________________________________________________________
-    def width(self, flags=['isClCharged']):
+    def NTracks(self, flags=[]):
       """
       Flags are checked with AND logic. Standard tau tracks are
       selected with the flag isClCharged only. This can be overridden 
@@ -282,8 +281,7 @@ class Particle(pyframe.core.ParticleProxy):
       assert "tau" in self.prefix, "ERROR: accessing tracks but particle is not a tau !!!" 
       
       pass_flags = True 
-      num = 0
-      den = 1.
+      ntracks = 0.
       tracks = self.tracks
       
       for track in tracks:
@@ -292,10 +290,85 @@ class Particle(pyframe.core.ParticleProxy):
             assert hasattr(track,str(fl)), "ERROR: requested flag %s for tau tracks does not exist !!!" 
             if not getattr(track,str(fl))==1: pass_flags = False
         if pass_flags:
-         num += self.tlv.DeltaR(track.tlv) * track.tlv.Pt()
-         den += track.tlv.Pt()
-      return num / den
+         
+          ntracks += 1
+      
+      return ntracks
 
+    #__________________________________________________________________________
+    def TrackWidth(self, flags=[]):
+      assert "tau" in self.prefix, "ERROR: accessing tracks but particle is not a tau !!!" 
+      
+      pass_flags = True 
+      num = den = 0.
+      tracks = self.tracks
+      
+      for track in tracks:
+        if flags:
+          for fl in flags:
+            assert hasattr(track,str(fl)), "ERROR: requested flag %s for tau tracks does not exist !!!" 
+            if not getattr(track,str(fl))==1: pass_flags = False
+        if pass_flags:
+         
+          num += self.tlv.DeltaR(track.tlv) * track.tlv.Pt()
+          den += track.tlv.Pt()
+      
+      if den > 0.: return num / den
+      else: return 0.
+
+    #__________________________________________________________________________
+    def AngEEC(self, flags=[], beta=1.0):
+      assert "tau" in self.prefix, "ERROR: accessing tracks but particle is not a tau !!!" 
+      
+      pass_flags = True 
+      num = den = 0.
+      tracks = self.tracks
+     
+      for track in tracks:
+        if flags:
+          for fl in flags:
+            assert hasattr(track,str(fl)), "ERROR: requested flag %s for tau tracks does not exist !!!" 
+            if not getattr(track,str(fl))==1: pass_flags = False
+        if pass_flags:
+         
+          den += track.tlv.Pt()
+
+
+      for tracks_pair in combinations(tracks,2):
+        if flags:
+          for fl in flags:
+            assert hasattr(tracks_pair[0],str(fl)), "ERROR: requested flag %s for tau tracks does not exist !!!" 
+            assert hasattr(tracks_pair[1],str(fl)), "ERROR: requested flag %s for tau tracks does not exist !!!" 
+            if not getattr(tracks_pair[0],str(fl))==1: pass_flags = False
+            if not getattr(tracks_pair[1],str(fl))==1: pass_flags = False
+        if pass_flags:
+         
+          num += tracks_pair[0].tlv.Pt() * tracks_pair[1].tlv.Pt() * pow(tracks_pair[0].tlv.DeltaR(tracks_pair[1].tlv),beta)
+      
+      if den > 0.: return num / (den*den)
+      else: return 0.
+
+    #__________________________________________________________________________
+    def TrackSum(self, flags=[]):
+      assert "tau" in self.prefix, "ERROR: accessing tracks but particle is not a tau !!!" 
+      
+      pass_flags = True 
+      num = den = 0.
+      tracks = self.tracks
+      
+      for track in tracks:
+        if flags:
+          for fl in flags:
+            assert hasattr(track,str(fl)), "ERROR: requested flag %s for tau tracks does not exist !!!" 
+            if not getattr(track,str(fl))==1: pass_flags = False
+        if pass_flags:
+         
+          num += self.tlv.DeltaR(track.tlv) / track.tlv.Pt() 
+       
+      den = 1. / self.tlv.Pt()
+      
+      if den > 0.: return num / den
+      else: return 0.
 
 #------------------------------------------------------------------------------
 class ParticlesBuilder(pyframe.core.Algorithm):
