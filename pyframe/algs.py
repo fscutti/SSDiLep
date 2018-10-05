@@ -53,7 +53,7 @@ class ListMerger(pyframe.core.Algorithm):
 #------------------------------------------------------------------------------
 class ListBuilder(pyframe.core.Algorithm):
     #__________________________________________________________________________
-    def __init__(self, name='ListBuilder', prefixes=None, keys=None, attr_prefixes=None):
+    def __init__(self, name='ListBuilder', prefixes=None, keys=None, attr_prefixes=[]):
         pyframe.core.Algorithm.__init__(self, name)
         if not len(keys) == len(prefixes)     : fatal("Need equal number of keys and prefixes in ListBuilder")
         if not isinstance(keys, list)         : fatal("Need keys to be list in ListBuilder")
@@ -79,11 +79,12 @@ class ListBuilder(pyframe.core.Algorithm):
 
             self.store[key] = pyframe.core.buildParticleProxies(self.chain, getattr(self.chain, nparts).size(), prefix) 
             
-            for attr_prefix in self.attr_prefixes:
-              if prefix in attr_prefix:
-                for p in self.store[key]:
-                  attr_list = pyframe.core.buildDetailsProxies(p, getattr(p, attr_prefix[len(prefix):]+"pt").size(), attr_prefix)
-                  setattr(p, attr_prefix[len(prefix):].strip("_"), attr_list)
+            if self.attr_prefixes:
+              for attr_prefix in self.attr_prefixes:
+                if prefix in attr_prefix:
+                  for p in self.store[key]:
+                    attr_list = pyframe.core.buildDetailsProxies(p, getattr(p, attr_prefix[len(prefix):]+"pt").size(), attr_prefix)
+                    setattr(p, attr_prefix[len(prefix):].strip("_"), attr_list)
 
 
 #------------------------------------------------------------------------------
@@ -378,10 +379,11 @@ class SelectorAlg(pyframe.core.Algorithm):
 #------------------------------------------------------------------------------
 class AttachTLVs(pyframe.core.Algorithm):
     #__________________________________________________________________________
-    def __init__(self, keys=None, obj=None, name='AttachTLVs'):
+    def __init__(self, keys=None, attr_keys=None, obj=None, name='AttachTLVs'):
         pyframe.core.Algorithm.__init__(self, name)
-        self.keys = keys        
-        self.obj  = obj
+        self.keys      = keys        
+        self.attr_keys = attr_keys
+        self.obj       = obj
         for key in self.keys:
             if "L1" in key and ("tau" in key or "electron" in key) and not self.obj in ["EM", "tau"]:
                 fatal("Need obj=EM or obj=tau when building L1_emtau TLVs.")
@@ -409,7 +411,17 @@ class AttachTLVs(pyframe.core.Algorithm):
                     p.tlv.SetPtEtaPhiM(p.pt, p.eta, p.phi, 0.0)
                 else:
                     log.error('attach_tlv: unrecognized prefix = %s' % p.prefix)
-          
+                
+                if self.attr_keys: 
+                  for ak in self.attr_keys:
+                    obj  = ak.split("_")[0]
+                    attr = ak.split("_")[1]
+                    if obj in key:
+                     attr_list = getattr(p,attr)
+                     for a in attr_list:
+                       a.tlv = ROOT.TLorentzVector()
+                       a.tlv.SetPtEtaPhiM(a.pt, a.eta, a.phi, 0)
+
 
 #------------------------------------------------------------------------------
 class PtSort(pyframe.core.Algorithm):
