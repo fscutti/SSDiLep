@@ -22,6 +22,9 @@ USER   = os.getenv('USER')
 NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY11Data.v1/merged'
 NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY11MC.v1/merged'
 
+#NTUPDATA='/coepp/cephfs/share/atlas/MLA/EXOT22Data.v1/merged'
+#NTUPMC='/coepp/cephfs/share/atlas/MLA/EXOT22MC.v1/merged'
+
 #NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY3Data.v1/merged'
 #NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY3MC.v1/merged'
 
@@ -31,7 +34,7 @@ INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-RUN = "HistTEST"
+RUN = "HistQGTauTracksIsClCharged"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 
@@ -39,7 +42,9 @@ OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) #
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
 
 # pick your script!!!
-SCRIPT="./ssdilep/run/j.plotter_FF_OneTau.py"  
+SCRIPT="./ssdilep/run/j.plotter_QG_OneTau.py"  
+#SCRIPT="./ssdilep/run/j.plotter_VR_MuTau.py"  
+#SCRIPT="./ssdilep/run/j.plotter_FF_OneTau.py"  
 #SCRIPT="./ssdilep/run/j.plotter_VR_OneTauPair.py"  
 
 #SCRIPT="./ssdilep/run/j.plotter_FF_TwoTau.py"  

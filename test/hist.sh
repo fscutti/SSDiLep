@@ -10,7 +10,8 @@ INPATH="/coepp/cephfs/share/atlas/MLA/SUSY11MC.v1/merged/nominal"
 
 INSCRIPT="../ssdilep/run"
 
-SCRIPT="j.plotter_FF_OneTau.py"
+#SCRIPT="j.plotter_FF_OneTau.py"
+SCRIPT="j.plotter_QG_OneTau.py"
 #SCRIPT="j.plotter_FF_OneMu.py"
 #SCRIPT="j.plotter_VR_OneMuPair.py"
 #SCRIPT="j.plotter_CF_MuTau.py"

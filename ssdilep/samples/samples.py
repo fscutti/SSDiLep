@@ -570,5 +570,5 @@ mc_bkg.append( Wtaunu )
 mc_bkg.append( ttbar )
 
 #mc_bkg.append( diboson )
-#mc_bkg.append( dijet )
+mc_bkg.append( dijet )
 ## EOF

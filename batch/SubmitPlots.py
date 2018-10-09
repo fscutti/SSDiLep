@@ -15,8 +15,8 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-indir    = 'HistTEST'
-outdir   = 'PlotsTEST'
+indir    = 'HistQGTauTracksIsWide'
+outdir   = 'PlotsQGTauTracksIsWide'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -51,22 +51,26 @@ job_vars['SCRIPT']    = SCRIPT
 #fake_estimate = "AllRegions"
 #fake_estimate = "TwoLepRegions"
 #fake_estimate = "LeadLepRegions"
-fake_estimate = "MixedRegions"
-#fake_estimate = "Subtraction"
+#fake_estimate = "MixedRegions"
+fake_estimate = "Subtraction"
 
 regions = {}
 # use it as such:
-#regions["FOLDERNAME"]     = [icut, "plot label"]
+#regions["FOLDERNAME"]     = [icut, "plot label", "file id"]
 
-regions["OSZ_MAINREG"] = [3, "OSZ_MAINREG",   "mixedreg"]
+# ---------------------------
+# tau fake factors validation
+# ---------------------------
+#regions["OSZ_MAINREG"] = [3, "OSZ_MAINREG",   "mixedreg"]
 #regions["OSZ_TT"] = [3, "OSZ_TT",   "osz"]
 #regions["OSZ_LT"] = [3, "OSZ_LT",   "osz"]
 #regions["OSZ_TL"] = [3, "OSZ_TL",   "osz"]
 #regions["OSZ_LL"] = [3, "OSZ_LL",   "osz"]
 
 
-#"""
-
+# ----------------
+# tau fake factors
+# ----------------
 """
 regions["FAKES_NUM_F1"]   = [3,  "num", "1prong"]
 regions["FAKES_DEN_F1"]   = [3,  "den", "1prong"]
@@ -99,6 +103,20 @@ regions["FAKES_NUM_F9"]   = [3,  "num", "1prong"]
 regions["FAKES_DEN_F9"]   = [3,  "den", "1prong"]
 """
 
+# ------------
+# tracks study
+# ------------
+regions["FAKES_QUARKS_F1"] = [3,  "nominal",       "incl"]
+regions["FAKES_QUARKS_F2"] = [4,  "PTratio>1",     "incl"]
+regions["FAKES_QUARKS_F3"] = [4,  "PTratio<1",     "incl"]
+regions["FAKES_QUARKS_F4"] = [2,  "TwoJets",       "incl"]
+regions["FAKES_QUARKS_F5"] = [1,  "AtLeastOneJet", "incl"]
+
+regions["FAKES_GLUONS_F1"] = [3,  "nominal",       "incl"]
+regions["FAKES_GLUONS_F2"] = [4,  "PTratio>1",     "incl"]
+regions["FAKES_GLUONS_F3"] = [4,  "PTratio<1",     "incl"]
+regions["FAKES_GLUONS_F4"] = [2,  "TwoJets",       "incl"]
+regions["FAKES_GLUONS_F5"] = [1,  "AtLeastOneJet", "incl"]
 
 
 #---------------------
@@ -127,7 +145,8 @@ for REG,OPT in regions.iteritems():
     job_vars['ICUT']     = OPT[0]
     job_vars['LAB']      = OPT[1]
     job_vars['TAG']      = OPT[2]
-    job_vars['MAKEPLOT'] = True
+    job_vars['MAKEPLOT'] = False
+    job_vars['RENORM']   = True
     job_vars['FAKEST']   = fake_estimate
     
     VARS = []

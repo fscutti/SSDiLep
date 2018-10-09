@@ -494,6 +494,7 @@ def write_hist(
         icut        = None,
         histname    = None,
         rebin       = None,
+        renorm      = None,
         sys_dict    = None,
         outname     = None,
         ):
@@ -521,6 +522,9 @@ def write_hist(
     for s,h in hists.items():
         hname = 'h_%s_nominal_%s' % (region,s.name)
         h.SetNameTitle(hname,hname)
+        
+        if renorm: h.Scale(1./h.Integral())
+        
         fout.WriteTObject(h,hname)
         ## systematics
         if hasattr(h,'sys_hists'):

@@ -11,6 +11,12 @@ from var import Var
 
 ## Event variables
 ## ---------------------------------------
+njets = Var(name = 'njets',
+              path  = 'event',
+              xmin  = 0,
+              xmax  = 6,
+              log   = False,
+              )
 ntaus = Var(name = 'ntaus',
               path  = 'event',
               xmin  = 0,
@@ -157,7 +163,65 @@ tausublead_phi = Var(name = 'tausublead_phi',
               log     = False,
               )
 
+## Tau track variables
+## ---------------------------------------
 
+taulead_ntracks = Var(name = 'taulead_ntracks',
+              path   = 'taus',
+              xmin   = 0,
+              xmax   = 30,
+              rebin  = 1,
+              log    = False,
+              )
+taulead_trackwidth = Var(name = 'taulead_trackwidth',
+              path   = 'taus',
+              xmin   = 0.,
+              xmax   = 1.,
+              rebin  = 2,
+              log    = False,
+              )
+taulead_angeec0 = Var(name = 'taulead_angeec0',
+              path   = 'taus',
+              xmin   = 0.,
+              xmax   = 1.,
+              rebin  = 2,
+              log    = False,
+              )
+taulead_angeec02 = Var(name = 'taulead_angeec02',
+              path   = 'taus',
+              xmin   = 0.,
+              xmax   = 1.,
+              rebin  = 2,
+              log    = False,
+              )
+taulead_angeec05 = Var(name = 'taulead_angeec05',
+              path   = 'taus',
+              xmin   = 0.,
+              xmax   = 1.,
+              rebin  = 2,
+              log    = False,
+              )
+taulead_angeec1 = Var(name = 'taulead_angeec1',
+              path   = 'taus',
+              xmin   = 0.,
+              xmax   = 1.,
+              rebin  = 2,
+              log    = False,
+              )
+taulead_jetwidth = Var(name = 'taulead_jetwidth',
+              path   = 'taus',
+              xmin   = 0.,
+              xmax   = 1.,
+              rebin  = 2,
+              log    = False,
+              )
+taulead_tracksum = Var(name = 'taulead_tracksum',
+              path   = 'taus',
+              xmin   = 0.,
+              xmax   = 600.,
+              rebin  = 10,
+              log    = False,
+              )
 
 ## jets
 ## ---------------------------------------
@@ -233,15 +297,15 @@ vars_list.append(taulead_eta)
 vars_list.append(taulead_phi)
 vars_list.append(met_trk_et)
 vars_list.append(jetlead_pt)
-#vars_list.append(jetlead_eta)
-#vars_list.append(jetlead_phi)
+vars_list.append(jetlead_eta)
+vars_list.append(jetlead_phi)
 
 vars_list.append(trigJetlead_pt)
 #vars_list.append(trigJetlead_eta)
 #vars_list.append(trigJetlead_phi)
 
-#vars_list.append(taujet_ptratio)
-#vars_list.append(taujet_dphi)
+vars_list.append(taujet_ptratio)
+vars_list.append(taujet_dphi)
 
 #vars_list.append(jetTrigJet_ptratio)
 #vars_list.append(jetTrigJet_deltaR)
@@ -249,20 +313,36 @@ vars_list.append(trigJetlead_pt)
 vars_list.append(taulead_JetBDTScore)
 vars_list.append(taulead_JetBDTScoreSigTrans)
 
+
 # ---------------
 # Two taus
 # ---------------
-vars_list.append(tausublead_pt)
-vars_list.append(tausublead_eta)
-vars_list.append(tausublead_phi)
-vars_list.append(ditau_ptratio)
-vars_list.append(tausublead_JetBDTScore)
-vars_list.append(tausublead_JetBDTScoreSigTrans)
+#vars_list.append(tausublead_pt)
+#vars_list.append(tausublead_eta)
+#vars_list.append(tausublead_phi)
+#vars_list.append(ditau_ptratio)
+#vars_list.append(tausublead_JetBDTScore)
+#vars_list.append(tausublead_JetBDTScoreSigTrans)
 
-vars_list.append(taus_mVis)
-vars_list.append(taus_mTtot)
+#vars_list.append(taus_mVis)
+#vars_list.append(taus_mTtot)
 
-vars_list.append(ntaus)
+#vars_list.append(ntaus)
+vars_list.append(njets)
+
+
+# ---------------
+# Tracks study
+# ---------------
+
+vars_list.append(taulead_ntracks)
+vars_list.append(taulead_trackwidth)
+vars_list.append(taulead_angeec0)
+vars_list.append(taulead_angeec02)
+vars_list.append(taulead_angeec05)
+vars_list.append(taulead_angeec1)
+vars_list.append(taulead_jetwidth)
+vars_list.append(taulead_tracksum)
 
 vars_dict = {}
 for var in vars_list: vars_dict[var.name] = var.__dict__

@@ -27,6 +27,8 @@ parser.add_option('-c', '--icut', dest='icut',
                   help='number of cuts',metavar='ICUT',default=None)
 parser.add_option('-p', '--makeplot', dest='makeplot',
                   help='make plot',metavar='MAKEPLOT',default=None)
+parser.add_option('-n', '--renorm', dest='renorm',
+                  help='renormalise hists',metavar='RENORM',default=None)
 parser.add_option('-i', '--input', dest='indir',
                   help='input directory',metavar='INDIR',default=None)
 parser.add_option('-o', '--output', dest='outdir',
@@ -195,7 +197,7 @@ vardict  = vars_tau.vars_dict
 
 ## order backgrounds for plots
 plot_ord_bkg = []
-plot_ord_bkg.append( fakes )
+#plot_ord_bkg.append( fakes )
 plot_ord_bkg += recom_mc_bkg
 
 
@@ -228,9 +230,10 @@ else:
          region      = options.region,
          icut        = int(options.icut),
          histname    = os.path.join(vardict[options.vname]['path'],vardict[options.vname]['hname']),
-         #rebin       = vardict[options.vname]['rebin'],
-         rebin       = 1,
+         rebin       = vardict[options.vname]['rebin'],
+         #rebin       = 1,
          sys_dict    = None,
+         renorm      = options.renorm,
          outname     = plotsfile
          )
  ## EOF

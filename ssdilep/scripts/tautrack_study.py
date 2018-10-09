@@ -56,6 +56,8 @@ tauvars.append('taulead_angeec05')
 tauvars.append('taulead_angeec1')
 tauvars.append('taulead_jetwidth')
 tauvars.append('taulead_tracksum')
+tauvars.append('taulead_JetBDTScore')
+tauvars.append('taulead_JetBDTScoreSigTrans')
 
 plotsel = []
 plotsel.append('FAKES_QUARKS')
@@ -63,10 +65,10 @@ plotsel.append('FAKES_GLUONS')
 
 reg = []
 reg.append('F1')
-#reg.append('F2')
-#reg.append('F3')
-#reg.append('F4')
-#reg.append('F5')
+reg.append('F2')
+reg.append('F3')
+reg.append('F4')
+reg.append('F5')
 
 
 tag = []

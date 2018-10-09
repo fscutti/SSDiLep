@@ -703,10 +703,10 @@ class CutAlg(pyframe.core.Algorithm):
       return self.store['taus'][1].isJetBDTSigTight
     #__________________________________________________________________________
     def cut_LeadTauIsNotTight(self):
-      return self.store['taus'][0].isJetBDTSigTight
+      return not self.store['taus'][0].isJetBDTSigTight
     #__________________________________________________________________________
     def cut_SubLeadTauIsNotTight(self):
-      return self.store['taus'][1].isJetBDTSigTight
+      return not self.store['taus'][1].isJetBDTSigTight
     
     
     #__________________________________________________________________________
@@ -717,10 +717,10 @@ class CutAlg(pyframe.core.Algorithm):
       return self.store['taus'][1].isJetBDTSigMedium
     #__________________________________________________________________________
     def cut_LeadTauIsNotMedium(self):
-      return self.store['taus'][0].isJetBDTSigMedium
+      return not self.store['taus'][0].isJetBDTSigMedium
     #__________________________________________________________________________
     def cut_SubLeadTauIsNotMedium(self):
-      return self.store['taus'][1].isJetBDTSigMedium
+      return not self.store['taus'][1].isJetBDTSigMedium
    
 
     #__________________________________________________________________________
@@ -731,10 +731,10 @@ class CutAlg(pyframe.core.Algorithm):
       return self.store['taus'][1].isJetBDTSigLoose
     #__________________________________________________________________________
     def cut_LeadTauIsNotLoose(self):
-      return self.store['taus'][0].isJetBDTSigLoose
+      return not self.store['taus'][0].isJetBDTSigLoose
     #__________________________________________________________________________
     def cut_SubLeadTauIsNotLoose(self):
-      return self.store['taus'][1].isJetBDTSigLoose
+      return not self.store['taus'][1].isJetBDTSigLoose
 
   
     #__________________________________________________________________________
@@ -745,10 +745,10 @@ class CutAlg(pyframe.core.Algorithm):
       return self.store['taus'][1].isJetBDTSigVeryLoose
     #__________________________________________________________________________
     def cut_LeadTauNotVeryLoose(self):
-      return self.store['taus'][0].isJetBDTSigVeryLoose
+      return not self.store['taus'][0].isJetBDTSigVeryLoose
     #__________________________________________________________________________
     def cut_SubLeadTauNotVeryLoose(self):
-      return self.store['taus'][1].isJetBDTSigVeryLoose
+      return not self.store['taus'][1].isJetBDTSigVeryLoose
 
 
     #__________________________________________________________________________

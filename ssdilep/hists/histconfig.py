@@ -420,6 +420,7 @@ h_taulead_JetBDTScoreSigTrans = Hist1D( hname  = "h_taulead_JetBDTScoreSigTrans"
 
 
 
+
 h_taulead_ntracks = Hist1D( hname  = "h_taulead_ntracks",
                               xtitle = "NTracks(#tau_{lead})",
                               ytitle = "Events / (0.01)", 
@@ -427,7 +428,7 @@ h_taulead_ntracks = Hist1D( hname  = "h_taulead_ntracks",
                               xmin   = 0,
                               xmax   = 30,
                               dir    = "taus",
-                              vexpr  = "self.store['taus'][0].NTracks()",
+                              vexpr  = "self.store['taus'][0].NTracks(['isClCharged'])",
                             )
 h_taulead_trackwidth = Hist1D( hname  = "h_taulead_trackwidth",
                               xtitle = "Width(#tau_{lead})",
@@ -436,7 +437,7 @@ h_taulead_trackwidth = Hist1D( hname  = "h_taulead_trackwidth",
                               xmin   = 0.0,
                               xmax   = 1.0,
                               dir    = "taus",
-                              vexpr  = "self.store['taus'][0].TrackWidth()",
+                              vexpr  = "self.store['taus'][0].TrackWidth(['isClCharged'])",
                             )
 h_taulead_angeec0 = Hist1D( hname  = "h_taulead_angeec0",
                               xtitle = "Ang^{0.0}_{EEC}(#tau_{lead})",
@@ -445,7 +446,7 @@ h_taulead_angeec0 = Hist1D( hname  = "h_taulead_angeec0",
                               xmin   = 0.0,
                               xmax   = 1.0,
                               dir    = "taus",
-                              vexpr  = "self.store['taus'][0].AngEEC([],0.0)",
+                              vexpr  = "self.store['taus'][0].AngEEC(['isClCharged'],0.0)",
                             )
 h_taulead_angeec02 = Hist1D( hname  = "h_taulead_angeec02",
                               xtitle = "Ang^{0.2}_{EEC}(#tau_{lead})",
@@ -454,7 +455,7 @@ h_taulead_angeec02 = Hist1D( hname  = "h_taulead_angeec02",
                               xmin   = 0.0,
                               xmax   = 1.0,
                               dir    = "taus",
-                              vexpr  = "self.store['taus'][0].AngEEC([],0.2)",
+                              vexpr  = "self.store['taus'][0].AngEEC(['isClCharged'],0.2)",
                             )
 h_taulead_angeec05 = Hist1D( hname  = "h_taulead_angeec05",
                               xtitle = "Ang^{0.5}_{EEC}(#tau_{lead})",
@@ -463,7 +464,7 @@ h_taulead_angeec05 = Hist1D( hname  = "h_taulead_angeec05",
                               xmin   = 0.0,
                               xmax   = 1.0,
                               dir    = "taus",
-                              vexpr  = "self.store['taus'][0].AngEEC([],0.5)",
+                              vexpr  = "self.store['taus'][0].AngEEC(['isClCharged'],0.5)",
                             )
 h_taulead_angeec1 = Hist1D( hname  = "h_taulead_angeec1",
                               xtitle = "Ang^{1.0}_{EEC}(#tau_{lead})",
@@ -472,7 +473,7 @@ h_taulead_angeec1 = Hist1D( hname  = "h_taulead_angeec1",
                               xmin   = 0.0,
                               xmax   = 1.0,
                               dir    = "taus",
-                              vexpr  = "self.store['taus'][0].AngEEC([],1.0)",
+                              vexpr  = "self.store['taus'][0].AngEEC(['isClCharged'],1.0)",
                             )
 h_taulead_jetwidth = Hist1D( hname  = "h_taulead_jetwidth",
                               xtitle = "JetWidth(#tau_{lead})",
@@ -485,12 +486,12 @@ h_taulead_jetwidth = Hist1D( hname  = "h_taulead_jetwidth",
                             )
 h_taulead_tracksum = Hist1D( hname  = "h_taulead_tracksum",
                               xtitle = "TrackSum(#tau_{lead})",
-                              ytitle = "Events / (0.01)", 
+                              ytitle = "Events / (1)", 
                               nbins  = 1000,
                               xmin   = 0.0,
                               xmax   = 1000.0,
                               dir    = "taus",
-                              vexpr  = "self.store['taus'][0].TrackSum()",
+                              vexpr  = "self.store['taus'][0].TrackSum(['isClCharged'])",
                             )
 
 
