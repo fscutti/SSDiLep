@@ -240,7 +240,7 @@ class Particle(pyframe.core.ParticleProxy):
     # ------------- 
     #__________________________________________________________________________
     def isTrueTau(self):
-      matchtype = self.truthPdgId in [10,11,12]
+      matchtype = self.truthType in [10,11,12] # this is the particle type not the pdgId
       return matchtype
     #__________________________________________________________________________
     def isTrueHadTau(self):
