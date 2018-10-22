@@ -250,16 +250,18 @@ class Particle(pyframe.core.ParticleProxy):
       return matchtype
     #__________________________________________________________________________
     def isQuarkFake(self):
-      # -----------------------
+      # -------------------------------------------------------------------
+      # according to pdg: http://pdg.lbl.gov/2007/reviews/montecarlorpp.pdf
       # d=1,u=2,s=3,c=4,b=5,t=6
-      # -----------------------
+      # -------------------------------------------------------------------
       matchtype = self.PartonTruthLabelID in [1,2,3,4,5,6]
       return matchtype and not self.isTrueTau()
     #__________________________________________________________________________
     def isGluonFake(self):
-      # -----------------------
+      # -------------------------------------------------------------------
+      # according to pdg: http://pdg.lbl.gov/2007/reviews/montecarlorpp.pdf
       # g=21
-      # -----------------------
+      # -------------------------------------------------------------------
       matchtype = self.PartonTruthLabelID in [21]
       return matchtype and not self.isTrueTau()
     #__________________________________________________________________________
