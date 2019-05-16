@@ -14,7 +14,23 @@ SampleID[361029]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W"
 SampleID[361030]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W"
 SampleID[361031]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W"
 SampleID[361032]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W"
-'''
+
+SampleID[364700]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0WithSW"
+SampleID[364701]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1WithSW"
+SampleID[364702]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2WithSW"
+SampleID[364703]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3WithSW"
+SampleID[364704]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4WithSW"
+SampleID[364705]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5WithSW"
+SampleID[364706]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6WithSW"
+SampleID[364707]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7WithSW"
+SampleID[364708]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8WithSW"
+SampleID[364709]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9WithSW"
+SampleID[364710]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10WithSW"
+SampleID[364711]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11WithSW"
+SampleID[364712]="Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12WithSW"
+
+
+#'''
 SampleID["data15_13TeV"]="data15_13TeV"
 SampleID["data16_13TeV"]="data16_13TeV"
 SampleID["data17_13TeV"]="data17_13TeV"
@@ -333,7 +349,8 @@ SampleID[306557] ="Pythia8EvtGen_A14NNPDF23LO_DCH1150"
 SampleID[306558] ="Pythia8EvtGen_A14NNPDF23LO_DCH1200"
 SampleID[306559] ="Pythia8EvtGen_A14NNPDF23LO_DCH1250"
 SampleID[306560] ="Pythia8EvtGen_A14NNPDF23LO_DCH1300"
-'''
+#'''
+
 """
 SampleID[309651] ="Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH300"
 SampleID[309652] ="Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH400"
