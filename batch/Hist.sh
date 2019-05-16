@@ -1,11 +1,16 @@
-#PBS -l walltime=12:00:00
+#PBS -l walltime=4:00:00
 #PBS -l pmem=1gb
 
 #!/bin/bash
 STARTTIME=`date +%s`
 date
 
-#-------------------------------- ENV VARS -------------------------------
+# ------------------------------------------------------------------------
+# JOB monitoring
+# http://techdoc.dartmouth.edu/discovery/?page_id=163
+# ------------------------------------------------------------------------
+
+# ------------------------------- ENV VARS -------------------------------
 echo 
 echo "Environment variables..."
 echo " User name:   $USER"
@@ -49,7 +54,8 @@ echo "cd ${MYDIR}"
 cd ${MYDIR}
 
 setupATLAS
-lsetup root
+##lsetup root
+lsetup "root 6.14.04-x86_64-slc6-gcc62-opt"
 
 ## copy over working area
 ##echo "ls /data/fscutti"

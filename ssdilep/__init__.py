@@ -8,4 +8,5 @@ ssdilep
 
 import algs
 import hists
+import samples
 

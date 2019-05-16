@@ -4,7 +4,8 @@
 import math
 import random
 import os
-from itertools import combinations
+from itertools import combinations, combinations_with_replacement
+import collections
 from copy import copy, deepcopy
 from types import MethodType
 
@@ -150,17 +151,63 @@ class BuildTrigConfig(pyframe.core.Algorithm):
       mu_trigger_slice["HLT_mu50"]  = (43. * GeV,  nolim * GeV)
 
 
-      if self.key == "taus": 
+      if "taus" in self.key: 
         self.store["ChainsWithTau"] = {} 
         for i,trig in enumerate(self.chain.tau_listTrigChains):
           if trig in self.store["ChainsWithTau"].keys(): continue
           self.store["ChainsWithTau"][trig] = i
+        
+        self.store["ChainsWithDiTau"] = {} 
+        for i,trig in enumerate(self.chain.tau_listTrigChains):
+          if trig in self.store["ChainsWithDiTau"].keys(): continue
+          if len(trig.split("_"))>5:
+            if trig.split("_")[1][:3] == "tau" and trig.split("_")[4][:3] == "tau":
+              self.store["ChainsWithDiTau"][trig] = i
 
-      if self.key == "muons": 
+        self.store["ChainsWithSingleTau"] = {} 
+        for i,trig in enumerate(self.chain.tau_listTrigChains):
+          if trig in self.store["ChainsWithSingleTau"].keys(): continue
+          if trig.split("_")[1][:3] == "tau" and len(trig.split("_"))<=5:
+            self.store["ChainsWithSingleTau"][trig] = i
+
+      if "muons" in self.key: 
         self.store["ChainsWithMuon"] = {} 
         for i,trig in enumerate(self.chain.muon_listTrigChains):
           if trig in self.store["ChainsWithMuon"].keys(): continue
           self.store["ChainsWithMuon"][trig] = i
+
+      if "electrons" in self.key: 
+        self.store["ChainsWithElectron"] = {} 
+        for i,trig in enumerate(self.chain.el_listTrigChains):
+          if trig in self.store["ChainsWithElectron"].keys(): continue
+          self.store["ChainsWithElectron"][trig] = i
+
+      if "muons" in self.key and "taus" in self.key: 
+        self.store["ChainsWithMuonTau"] = {} 
+        for itau,trig_tau in enumerate(self.chain.tau_listTrigChains):
+          for imuon,trig_muon in enumerate(self.chain.muon_listTrigChains):
+            if trig_tau == trig_muon: 
+              trig = trig_tau 
+              if trig in self.store["ChainsWithMuonTau"].keys(): continue
+              contains_mu_tau = []
+              for t in trig.split("_"):
+                if t.startswith("mu") or t.startswith("tau"): contains_mu_tau.append(t)
+              if len(contains_mu_tau) == 2:
+                self.store["ChainsWithMuonTau"][trig] = (imuon,itau)
+
+     
+      if "electrons" in self.key and "taus" in self.key: 
+        self.store["ChainsWithElectronTau"] = {} 
+        for itau,trig_tau in enumerate(self.chain.tau_listTrigChains):
+          for iel,trig_el in enumerate(self.chain.el_listTrigChains):
+            if trig_tau == trig_el: 
+              trig = trig_tau 
+              if trig in self.store["ChainsWithElectronTau"].keys(): continue
+              contains_e_tau = []
+              for t in trig.split("_"):
+                if t.startswith("e") or t.startswith("tau"): contains_e_tau.append(t)
+              if len(contains_e_tau) == 2:
+                self.store["ChainsWithElectronTau"][trig] = (iel,itau)
 
 
       # initialise the different slices
@@ -221,55 +268,122 @@ class Particle(pyframe.core.ParticleProxy):
     # https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
     # https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier 
     
+    #__________________________________________________________________________
+    def Charge(self):
+      if self.prefix == "tau_": return self.charge
+      if self.prefix in ["muon_","el_"]: return self.charge
+      else: return 0.
+    
+    # ------------------ 
+    # Electron variables 
+    # ------------------ 
+    #__________________________________________________________________________
+    def isPassElectron(self):
+      assert "el" in self.prefix, "ERROR: using wrong quality method" 
+      return bool(self.isIsolated_FCLoose) and bool(self.LHTight)
+    #__________________________________________________________________________
+    def isFailElectron(self):
+      assert "el" in self.prefix, "ERROR: using wrong quality method" 
+      return not (bool(self.isIsolated_FCLoose) and bool(self.LHTight))
+    #__________________________________________________________________________
+    def isTrueNonIsoElectron(self):
+      assert "el" in self.prefix, "ERROR: using wrong truth method" 
+      matchtype = self.truthType in [1,3,4]
+      return matchtype
+    #__________________________________________________________________________
+    def isTrueIsoElectron(self):
+      assert "el" in self.prefix, "ERROR: using wrong truth method" 
+      matchtype = self.truthType in [2]
+      return matchtype
+   
+
+
     # -------------- 
     # Muon variables 
     # -------------- 
     #__________________________________________________________________________
+    def isPassMuon(self):
+      assert "muon" in self.prefix, "ERROR: using wrong quality method" 
+      return bool(self.isIsolated_FCTightTrackOnly_FixedRad)
+    #__________________________________________________________________________
+    def isFailMuon(self):
+      assert "muon" in self.prefix, "ERROR: using wrong quality method" 
+      return not bool(self.isIsolated_FCTightTrackOnly_FixedRad)
+    #__________________________________________________________________________
     def isTrueNonIsoMuon(self):
+      assert "muon" in self.prefix, "ERROR: using wrong truth method" 
       matchtype = self.truthType in [5,7,8]
       #return self.isTruthMatchedToMuon and matchtype
       return matchtype
     #__________________________________________________________________________
     def isTrueIsoMuon(self):
+      assert "muon" in self.prefix, "ERROR: using wrong truth method" 
       matchtype = self.truthType in [6]
       #return self.isTruthMatchedToMuon and matchtype
       return matchtype
     
+   
+
     # ------------- 
     # Tau variables 
     # ------------- 
     #__________________________________________________________________________
+    def isPassTau(self):
+      assert "tau" in self.prefix, "ERROR: using wrong quality method" 
+      return bool(self.isJetBDTSigMedium)
+    #__________________________________________________________________________
+    def isFailTau(self):
+      assert "tau" in self.prefix, "ERROR: using wrong quality method" 
+      return not bool(self.isJetBDTSigMedium) and bool(self.JetBDTScoreSigTrans > 0.005)
+
+    #__________________________________________________________________________
     def isTrueTau(self):
+      assert "tau" in self.prefix, "ERROR: using wrong truth method" 
       matchtype = self.truthType in [10,11,12] # this is the particle type not the pdgId
       return matchtype
     #__________________________________________________________________________
     def isTrueHadTau(self):
+      assert "tau" in self.prefix, "ERROR: using wrong truth method" 
       matchtype = False
       if hasattr(self, 'isTrueHadronicTau'):
         matchtype = self.isTrueHadronicTau in [1]
       return matchtype
     #__________________________________________________________________________
     def isQuarkFake(self):
+      assert "tau" in self.prefix, "ERROR: using wrong truth method" 
       # -------------------------------------------------------------------
       # according to pdg: http://pdg.lbl.gov/2007/reviews/montecarlorpp.pdf
       # d=1,u=2,s=3,c=4,b=5,t=6
       # -------------------------------------------------------------------
-      matchtype = self.PartonTruthLabelID in [1,2,3,4,5,6]
-      return matchtype and not self.isTrueTau()
+      matchtype = self.PartonTruthLabelID in [1,2,3,4,5,6,7,8]
+      return matchtype
     #__________________________________________________________________________
     def isGluonFake(self):
+      assert "tau" in self.prefix, "ERROR: using wrong truth method" 
       # -------------------------------------------------------------------
       # according to pdg: http://pdg.lbl.gov/2007/reviews/montecarlorpp.pdf
       # g=21
       # -------------------------------------------------------------------
       matchtype = self.PartonTruthLabelID in [21]
-      return matchtype and not self.isTrueTau()
+      return matchtype
+    #__________________________________________________________________________
+    def isUnknownFake(self):
+      assert "tau" in self.prefix, "ERROR: using wrong truth method" 
+      # -------------------------------------------------------------------
+      # tau fakes with most likely originate from pileup
+      # -------------------------------------------------------------------
+      #matchtype = self.PartonTruthLabelID in [0,-1]
+      matchtype = not (self.isQuarkFake() or self.isGluonFake())
+      return matchtype
+
     #__________________________________________________________________________
     def isEleFake(self):
+      assert "tau" in self.prefix, "ERROR: using wrong truth method" 
       matchtype = self.truthType in [2,3,4]
       return matchtype
     #__________________________________________________________________________
     def isMuonFake(self):
+      assert "tau" in self.prefix, "ERROR: using wrong truth method" 
       matchtype = self.truthType in [6,7,8]
       return matchtype
 
@@ -372,6 +486,28 @@ class Particle(pyframe.core.ParticleProxy):
       if den > 0.: return num / den
       else: return 0.
 
+    #__________________________________________________________________________
+    def isPass(self):
+      if "muon" in self.prefix: return self.isPassMuon()
+      if "el"   in self.prefix: return self.isPassElectron()
+      if "tau"  in self.prefix: return self.isPassTau()
+    #__________________________________________________________________________
+    def isFail(self):
+      if "muon" in self.prefix: return self.isFailMuon()
+      if "el"   in self.prefix: return self.isFailElectron()
+      if "tau"  in self.prefix: return self.isFailTau()
+    
+    #__________________________________________________________________________
+    def isTrue(self):
+      if "muon" in self.prefix: return self.isTrueIsoMuon()
+      if "el"   in self.prefix: return self.isTrueIsoElectron()
+      if "tau"  in self.prefix: return self.isTrueHadTau()
+    #__________________________________________________________________________
+    def isFake(self):
+      if "muon" in self.prefix: return not self.isTrueIsoMuon()
+      if "el"   in self.prefix: return not self.isTrueIsoElectron()
+      if "tau"  in self.prefix: return not self.isTrueHadTau()
+
 #------------------------------------------------------------------------------
 class ParticlesBuilder(pyframe.core.Algorithm):
     #__________________________________________________________________________
@@ -384,6 +520,110 @@ class ParticlesBuilder(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def execute(self,weight):
         self.store[self.key] = [Particle(copy(l)) for l in self.store[self.key]]
+
+
+
+
+#-------------------------------------------------------------------------------
+class Pair(object):
+    """
+    Variables added to the pair. 
+    IMPORTANT: kinematics in MeV!!!
+    """
+    #__________________________________________________________________________
+    def __init__(self, pair, **kwargs):
+        self.pair = pair
+        self.tlv = ROOT.TLorentzVector() 
+        self.tlv.SetPtEtaPhiM(self.Pt(), self.Eta(), self.Phi(), self.mVis()) 
+    #__________________________________________________________________________
+    def Pt(self):
+      return (self.pair[0].tlv+self.pair[1].tlv).Pt()
+    #__________________________________________________________________________
+    def Eta(self):
+      return (self.pair[0].tlv+self.pair[1].tlv).Eta()
+    #__________________________________________________________________________
+    def Phi(self):
+      return (self.pair[0].tlv+self.pair[1].tlv).Phi()
+    #__________________________________________________________________________
+    def mVis(self):
+      return (self.pair[0].tlv+self.pair[1].tlv).M()
+    #__________________________________________________________________________
+    def DeltaR(self):
+      return self.pair[0].tlv.DeltaR(self.pair[1].tlv)
+    #__________________________________________________________________________
+    def hasTau(self):
+      return 'tau_' in [self.pair[0].prefix,self.pair[1].prefix]
+    #__________________________________________________________________________
+    def hasMuon(self):
+      return 'muon_' in [self.pair[0].prefix,self.pair[1].prefix]
+    #__________________________________________________________________________
+    def hasElectron(self):
+      return 'el_' in [self.pair[0].prefix,self.pair[1].prefix]
+    #__________________________________________________________________________
+    def ID(self):
+      if self.hasElectron() and not (self.hasMuon() or self.hasTau()): return "ElEl"
+      if self.hasMuon() and not (self.hasTau() or self.hasElectron()): return "MuMu"
+      if self.hasTau() and not (self.hasMuon() or self.hasElectron()): return "TauTau"
+      if self.hasTau() and self.hasElectron():                         return "ElTau"
+      if self.hasTau() and self.hasMuon():                             return "MuTau"
+      if self.hasElectron() and self.hasMuon():                        return "ElMu"
+
+    #__________________________________________________________________________
+    def Charge(self):
+      return self.pair[0].Charge() + self.pair[1].Charge()
+    #__________________________________________________________________________
+    def isSS(self):
+      return abs(self.Charge()) == 2.
+    #__________________________________________________________________________
+    def isOS(self):
+      return abs(self.Charge()) == 0.
+    #__________________________________________________________________________
+    def isSF(self):
+      return self.ID() in ["ElEl","MuMu","TauTau"]
+    #__________________________________________________________________________
+    def isDF(self):
+      return not self.ID() in ["ElEl","MuMu","TauTau"]
+    #__________________________________________________________________________
+    def ORD(self):
+      order = self.pair[0].prefix+self.pair[1].prefix
+      order = order.replace("el_","El")
+      order = order.replace("muon_","Mu")
+      order = order.replace("tau_","Tau")
+      return order
+
+
+    #__________________________________________________________________________
+    def isPassPass(self):
+      if self.pair[0].isPass() and self.pair[1].isPass(): return True
+      return False
+    #__________________________________________________________________________
+    def isPassFail(self):
+      if self.pair[0].isPass() and self.pair[1].isFail(): return True
+      return False
+    #__________________________________________________________________________
+    def isFailPass(self):
+      if self.pair[0].isFail() and self.pair[1].isPass(): return True
+      return False
+    #__________________________________________________________________________
+    def isFailFail(self):
+      if self.pair[0].isFail() and self.pair[1].isFail(): return True
+      return False
+
+
+#------------------------------------------------------------------------------
+class PairsBuilder(pyframe.core.Algorithm):
+    #__________________________________________________________________________
+    def __init__(self, name="PairsBuilder", key=[]):
+        pyframe.core.Algorithm.__init__(self, name=name)
+        self.key  = key
+    #__________________________________________________________________________
+    def initialize(self):
+        log.info('initializing pairs')
+    #__________________________________________________________________________
+    def execute(self,weight):
+      particles = []
+      for key in self.key: particles += self.store[key]
+      self.store['pairs'] = [ Pair(p) for p in combinations(particles,2)]
 
 
 #------------------------------------------------------------------------------
@@ -417,10 +657,6 @@ class MuTauVars(pyframe.core.Algorithm):
         muons = self.store[self.key_muons]
         met   = self.store[self.key_met]
        
-        # ---------------------------
-        # at least a lepton and a jet
-        # ---------------------------
-
         self.store['mutau_dphi'] = muons[0].tlv.DeltaPhi(taus[0].tlv)
         scdphi = 0.0
         scdphi += ROOT.TMath.Cos(met.tlv.Phi() - muons[0].tlv.Phi())
@@ -438,9 +674,88 @@ class MuTauVars(pyframe.core.Algorithm):
         
         self.store['mVisMT']     = (tau.tlv+muon.tlv).M()
         self.store['mTtotMT']    = (muonT + tauT + met.tlv).M()  
+        self.store['mTMu']       = (muonT + met.tlv).M()  
 
         return True
 
+
+#------------------------------------------------------------------------------
+class PairsVars(pyframe.core.Algorithm):
+          
+    """
+    computes variables based on object pairs in the event
+    """
+    #__________________________________________________________________________
+    def __init__(self, 
+                 name        = 'PairsVarsAlg',
+                 key_met     = 'met_trk',
+                 ):
+        pyframe.core.Algorithm.__init__(self, name)
+        self.key_met = key_met
+
+    #__________________________________________________________________________
+    def execute(self, weight):
+        pyframe.core.Algorithm.execute(self, weight)
+        """
+        computes variables and puts them in the store
+        """
+
+        ## get objects from event candidate
+        ## --------------------------------------------------
+        met = self.store[self.key_met]
+        
+        sspairs = []
+        ospairs = []
+
+        for c in self.store['pairs']:
+          if c.isSS(): sspairs.append(c)
+          elif c.isOS(): ospairs.append(c)
+
+        self.store['nsspairs'] = len(sspairs)
+
+        # ---------------------
+        # one pair in the event
+        # ---------------------
+        if len(sspairs) == 1:
+          
+          lead_sspair_T = ROOT.TLorentzVector()
+          lead_sspair_T.SetPtEtaPhiM(sspairs[0].tlv.Pt(), 0., sspairs[0].tlv.Phi(), sspairs[0].tlv.M() )
+          
+          self.store['leadsspair_mTtot']  = (lead_sspair_T + met.tlv).M()
+          self.store['leadsspair_pt']     = sspairs[0].Pt()
+          self.store['leadsspair_phi']    = sspairs[0].Phi()
+          self.store['leadsspair_eta']    = sspairs[0].Eta()
+          self.store['leadsspair_DR']     = sspairs[0].DeltaR()
+          self.store['leadsspair_mVis']   = sspairs[0].mVis()
+          self.store['leadsspair_charge'] = sspairs[0].Charge()
+          self.store['leadsspair_ID']     = sspairs[0].ID()
+
+        # ----------------------
+        # two pairs in the event
+        # ----------------------
+        if len(sspairs) == 2:
+
+          sspair1_T = ROOT.TLorentzVector()
+          sspair1_T.SetPtEtaPhiM(sspairs[0].tlv.Pt(), 0., sspairs[0].tlv.Phi(), sspairs[0].tlv.M() )
+          sspair2_T = ROOT.TLorentzVector()
+          sspair2_T.SetPtEtaPhiM(sspairs[1].tlv.Pt(), 0., sspairs[1].tlv.Phi(), sspairs[1].tlv.M() )
+
+          self.store['sspairs_mTtot']  = (sspair1_T + sspair2_T + met.tlv).M()
+          self.store['sspairs_pt']     = (sspairs[0].tlv + sspairs[1].tlv).Pt()
+          self.store['sspairs_phi']    = (sspairs[0].tlv + sspairs[1].tlv).Phi()
+          self.store['sspairs_eta']    = (sspairs[0].tlv + sspairs[1].tlv).Eta()
+          self.store['sspairs_DR']     = sspairs[0].tlv.DeltaR(sspairs[1].tlv)
+          self.store['sspairs_mVis']   = (sspairs[0].tlv + sspairs[1].tlv).M()
+          self.store['sspairs_charge'] = sspairs[0].Charge() + sspairs[1].Charge()
+          self.store['sspairs_avgM']   = (sspairs[0].mVis() + sspairs[1].mVis()) / 2.
+          self.store['sspairs_DM']     = 2 * (sspairs[0].mVis() - sspairs[1].mVis()) / (sspairs[0].mVis() + sspairs[1].mVis())
+          
+          # all possible 4-lepton combinations
+          quads = [ pair[0]+pair[1] for pair in combinations_with_replacement([ lep[0]+lep[1] for lep in combinations_with_replacement(['El','Mu','Tau'],2)],2)]
+          for q in quads: 
+            if sspairs[0].ID() in q and sspairs[1].ID() in q: self.store['sspairs_ID'] = q
+
+        return True
 
 
 #------------------------------------------------------------------------------
@@ -502,7 +817,6 @@ class DiTauVars(pyframe.core.Algorithm):
 
         return True
 
-
 #------------------------------------------------------------------------------
 class JetsBuilder(pyframe.core.Algorithm):
           
@@ -526,22 +840,29 @@ class JetsBuilder(pyframe.core.Algorithm):
         computes variables and puts them in the store
         """
         jets_tight = []
-        jets_nontight = []
+        jets_antitight = []
         
         met = self.store[self.key_met]
         jets = self.store['jets']
         
+        # -----------------------------------------------------------------------------------------------
+        # JVT:  https://twiki.cern.ch/twiki/bin/view/AtlasProtected/JVTCalibrationRel21
+        # fJVT: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/FJVTCalibration#JetJvtEfficiency_Tool
+        #       https://twiki.cern.ch/twiki/bin/view/AtlasProtected/ForwardJVT
+        # -----------------------------------------------------------------------------------------------
+        
         # -------------------------
         # build tight jets
         # -------------------------
+        """
         for jet in jets:
-          if jet.JvtPass_Medium and jet.fJvtPass_Medium and abs(jet.eta) <= 2.8:
+          if jet.JvtPass_Medium>0 or jet.fJvtPass_Medium>0:
             jets_tight += [jet]
           else:
-            jets_nontight += [jet]
+            jets_antitight += [jet]
         
         jets_tight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
-        jets_nontight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
+        jets_antitight.sort(key=lambda x: x.tlv.Pt(), reverse=True )
         
         if len(jets_tight) > 1:
           assert jets_tight[0].tlv.Pt() >= jets_tight[1].tlv.Pt(), "jets_tight not sorted.."
@@ -555,10 +876,11 @@ class JetsBuilder(pyframe.core.Algorithm):
           self.store['mVisJJ']           = (jet2.tlv+jet1.tlv).M()
           self.store['mTtotJJ']          = (jet1T + jet2T + met.tlv).M()  
 
-        if len(jets_nontight) > 1:
-          assert jets_nontight[0].tlv.Pt() >= jets_nontight[1].tlv.Pt(), "jets_nontight not sorted.."
+        if len(jets_antitight) > 1:
+          assert jets_antitight[0].tlv.Pt() >= jets_antitight[1].tlv.Pt(), "jets_antitight not sorted.."
         self.store['jets_tight'] = jets_tight        
-        self.store['jets_nontight'] = jets_nontight        
+        self.store['jets_antitight'] = jets_antitight        
+        """ 
         
         # -------------------------
         # build trigger jets

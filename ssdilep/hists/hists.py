@@ -24,6 +24,7 @@ class Hist1D(object):
             dir      = None,
             instance = None,
             vexpr    = None,
+            anbins   = None,
             **kw):
        
        self.hname    = hname
@@ -35,6 +36,12 @@ class Hist1D(object):
        self.dir      = dir
        self.instance = instance
        self.vexpr    = vexpr
+       self.anbins   = anbins
+       
+       if self.anbins: 
+         self.nbins = len(self.anbins)
+         self.xmin = 1.
+         self.xmax = float(len(self.anbins)) + 1
         
        ## set additional key-word args
        # -------------------------------------------------------
@@ -44,7 +51,14 @@ class Hist1D(object):
     #________________________________________________________
     def get_name(self):
       return self.__class__.__name__
-    
+   
+    #________________________________________________________
+    def init_axis(self):
+      if self.instance and self.anbins:
+        for ibin, binlabel in enumerate(self.anbins):
+          self.instance.GetXaxis().SetBinLabel(ibin+1,binlabel)
+      return 
+
     #________________________________________________________
     def fill(self,var,weight):
       if self.instance:

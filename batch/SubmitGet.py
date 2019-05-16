@@ -29,10 +29,14 @@ user  = "tadej"
 
 samp  = options.sample
 
+#jtag = "SUSY3DCH.v1"
 #jtag = "SUSY3MC.v1"
 #jtag = "SUSY3Data.v1"
 #jtag = "SUSY11Data.v1"
-jtag = "SUSY11MC.v1"
+#jtag = "SUSY11MC.v1"
+
+#jtag = "SUSY11Data.v2"
+jtag = "SUSY11MC.v*"
 
 #jtag = "EXOT22MC.v1"
 
@@ -113,7 +117,8 @@ infile_meta = os.path.join(JOBDIR,outjobs_meta)
 infile_cutflow = os.path.join(JOBDIR,outjobs_cutflow)
 
 with open(infile_tree,"w") as f:
-  cmd = "rucio list-dids"
+  cmd = "rucio list-files"
+  #cmd = "rucio list-dids"
   cmd += " %s.%s:" % ("user",user)
   cmd += "%s.%s.%s.*%s*tree*" % ("user",user,jtype,jtagsamp)
   print cmd
@@ -122,7 +127,8 @@ with open(infile_tree,"w") as f:
 f.close()
 
 with open(infile_meta,"w") as f:
-  cmd = "rucio list-dids"
+  cmd = "rucio list-files"
+  #cmd = "rucio list-dids"
   cmd += " %s.%s:" % ("user",user)
   cmd += "%s.%s.%s.*%s*metadata*" % ("user",user,jtype,jtagsamp)
   print cmd
@@ -131,7 +137,8 @@ with open(infile_meta,"w") as f:
 f.close()
 
 with open(infile_cutflow,"w") as f:
-  cmd = "rucio list-dids"
+  cmd = "rucio list-files"
+  #cmd = "rucio list-dids"
   cmd += " %s.%s:" % ("user",user)
   cmd += "%s.%s.%s.*%s*cutflow*" % ("user",user,jtype,jtagsamp)
   print cmd
@@ -202,7 +209,8 @@ for k in out_tree_dict.keys():
   if use_sample_id:
     #if "period" in job_name: id = SampleID[str(id).split("_period")[0]]
     if "period" in job_name: pass
-    else:                    id = SampleID[int(id)]
+    elif int(id) in SampleID.keys():  id = SampleID[int(id)]
+    else: pass
   
   print
   print 'downloading %s ...' % id
@@ -234,9 +242,9 @@ for k in out_tree_dict.keys():
   cmd += ' -j n -o %s'        % OUTLOGS
   cmd += ' -e %s'             % OUTLOGS
   cmd += ' %s'                % SCRIPT
-  
+   
   print cmd
-  m = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-  print m.communicate()[0]
+  #m = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+  #print m.communicate()[0]
 
 

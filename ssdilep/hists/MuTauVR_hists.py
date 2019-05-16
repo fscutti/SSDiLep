@@ -12,6 +12,8 @@ hist_list.append(h_njets)
 hist_list.append(h_ntaus)
 hist_list.append(h_mutau_mVis)
 hist_list.append(h_mutau_mTtot)
+hist_list.append(h_mutau_scdphi)
+hist_list.append(h_mutau_mTMu)
 
 
 # -------
@@ -22,10 +24,10 @@ hist_list.append(h_mutau_mTtot)
 hist_list.append(h_mulead_pt)
 hist_list.append(h_mulead_eta)
 hist_list.append(h_mulead_phi)
-hist_list.append(h_mulead_trkd0)
-hist_list.append(h_mulead_trkd0sig)
-hist_list.append(h_mulead_trkz0)
-hist_list.append(h_mulead_trkz0sintheta)
+#hist_list.append(h_mulead_trkd0)
+#hist_list.append(h_mulead_trkd0sig)
+#hist_list.append(h_mulead_trkz0)
+#hist_list.append(h_mulead_trkz0sintheta)
 
 
 # -------
@@ -34,7 +36,7 @@ hist_list.append(h_mulead_trkz0sintheta)
 hist_list.append(h_taulead_pt)
 hist_list.append(h_taulead_eta)
 hist_list.append(h_taulead_phi)
-hist_list.append(h_taulead_JetBDTScore)
+#hist_list.append(h_taulead_JetBDTScore)
 hist_list.append(h_taulead_JetBDTScoreSigTrans)
 
 # -------

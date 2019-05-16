@@ -8,10 +8,10 @@ description:
 
 ## modules
 from pyplot import histutils, fileio
+from copy import copy
 import os 
 import random
 import ROOT
-import copy
 import math
 
 from array import array
@@ -101,7 +101,7 @@ class HistMgr():
            ## get hist path
            path_to_hist = ''
            
-           if region != None:
+           if region:
               path_to_hist = os.path.join('regions',region)
 
               ## check region exists
@@ -110,7 +110,7 @@ class HistMgr():
                   return None
               cutflow = get_icut_path(path, path_to_hist, icut)
               
-              if icut == 0: pass #cutflow = "ALL"
+              #if icut == 0: pass #cutflow = "ALL"
               if not cutflow: 
                   log.debug( '%s no cut: %s'% (samplename,icut) )
                   f.Close()
@@ -128,16 +128,19 @@ class HistMgr():
            h = h.Clone()
            h_list += [h]
         
-        print "Retrieving histograms for %s"%samplename
+        print "Adding retrieved histogram %s for %s in \"%s\""%(histname,samplename,region)
         h_sum = h_list[0]
-        for h in h_list[1:]: h_sum.Add(h)
+        
+        if len(h_list)>1:
+          for h in h_list[1:]: 
+            h_sum.Add(h)
         
         ## apply flat sys (if specified)
         if sys and sys.flat_err:
             if mode == 'up': h_sum.Scale(1.+sys.flat_err)
             else:            h_sum.Scale(1.-sys.flat_err)
-
-        return h_sum
+        
+        return copy(h_sum)
           
     #____________________________________________________________
     def get_nevents(self,samplename,sys=None,mode=None):
@@ -199,7 +202,6 @@ class BaseEstimator(object):
                      sys=sys,
                      mode=mode,
                      )
-
           h = None
           if not all(v is None for v in h_dict.values()):
             h = histutils.add_hists(h_dict.values())
@@ -254,6 +256,8 @@ class Estimator(BaseEstimator):
                          )
         if h and self.sample.type == 'mc': 
             lumi_frac = self.get_mc_lumi_frac(sys,mode)
+            # all normalisation factors are within the ntuple
+            #lumi_frac = 1.
             h.Scale(self.hm.target_lumi * lumi_frac)
 
         return h    
@@ -278,12 +282,11 @@ class Estimator(BaseEstimator):
             xsec    = self.sample.xsec 
             feff    = self.sample.feff
             kfactor = self.sample.kfactor
-            Ntotal  = self.hm.get_nevents(self.sample.name,sys,mode)
+            #Ntotal  = self.hm.get_nevents(self.sample.name,sys,mode)
+            Ntotal  = 1.0 # normalise within loop
             
             self.mc_lumi_frac[sys] = (xsec * feff * kfactor) / Ntotal if Ntotal else 0.0
         return self.mc_lumi_frac[sys]
-
-
 
 
 

@@ -70,14 +70,14 @@ def analyze(config):
                              'HLT_j15',
                              'HLT_j25',
                              'HLT_j35',
-                             #'HLT_j55',  # 2015-2016 only
+                             ###'HLT_j55',  # 2015-2016 only
                              'HLT_j60',
                              'HLT_j85',
                              'HLT_j110',
-                             'HLT_j150', # 2015-2016 only
+                             #'HLT_j150', # 2015-2016 only
                              'HLT_j175',
                              'HLT_j260', # 2017- only
-                             #'HLT_j360', # 2017- only
+                             ###'HLT_j360', # 2017- only
                              'HLT_j380', # 2015-2016 only
                              'HLT_j400',
                              'HLT_j420',
@@ -123,23 +123,21 @@ def analyze(config):
    
     ## initialize and/or decorate objects
     ## ---------------------------------------
-    loop += ssdilep.algs.vars.DiJetVars(key_leptons='taus',
-                                        key_jets='jets',
-    ) 
     loop += ssdilep.algs.vars.JetsBuilder(build_trigger_jets=True)   
 
+    loop += ssdilep.algs.vars.DiJetVars(key_leptons='taus',
+                                        key_jets='jets_tight',
+    ) 
+    
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTau') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One1PTau') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='One3PTau') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsVeryLoose') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='MuVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleJetTrigger') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTauPt20') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTightJet') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastOneJet') 
 
     
@@ -148,7 +146,7 @@ def analyze(config):
     ## event
     ## +++++++++++++++++++++++++++++++++++++++
     
-    # jet weights 
+    # jet weights
     loop += ssdilep.algs.EvWeights.GlobalBjet(
             key       = "GlobBJetSF",
             )
@@ -166,10 +164,145 @@ def analyze(config):
     hist_list += ssdilep.hists.OneTauFF_hists.hist_list
     hist_list += ssdilep.hists.TauTracks_hists.hist_list
     
+    if config['sampletype'] == "mc":
+      hist_list += ssdilep.hists.TRUTH_TAUS_hists.hist_list
+    
     ##-------------------------------------------------------------------------
     ## make plots
     ##-------------------------------------------------------------------------
+    
+    ## NOFILTER
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_NOFILTER_F1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_NOFILTER_1PF1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['One1PTau', None],
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_NOFILTER_3PF1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['One3PTau', None],
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ],
+            )
+    
+    ## TRUETAUHAD
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_TRUETAUHAD_F1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ['TrueTauHadFilter', None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_TRUETAUHAD_1PF1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['One1PTau', None],
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ['TrueTauHadFilter', None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_TRUETAUHAD_3PF1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['One3PTau', None],
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ['TrueTauHadFilter', None],
+              ],
+            )
+    
+    """
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_TRUETAUHAD_F2',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetPtRatioHigh1', None],
+              ['TauJetDphi27', None],
+              ['TrueTauHadFilter', None],
+              ],
+            )
+    
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_TRUETAUHAD_F3',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetPtRatioLow1', None],
+              ['TauJetDphi27', None],
+              ['TrueTauHadFilter', None],
+              ],
+            )
+    
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_TRUETAUHAD_F4',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['LeadJetPt20', None],
+              ['TwoJets', ['JVTSF']],
+              ['TrueTauHadFilter', None],
+              ],
+            )
 
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_TRUETAUHAD_F5',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['LeadJetPt20', ['JVTSF']],
+              ['TrueTauHadFilter', None],
+              ],
+            )
+    """
+    
     ## GLUONS
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -179,12 +312,39 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['LeadJetPt20', None],
-              ['OneJet', None],
+              ['OneJet', ['JVTSF']],
               ['TauJetDphi27', None],
               ['GluonFilter', None],
               ],
             )
-
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_GLUONS_1PF1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['One1PTau', None],
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ['GluonFilter', None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_GLUONS_3PF1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['One3PTau', None],
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ['GluonFilter', None],
+              ],
+            )
+    
+    """
     loop += ssdilep.algs.algs.PlotAlg(
             region       = 'FAKES_GLUONS_F2',
             plot_all     = False,
@@ -192,7 +352,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['LeadJetPt20', None],
-              ['OneJet', None],
+              ['OneJet', ['JVTSF']],
               ['TauJetPtRatioHigh1', None],
               ['TauJetDphi27', None],
               ['GluonFilter', None],
@@ -206,7 +366,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['LeadJetPt20', None],
-              ['OneJet', None],
+              ['OneJet', ['JVTSF']],
               ['TauJetPtRatioLow1', None],
               ['TauJetDphi27', None],
               ['GluonFilter', None],
@@ -220,7 +380,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['LeadJetPt20', None],
-              ['TwoJets', None],
+              ['TwoJets', ['JVTSF']],
               ['GluonFilter', None],
               ],
             )
@@ -231,11 +391,11 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt20', None],
+              ['LeadJetPt20', ['JVTSF']],
               ['GluonFilter', None],
               ],
             )
-   
+    """ 
     ## QUARKS
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -245,12 +405,39 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['LeadJetPt20', None],
-              ['OneJet', None],
+              ['OneJet', ['JVTSF']],
               ['TauJetDphi27', None],
               ['QuarkFilter', None],
               ],
             )
-
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_QUARKS_1PF1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['One1PTau', None],
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ['QuarkFilter', None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_QUARKS_3PF1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['One3PTau', None],
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ['QuarkFilter', None],
+              ],
+            )
+    
+    """
     loop += ssdilep.algs.algs.PlotAlg(
             region       = 'FAKES_QUARKS_F2',
             plot_all     = False,
@@ -258,7 +445,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['LeadJetPt20', None],
-              ['OneJet', None],
+              ['OneJet', ['JVTSF']],
               ['TauJetPtRatioHigh1', None],
               ['TauJetDphi27', None],
               ['QuarkFilter', None],
@@ -272,7 +459,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['LeadJetPt20', None],
-              ['OneJet', None],
+              ['OneJet', ['JVTSF']],
               ['TauJetPtRatioLow1', None],
               ['TauJetDphi27', None],
               ['QuarkFilter', None],
@@ -286,7 +473,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['LeadJetPt20', None],
-              ['TwoJets', None],
+              ['TwoJets', ['JVTSF']],
               ['QuarkFilter', None],
               ],
             )
@@ -297,10 +484,105 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
-              ['LeadJetPt20', None],
+              ['LeadJetPt20', ['JVTSF']],
               ['QuarkFilter', None],
               ],
             )
+    """
+
+    ## UNKNOWN
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_UNKNOWN_F1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ['UnknownFilter', None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_UNKNOWN_1PF1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['One1PTau', None],
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ['UnknownFilter', None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_UNKNOWN_3PF1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['One3PTau', None],
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetDphi27', None],
+              ['UnknownFilter', None],
+              ],
+            )
+    
+    """
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_UNKNOWN_F2',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetPtRatioHigh1', None],
+              ['TauJetDphi27', None],
+              ['UnknownFilter', None],
+              ],
+            )
+    
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_UNKNOWN_F3',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['LeadJetPt20', None],
+              ['OneJet', ['JVTSF']],
+              ['TauJetPtRatioLow1', None],
+              ['TauJetDphi27', None],
+              ['UnknownFilter', None],
+              ],
+            )
+    
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_UNKNOWN_F4',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['LeadJetPt20', None],
+              ['TwoJets', ['JVTSF']],
+              ['UnknownFilter', None],
+              ],
+            )
+
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKES_UNKNOWN_F5',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['LeadJetPt20', ['JVTSF']],
+              ['UnknownFilter', None],
+              ],
+            )
+    """
 
     loop += pyframe.algs.HistCopyAlg()
 

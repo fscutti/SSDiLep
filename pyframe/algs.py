@@ -104,6 +104,7 @@ class HistCopyAlg(pyframe.core.Algorithm):
                 log.info('  %s' % hist_path)
                 self.hists[hist_path] = hg.get(hist_path)
 
+
 #------------------------------------------------------------------------------
 class TreeWriterAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________

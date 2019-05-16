@@ -10,14 +10,21 @@ from array import array
 #indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTwoTau"
 #indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesSteve"
 
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau1PRevThr"
+#indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTauTracks"
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWin"
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWinRed"
 
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/Fakes27Feb"
+
+wp = "Medium"
+
+tauType = "1P%s"%wp
+
+
 #tag       = "onetau"
 #tag       = "twotau"
-tag       = "1prong"
-#tag       = "final"
+#tag       = "3P%s"%wp
+tag       = "%s_All"%tauType
 name      = "data"
 
 # pt 
@@ -31,7 +38,8 @@ var       = "taulead_pt"
 #new_bins = array('d', [0.,25.,28.,30.,32.,36.,300.])
 
 # tau fakes (one tau)
-new_bins = array('d', [0.,20.,30.,40.,60.,90.,150.,250.,400.,800.])
+#new_bins = array('d', [0.,20.,30.,40.,60.,90.,150.,250.,400.,800.])
+new_bins = array('d', [0.,20.,30.,40.,60.,90.,150.,800.])
 
 # tau fakes (two tau)
 #new_bins = array('d', [0.,50.,60.,70.,80.,120.,160.,260.,460.,700.])
@@ -45,9 +53,9 @@ new_bins = array('d', [-2.5, -2.0, -1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.
 var       = "mulead_eta"
 '''
 
-infile    = "hists_"+var+"_FAKES_%s_F%s_"+tag+".root"
-outfile   = "ff_"+var+"_"+name+"_"+tag+"_F%s_%s.root"
-outmerged = "merged_ff_"+var+"_"+name+"_"+tag+".root"
+infile    = "hists_"+var+"_FAKES_%s_"+tauType+"_All_F%s_"+tag+".root"
+outfile   = "ff_"+var+"_"+name+"_"+tag+"_"+tauType+"_All_F%s_%s.root"
+outmerged = "merged_ff_"+var+"_"+name+"_"+tag+"_"+tauType+".root"
 
 # -------------------------------------------------------------------------------------
 
@@ -59,13 +67,13 @@ rcol = [
    ROOT.kYellow+1,
    ROOT.kGreen+2,
    ROOT.kCyan+2,
-   ROOT.kBlue+1,
+   ROOT.kGray+1,
    ROOT.kYellow+3,
    ROOT.kMagenta+1,
-   ROOT.kOrange+7,
-   ROOT.kGray+1,
-   ROOT.kRed+3,
    ROOT.kAzure+2,
+   ROOT.kGreen+1,
+   ROOT.kBlue+1,
+   ROOT.kRed+3,
    ROOT.kPink+10,
    ]
 
@@ -91,19 +99,27 @@ samples =  [
             "diboson",
             ]
 """
-samples =  ["fakes"]
+#samples =  ["fakes"]
+samples =  ["data"]
 
 merged_ff_file = ROOT.TFile.Open(os.path.join(indir,outmerged),"UPDATE")
 
-for i in xrange(1,10):
+#for i in [1,10]:
+#for i in xrange(1,10):
+#for i in xrange(1,2):
+for i in [1,2,10,11]:
 #for i in xrange(1,12):
   for s in samples:
     num_file = ROOT.TFile.Open(os.path.join(indir,infile%("NUM",i)),"READ")
     den_file = ROOT.TFile.Open(os.path.join(indir,infile%("DEN",i)),"READ")
 
-    h_num_name = "h_FAKES_NUM_F%s_nominal_%s"%(i,s)
-    h_den_name = "h_FAKES_DEN_F%s_nominal_%s"%(i,s)
-    
+    h_num_name = "h_FAKES_NUM_"+tauType+"_All_F%s_nominal_%s"%(i,s)
+    h_den_name = "h_FAKES_DEN_"+tauType+"_All_F%s_nominal_%s"%(i,s)
+
+    print h_num_name
+    print h_den_name
+
+
     """
     if i == 10 or i == 11:
      h_num_name = "h_FAKES_NUM_F1_nominal_%s"%(s)
@@ -134,7 +150,7 @@ for i in xrange(1,10):
     h_ff = h_new_num.Clone()
     h_ff.Divide(h_new_den)
    
-    h_ff.SetNameTitle("h_ff_F%s"%i,"")
+    h_ff.SetNameTitle("h_ff_"+tauType+"_F%s"%i,"")
     h_ff.GetYaxis().SetTitle("Fake-factor")
     
     h_ff.GetYaxis().SetTitleSize(0.045)
@@ -155,7 +171,7 @@ for i in xrange(1,10):
     #if i==1: h_ff.Draw("E1 SAME")
     #else: h_ff.Draw("E1 SAME")
     
-    c = ROOT.TCanvas("c_ff_F%s"%i,"c_ff_F%s"%i,650,600)
+    c = ROOT.TCanvas("c_ff_"+tauType+"_F%s"%i,"c_ff_"+tauType+"_F%s"%i,650,600)
     c.SetTopMargin(0.05)
     c.SetBottomMargin(0.13)
     c.SetLeftMargin(0.13)
@@ -167,7 +183,7 @@ for i in xrange(1,10):
     h_ff.SetStats(0)
     h_ff.Draw("E1")
     
-    if s=="fakes":
+    if s=="data":
       merged_ff_file.WriteTObject(h_ff.Clone())
       merged_ff_file.WriteTObject(c.Clone())
     

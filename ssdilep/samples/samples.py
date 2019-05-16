@@ -13,8 +13,9 @@ description:
 
 ## modules
 from sample import Sample
+import samples_DCH 
 import ROOT
-
+from data_periods import data_periods
 
 ## colors
 black = ROOT.kBlack
@@ -23,51 +24,31 @@ red   = ROOT.kRed
 green = ROOT.kGreen+1
 
 
+def getFiltered(sample, suffix):
+   
+   filtered_style = {}
+   filtered_style['qfakes'] = 3144
+   filtered_style['gfakes'] = 3315
+   filtered_style['ufakes'] = 3305
+   
+   globals()[sample.name+"_"+suffix] = sample.duplicate(suffix=suffix, tlatex='{} {}'.format(sample.name, suffix), fill_style=filtered_style[suffix])
+
 
 #-------------------------------------------------------------------------------
 # data
 #-------------------------------------------------------------------------------
-periods = []
-periods += [
-         # 2015
-         "data15_13TeV_periodD",
-         "data15_13TeV_periodE",
-         "data15_13TeV_periodF",
-         "data15_13TeV_periodG",
-         "data15_13TeV_periodH",
-         "data15_13TeV_periodJ",
-         # 2016
-         "data16_13TeV_periodA",
-         "data16_13TeV_periodB",
-         "data16_13TeV_periodC",
-         "data16_13TeV_periodD",
-         "data16_13TeV_periodE",
-         "data16_13TeV_periodF",
-         "data16_13TeV_periodG",
-         "data16_13TeV_periodI",
-         "data16_13TeV_periodK",
-         "data16_13TeV_periodL",
-         # 2017
-         "data17_13TeV_periodB",
-         "data17_13TeV_periodC",
-         "data17_13TeV_periodD",
-         "data17_13TeV_periodE",
-         "data17_13TeV_periodF",
-         "data17_13TeV_periodH",
-         "data17_13TeV_periodI",
-         "data17_13TeV_periodK",
-        ]
 
-for name in periods:
-    globals()[name] = Sample(
-            name = name,
+for name in data_periods:
+    sname = "physics_Main_"+name
+    globals()[sname] = Sample(
+            name = sname,
             type = "data"
             )
 
-list_runs =[globals()[name] for name in periods]
+list_runs =[globals()["physics_Main_"+name] for name in data_periods]
 
 data = Sample(name         = "data",
-              tlatex       = "Data 2015+2016+2017",
+              tlatex       = "Data",
               fill_color   = white,
               fill_style   = 0,
               line_color   = black,
@@ -103,23 +84,23 @@ fakes    = Sample( name         = "fakes",
 # Wenu
 #-----
 
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_CVetoBVeto",         xsec = 15299.7024868,  ) 
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_CVetoBVeto",       xsec = 611.538499092,  )
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_CVetoBVeto",      xsec = 196.791474684,  )
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_CVetoBVeto",      xsec = 38.073801577 ,  )
-                                                                                                                                                                   
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_CFilterBVeto",       xsec = 2418.3583578 ,  )
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_CFilterBVeto",     xsec = 209.068226178,  )
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_CFilterBVeto",    xsec = 95.509733804 ,  )
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_CFilterBVeto",    xsec = 22.165716989 ,  )
-                                                                                                                                                                   
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_BFilter",            xsec = 819.467821557, )
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_BFilter",          xsec = 94.8253702473, )
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_BFilter",         xsec = 35.894033794 , )
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_BFilter",         xsec = 9.368883605  , )
-                                                                                                                                                                   
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV500_1000",                xsec = 14.7703248   , )
-Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV1000_E_CMS",              xsec = 1.19664468   , )
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_CVetoBVeto",       ) 
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_CVetoBVeto",     )
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_CVetoBVeto",    )
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_CVetoBVeto",    )
+                                                                                                                                           
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_CFilterBVeto",     )
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_CFilterBVeto",   )
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_CFilterBVeto",  )
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_CFilterBVeto",  )
+                                                                                                                                           
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV0_70_BFilter",          )
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV70_140_BFilter",        )
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV140_280_BFilter",       )
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV280_500_BFilter",       )
+                                                                                                                                           
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV500_1000",              )
+Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wenu_MAXHTPTV1000_E_CMS",            )
 
 
 Wenu = Sample( name =   'Wenu',
@@ -145,27 +126,39 @@ Wenu = Sample( name =   'Wenu',
                               ],
                 ) 
 
+
+Wenu_fakes = Sample( name =   'Wenu_fakes',
+                  tlatex = 'W #rightarrow e#nu+jets (fakes)',
+                  fill_color = ROOT.kRed+1,
+                  fill_style = 3002,
+                  line_color =  ROOT.kRed+2,
+                  marker_color =  ROOT.kRed+2,
+                  daughters = Wenu.daughters,
+                ) 
+
+
+
 #------
 # Wmunu
 #------
 
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_CVetoBVeto",         xsec = 15300.0572987, )
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_CVetoBVeto",       xsec = 618.428915666, ) 
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CVetoBVeto",      xsec = 206.221283425, )
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_CVetoBVeto",      xsec = 38.208856376 , )
-                                                                                                                                                                    
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_CFilterBVeto",       xsec = 2419.07572368, )
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_CFilterBVeto",     xsec = 213.410699631, )
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CFilterBVeto",    xsec = 95.503740588 , )
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_CFilterBVeto",    xsec = 22.234860368 , )
-                                                                                                                                                                    
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_BFilter",            xsec = 819.040831686, )
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_BFilter",          xsec = 69.329881007 , )
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_BFilter",         xsec = 35.814728094 , )
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_BFilter",         xsec = 9.322304129  , )
-                                                                                                                                                                    
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV500_1000",                xsec = 14.562702    , )
-Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV1000_E_CMS",              xsec = 1.19761488   , )
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_CVetoBVeto",       )
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_CVetoBVeto",     ) 
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CVetoBVeto",    )
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_CVetoBVeto",    )
+                                                                                                                                            
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_CFilterBVeto",     )
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_CFilterBVeto",   )
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_CFilterBVeto",  )
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_CFilterBVeto",  )
+                                                                                                                                            
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV0_70_BFilter",          )
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV70_140_BFilter",        )
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV140_280_BFilter",       )
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV280_500_BFilter",       )
+                                                                                                                                            
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV500_1000",              )
+Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wmunu_MAXHTPTV1000_E_CMS",            )
 
 
 Wmunu = Sample( name =   'Wmunu',
@@ -191,26 +184,35 @@ Wmunu = Sample( name =   'Wmunu',
                               ],
                 ) 
 
+Wmunu_fakes = Sample( name =   'Wmunu_fakes',
+                  tlatex = 'W #rightarrow #mu#nu+jets (fakes)',
+                  fill_color = ROOT.kGreen+1,
+                  fill_style = 3002,
+                  line_color =  ROOT.kGreen+2,
+                  marker_color =  ROOT.kGreen+2,
+                  daughters = Wmunu.daughters,
+                ) 
+
 #-------
 # Wtaunu
 #-------
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CVetoBVeto",         xsec = 15328.6190165,  )
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CVetoBVeto",       xsec = 619.516866415,  ) 
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CVetoBVeto",      xsec = 196.303689268,  )
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CVetoBVeto",      xsec = 38.153260385 ,  )
-                                                                                                                                                                       
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CFilterBVeto",       xsec = 2403.4269992 ,  )
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CFilterBVeto",     xsec = 204.11294685 ,  )
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CFilterBVeto",    xsec = 95.639994797 ,  )
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CFilterBVeto",    xsec = 22.100151339 ,  )
-                                                                                                                                                                       
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_BFilter",            xsec = 829.089088304,  )
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_BFilter",          xsec = 95.1431170536,  )
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_BFilter",         xsec = 38.868467327 ,  )
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_BFilter",         xsec = 9.382038479  ,  )
-                                                                                                                                                                       
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV500_1000",                xsec = 14.5976292   ,  )
-Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV1000_E_CMS",              xsec = 1.19712978   ,  )
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CVetoBVeto",        )
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CVetoBVeto",      ) 
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CVetoBVeto",     )
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CVetoBVeto",     )
+                                                                                                                                               
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CFilterBVeto",      )
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CFilterBVeto",    )
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CFilterBVeto",   )
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CFilterBVeto",   )
+                                                                                                                                               
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_BFilter",           )
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_BFilter",         )
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_BFilter",        )
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_BFilter",        )
+                                                                                                                                               
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV500_1000",               )
+Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV1000_E_CMS",             )
 
 Wtaunu = Sample( name =   'Wtaunu',
                   tlatex = 'W #rightarrow #tau#nu+jets (Sherpa 2.2.1)',
@@ -235,6 +237,15 @@ Wtaunu = Sample( name =   'Wtaunu',
                               ],
                 ) 
 
+Wtaunu_fakes = Sample( name =   'Wtaunu_fakes',
+                  tlatex = 'W #rightarrow #tau#nu+jets (fakes)',
+                  fill_color = ROOT.kBlue+1,
+                  fill_style = 3002,
+                  line_color =  ROOT.kBlue+2,
+                  marker_color =  ROOT.kBlue+2,
+                  daughters = Wtaunu.daughters,
+                ) 
+
 
 #---------------------------------------------------------------------------------------------------------------------
 # Z + jets (Sherpa 2.2.1)
@@ -245,23 +256,23 @@ Wtaunu = Sample( name =   'Wtaunu',
 #-----
 # Zee
 #-----
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_CVetoBVeto",                xsec = 1586.66000797, ) 
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_CVetoBVeto",              xsec = 74.392831377 , )
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_CVetoBVeto",             xsec = 24.406766768 , )
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_CVetoBVeto",             xsec = 4.747987696  , )
-                                                                                                                                                                       
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_CFilterBVeto",              xsec = 218.160449136, )
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_CFilterBVeto",            xsec = 19.829640036 , )
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_CFilterBVeto",           xsec = 9.138632129  , )
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_CFilterBVeto",           xsec = 2.223207556  , )
-                                                                                                                                                                       
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_BFilter",                   xsec = 123.301682947, )
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_BFilter",                 xsec = 12.308466245 , )
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_BFilter",                xsec = 5.923140985  , )
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_BFilter",                xsec = 1.457160985  , )
-                                                                                                                                                                       
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV500_1000",                       xsec = 1.76307831   , )
-Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV1000_E_CMS",                     xsec = 0.144870607  , )
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_CVetoBVeto",       ) 
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_CVetoBVeto",     )
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_CVetoBVeto",    )
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_CVetoBVeto",    )
+                                                                                                                                         
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_CFilterBVeto",     )
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_CFilterBVeto",   )
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_CFilterBVeto",  )
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_CFilterBVeto",  )
+                                                                                                                                         
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV0_70_BFilter",          )
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV70_140_BFilter",        )
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV140_280_BFilter",       )
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV280_500_BFilter",       )
+                                                                                                                                         
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV500_1000",              )
+Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zee_MAXHTPTV1000_E_CMS",            )
 
 Zee = Sample( name =   'Zee',                                                                                                                              
                   tlatex = 'Z #rightarrow ee+jets (Sherpa 2.2.1)',
@@ -291,23 +302,23 @@ Zee = Sample( name =   'Zee',
 # Zmumu
 #-------
                                                                      
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_CVetoBVeto",              xsec = 1588.71733441,  )
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_CVetoBVeto",            xsec = 73.2618419445,  ) 
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_CVetoBVeto",           xsec = 23.6966813186,  )
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_CVetoBVeto",           xsec = 4.6487083167 ,  )
-                                                                                                                                                                          
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_CFilterBVeto",            xsec = 218.358902463,  )
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_CFilterBVeto",          xsec = 19.8590024419,  )
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_CFilterBVeto",         xsec = 9.06175614257,  )
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_CFilterBVeto",         xsec = 2.20891350665,  )
-                                                                                                                                                                          
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_BFilter",                 xsec = 124.421478524,  )
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_BFilter",               xsec = 12.0883026088,  )
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_BFilter",              xsec = 5.74741074457,  )
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_BFilter",              xsec = 1.45819160585,  )
-                                                                                                                                                                          
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV500_1000",                     xsec = 1.74201615   ,  )
-Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV1000_E_CMS",                   xsec = 0.143944262  ,  )
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_CVetoBVeto",        )
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_CVetoBVeto",      ) 
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_CVetoBVeto",     )
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_CVetoBVeto",     )
+                                                                                                                                             
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_CFilterBVeto",      )
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_CFilterBVeto",    )
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_CFilterBVeto",   )
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_CFilterBVeto",   )
+                                                                                                                                             
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_BFilter",           )
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_BFilter",         )
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_BFilter",        )
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_BFilter",        )
+                                                                                                                                             
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV500_1000",               )
+Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV1000_E_CMS",             )
 
 
 Zmumu = Sample( name =   'Zmumu',                                                                                                                         
@@ -334,28 +345,27 @@ Zmumu = Sample( name =   'Zmumu',
                 ) 
 
 
-
 #---------
 # Ztautau
 #---------
 
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_CVetoBVeto",         xsec = 1587.19549779 ,  )
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_CVetoBVeto",       xsec = 74.1331155392 ,  ) 
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_CVetoBVeto",      xsec = 24.185807051  ,  )
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_CVetoBVeto",      xsec = 4.67188943921 ,  )
-                                                                                                                                                                          
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_CFilterBVeto",       xsec = 218.306784343 ,  )
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_CFilterBVeto",     xsec = 19.7089932529 ,  )
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_CFilterBVeto",    xsec = 9.09596467878 ,  )
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_CFilterBVeto",    xsec = 2.21896214715 ,  )
-                                                                                                                                                                          
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_BFilter",            xsec = 124.552404811 ,  )
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_BFilter",          xsec = 11.9878119426 ,  ) 
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_BFilter",         xsec = 5.34266418886 ,  )
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_BFilter",         xsec = 1.46541699447 ,  )
-                                                                                                                                                                          
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV500_1000",                xsec = 1.76454096   ,   )
-Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV1000_E_CMS",              xsec = 0.144646334  ,   )
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_CVetoBVeto         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_CVetoBVeto",       )
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_CVetoBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_CVetoBVeto",     ) 
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_CVetoBVeto",    )
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_CVetoBVeto      = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_CVetoBVeto",    )
+                                                                                                                                                
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_CFilterBVeto       = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_CFilterBVeto",     )
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_CFilterBVeto     = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_CFilterBVeto",   )
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_CFilterBVeto",  )
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_CFilterBVeto    = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_CFilterBVeto",  )
+                                                                                                                                                
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_BFilter            = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV0_70_BFilter",          )
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_BFilter          = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV70_140_BFilter",        ) 
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV140_280_BFilter",       )
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_BFilter         = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV280_500_BFilter",       )
+                                                                                                                                                
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV500_1000                = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV500_1000",              )
+Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV1000_E_CMS              = Sample( name =  "Sherpa_221_NNPDF30NNLO_Ztautau_MAXHTPTV1000_E_CMS",            )
 
 
 Ztautau = Sample( name =   'Ztautau',
@@ -381,7 +391,6 @@ Ztautau = Sample( name =   'Ztautau',
                               ],
                 ) 
 
-
 #-----------------------------------------------------------------------------
 # Top 
 #-----------------------------------------------------------------------------
@@ -393,9 +402,9 @@ Ztautau = Sample( name =   'Ztautau',
 #       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryTTbar 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-PhPy8EG_A14_ttbar_hdamp258p75_nonallhad = Sample( name =  "PhPy8EG_A14_ttbar_hdamp258p75_nonallhad", xsec = 452.336040799,)
-PhPy8EG_A14_ttbar_hdamp258p75_allhad    = Sample( name =  "PhPy8EG_A14_ttbar_hdamp258p75_allhad",    xsec = 379.501934906,)
-PhPy8EG_A14_ttbar_hdamp258p75_dil       = Sample( name =  "PhPy8EG_A14_ttbar_hdamp258p75_dil",       xsec = 87.709092,    )
+PhPy8EG_A14_ttbar_hdamp258p75_nonallhad = Sample( name =  "PhPy8EG_A14_ttbar_hdamp258p75_nonallhad",)
+PhPy8EG_A14_ttbar_hdamp258p75_allhad    = Sample( name =  "PhPy8EG_A14_ttbar_hdamp258p75_allhad",   )
+PhPy8EG_A14_ttbar_hdamp258p75_dil       = Sample( name =  "PhPy8EG_A14_ttbar_hdamp258p75_dil",      )
 
 ttbar = Sample( name =  'ttbar',
                     tlatex = 'ttbar',
@@ -415,12 +424,12 @@ ttbar = Sample( name =  'ttbar',
 # Notes:
 #       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummarySingleTop
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-PowhegPythiaEvtGen_P2012_Wt_inclusive_top             = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_inclusive_top",             xsec = 35.845486, )
-PowhegPythiaEvtGen_P2012_Wt_inclusive_antitop         = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_inclusive_antitop",         xsec = 35.824406, )
-PowhegPythiaEvtGen_P2012_Wt_dilepton_top              = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_dilepton_top",              xsec = 3.777009, )
-PowhegPythiaEvtGen_P2012_Wt_dilepton_antitop          = Sample( name = "PowhegPythiaEvtGen_P2012_Wt_dilepton_antitop",          xsec = 3.7747956, )
-PowhegPythiaEvtGen_P2012_singletop_tchan_lept_top     = Sample( name = "PowhegPythiaEvtGen_P2012_singletop_tchan_lept_top",     xsec = 44.152, )
-PowhegPythiaEvtGen_P2012_singletop_tchan_lept_antitop = Sample( name = "PowhegPythiaEvtGen_P2012_singletop_tchan_lept_antitop", xsec = 26.276, )
+PhPy8EG_A14_tchan_BW50_lept_antitop                      = Sample( name = "PhPy8EG_A14_tchan_BW50_lept_antitop"                  )
+PhPy8EG_A14_tchan_BW50_lept_top                          = Sample( name = "PhPy8EG_A14_tchan_BW50_lept_top"                      )
+PowhegPythia8EvtGen_A14_singletop_schan_lept_antitop     = Sample( name = "PowhegPythia8EvtGen_A14_singletop_schan_lept_antitop" )
+PowhegPythia8EvtGen_A14_singletop_schan_lept_top         = Sample( name = "PowhegPythia8EvtGen_A14_singletop_schan_lept_top"     )
+PowhegPythia8EvtGen_A14_Wt_DR_inclusive_antitop          = Sample( name = "PowhegPythia8EvtGen_A14_Wt_DR_inclusive_antitop"      )
+PowhegPythia8EvtGen_A14_Wt_DR_inclusive_top              = Sample( name = "PowhegPythia8EvtGen_A14_Wt_DR_inclusive_top"          )
 
 singletop = Sample( name =   'singletop',
                     tlatex = 'single-top',
@@ -428,50 +437,113 @@ singletop = Sample( name =   'singletop',
                     line_color =  ROOT.kRed+4,
                     marker_color =  ROOT.kRed+4,
                     daughters = [
-                                 PowhegPythiaEvtGen_P2012_Wt_inclusive_antitop,        
-                                 PowhegPythiaEvtGen_P2012_Wt_inclusive_top,            
-                                 #PowhegPythiaEvtGen_P2012_singletop_tchan_lept_antitop,
-                                 #PowhegPythiaEvtGen_P2012_singletop_tchan_lept_top,    
-                                 #PowhegPythiaEvtGen_P2012_Wt_dilepton_top,
-                                 #PowhegPythiaEvtGen_P2012_Wt_dilepton_antitop,
+                                  PhPy8EG_A14_tchan_BW50_lept_antitop,                 
+                                  PhPy8EG_A14_tchan_BW50_lept_top,                     
+                                  PowhegPythia8EvtGen_A14_singletop_schan_lept_antitop,
+                                  PowhegPythia8EvtGen_A14_singletop_schan_lept_top,    
+                                  PowhegPythia8EvtGen_A14_Wt_DR_inclusive_antitop,     
+                                  PowhegPythia8EvtGen_A14_Wt_DR_inclusive_top,         
                                 ],
                 ) 
 
 
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W",      xsec =   76498710000.0,   )
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W",      xsec =   52653540.6,      )
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W",      xsec =   813248.436,      )
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W",      xsec =   8469.51264,      )
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W",      xsec =   135.3052894,     )
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W",      xsec =   4.207843815,     )
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W",      xsec =   0.2427014226,    )
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W",      xsec =   0.006369252,     )
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W",      xsec =   0.00636030528,   )
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W",      xsec =   0.000237160564,  )
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W  = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W",     xsec =   7.06798694e-06,  )
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W  = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W",     xsec =   1.130893099e-07, )  
-Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W  = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W",     xsec =   4.41551264e-10,  )
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# ttV
+# Notes:
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_allhad   = Sample( name = "aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_allhad"  )
+aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_semilep  = Sample( name = "aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_semilep" )
+aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee                = Sample( name = "aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee"               )
+aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu              = Sample( name = "aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu"             )
+aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau            = Sample( name = "aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau"           )
+aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttW                 = Sample( name = "aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttW"                )
+aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZnunu             = Sample( name = "aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZnunu"            )
+aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZqq               = Sample( name = "aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZqq"              )
+MadGraphPythia8EvtGen_A14NNPDF23_3top_SM                    = Sample( name = "MadGraphPythia8EvtGen_A14NNPDF23_3top_SM"                   )
+MadGraphPythia8EvtGen_A14NNPDF23_4topSM                     = Sample( name = "MadGraphPythia8EvtGen_A14NNPDF23_4topSM"                    )
+
+ttV = Sample( name =   'ttV',
+                    tlatex = 'ttV',
+                    fill_color = ROOT.kPink+3,
+                    line_color =  ROOT.kPink-7,
+                    marker_color =  ROOT.kPink-7,
+                    daughters = [
+                                 #aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_allhad,
+                                 #aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_semilep,
+                                 aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee,              
+                                 aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu,
+                                 aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau,
+                                 aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttW,               
+                                 aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZnunu,
+                                 aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZqq,          
+                                 MadGraphPythia8EvtGen_A14NNPDF23_3top_SM,                  
+                                 MadGraphPythia8EvtGen_A14NNPDF23_4topSM,                   
+                                ],
+                ) 
+
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# dijet ( A14 NNPDF23 LO tune )
+# Notes:
+#       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MC15MultijetPMG
+#       * more info:      https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MultijetFocusGroup
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0WithSW   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0WithSW",  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1WithSW   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1WithSW",  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2WithSW   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2WithSW",  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3WithSW   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3WithSW",  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4WithSW   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4WithSW",  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5WithSW   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5WithSW",  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6WithSW   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6WithSW",  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7WithSW   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7WithSW",  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8WithSW   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8WithSW",  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9WithSW   = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9WithSW",  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10WithSW  = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10WithSW", )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11WithSW  = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11WithSW", )  
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12WithSW  = Sample( name =   "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12WithSW", )
+
+
+JZ_dict = {"0"  : ROOT.kRed,
+           "1"  : ROOT.kYellow,
+           "2"  : ROOT.kBlue,
+           "3"  : ROOT.kGreen,
+           "4"  : ROOT.kCyan,
+           "5"  : ROOT.kMagenta,
+           "6"  : ROOT.kOrange,
+           "7"  : ROOT.kRed+1,
+           "8"  : ROOT.kBlue+1,
+           "9"  : ROOT.kMagenta+1,
+           "10" : ROOT.kYellow+1,
+           "11" : ROOT.kGreen+1,
+           "12" : ROOT.kSpring+1}
+
+for jz,jz_color in JZ_dict.iteritems():
+  globals()["Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ%sWithSW"%(jz)].tlatex = "JZ%sW"%(jz)
+  globals()["Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ%sWithSW"%(jz)].fill_color   = jz_color
+  globals()["Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ%sWithSW"%(jz)].line_color   = jz_color+1
+  globals()["Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ%sWithSW"%(jz)].marker_color = jz_color+1
 
 
 dijet = Sample( name =   'dijet',
                     tlatex = 'Di-Jet',
-                    fill_color = ROOT.kRed+3,
-                    line_color =  ROOT.kRed+4,
-                    marker_color =  ROOT.kRed+4,
+                    fill_color = ROOT.kGray+2,
+                    line_color =  ROOT.kGray+2,
+                    marker_color =  ROOT.kGray+3,
                     daughters = [
-                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W,         
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W, 
-                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W, 
-                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W, 
-                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W, 
-                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W,
-                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W,
-                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W,
+                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0WithSW,         
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1WithSW, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2WithSW, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3WithSW, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4WithSW, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5WithSW, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6WithSW, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7WithSW, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8WithSW, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9WithSW, 
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10WithSW,
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11WithSW,
+                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12WithSW,
                               ],
                 ) 
 
@@ -480,57 +552,151 @@ dijet = Sample( name =   'dijet',
 # Diboson (list of samples might be incomplete!)
 #-----------------------------------------------------------------------------
 
-Sherpa_221_NNPDF30NNLO_ZqqZvv   = Sample( name = "Sherpa_221_NNPDF30NNLO_ZqqZvv" ,   xsec = 4.35418464, )
-Sherpa_221_NNPDF30NNLO_ZqqZll   = Sample( name = "Sherpa_221_NNPDF30NNLO_ZqqZll" ,   xsec = 2.17275043, )
-Sherpa_221_NNPDF30NNLO_WqqZvv   = Sample( name = "Sherpa_221_NNPDF30NNLO_WqqZvv" ,   xsec = 6.7973,     )
-Sherpa_221_NNPDF30NNLO_WqqZll   = Sample( name = "Sherpa_221_NNPDF30NNLO_WqqZll" ,   xsec = 3.4345,     )
-Sherpa_221_NNPDF30NNLO_WpqqWmlv = Sample( name = "Sherpa_221_NNPDF30NNLO_WpqqWmlv" , xsec = 24.719,     )
-Sherpa_221_NNPDF30NNLO_WplvWmqq = Sample( name = "Sherpa_221_NNPDF30NNLO_WplvWmqq" , xsec = 112.74,     )
-Sherpa_221_NNPDF30NNLO_WlvZqq   = Sample( name = "Sherpa_221_NNPDF30NNLO_WlvZqq" ,   xsec = 11.42,      )
-
-Sherpa_222_NNPDF30NNLO_lllljj_EW6    = Sample( name ="Sherpa_222_NNPDF30NNLO_lllljj_EW6" ,    xsec = 0.010523,)
-Sherpa_222_NNPDF30NNLO_lllvjj_EW6    = Sample( name ="Sherpa_222_NNPDF30NNLO_lllvjj_EW6" ,    xsec = 0.046691,)
-Sherpa_222_NNPDF30NNLO_llvvjj_EW6    = Sample( name ="Sherpa_222_NNPDF30NNLO_llvvjj_EW6" ,    xsec = 0.11621, )
-Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW4 = Sample( name ="Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW4" , xsec = 0.025211,)
-Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW6 = Sample( name ="Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW6" , xsec = 0.040804,)
-
 # this is a mix of 222 and 221
-Sherpa_222_NNPDF30NNLO_llll = Sample( name ="Sherpa_222_NNPDF30NNLO_llll" , xsec = 1.2523, )
-Sherpa_222_NNPDF30NNLO_lllv = Sample( name ="Sherpa_222_NNPDF30NNLO_lllv" , xsec = 4.5832, )
-Sherpa_222_NNPDF30NNLO_llvv = Sample( name ="Sherpa_222_NNPDF30NNLO_llvv" , xsec = 12.501, )
-Sherpa_222_NNPDF30NNLO_lvvv = Sample( name ="Sherpa_222_NNPDF30NNLO_lvvv" , xsec = 3.231, )
-Sherpa_221_NNPDF30NNLO_vvvv = Sample( name ="Sherpa_221_NNPDF30NNLO_vvvv" , xsec = 0.60154,)
+Sherpa_222_NNPDF30NNLO_llll            = Sample( name = "Sherpa_222_NNPDF30NNLO_llll" )
+Sherpa_222_NNPDF30NNLO_lllv            = Sample( name = "Sherpa_222_NNPDF30NNLO_lllv" )
+Sherpa_222_NNPDF30NNLO_llvv            = Sample( name = "Sherpa_222_NNPDF30NNLO_llvv" )
+Sherpa_222_NNPDF30NNLO_lvvv            = Sample( name = "Sherpa_222_NNPDF30NNLO_lvvv" )
+Sherpa_221_NNPDF30NNLO_vvvv            = Sample( name = "Sherpa_221_NNPDF30NNLO_vvvv" )
+                                       
+Sherpa_221_NNPDF30NNLO_ZqqZvv          = Sample( name = "Sherpa_221_NNPDF30NNLO_ZqqZvv"   )
+Sherpa_221_NNPDF30NNLO_ZqqZll          = Sample( name = "Sherpa_221_NNPDF30NNLO_ZqqZll"   )
+Sherpa_221_NNPDF30NNLO_WqqZvv          = Sample( name = "Sherpa_221_NNPDF30NNLO_WqqZvv"   )
+Sherpa_221_NNPDF30NNLO_WqqZll          = Sample( name = "Sherpa_221_NNPDF30NNLO_WqqZll"   )
+Sherpa_221_NNPDF30NNLO_WpqqWmlv        = Sample( name = "Sherpa_221_NNPDF30NNLO_WpqqWmlv" )
+Sherpa_221_NNPDF30NNLO_WplvWmqq        = Sample( name = "Sherpa_221_NNPDF30NNLO_WplvWmqq" )
+Sherpa_221_NNPDF30NNLO_WlvZqq          = Sample( name = "Sherpa_221_NNPDF30NNLO_WlvZqq"   )
+                                       
+Sherpa_222_NNPDF30NNLO_lllljj_EW6      = Sample( name ="Sherpa_222_NNPDF30NNLO_lllljj_EW6"    )
+Sherpa_222_NNPDF30NNLO_lllvjj_EW6      = Sample( name ="Sherpa_222_NNPDF30NNLO_lllvjj_EW6"    )
+Sherpa_222_NNPDF30NNLO_llvvjj_EW6      = Sample( name ="Sherpa_222_NNPDF30NNLO_llvvjj_EW6"    )
+Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW4   = Sample( name ="Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW4" )
+Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW6   = Sample( name ="Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW6" )
+                                       
+Sherpa_222_NNPDF30NNLO_WWW_3l3v_EW6    = Sample( name = "Sherpa_222_NNPDF30NNLO_WWW_3l3v_EW6"  )
+Sherpa_222_NNPDF30NNLO_WWZ_4l2v_EW6    = Sample( name = "Sherpa_222_NNPDF30NNLO_WWZ_4l2v_EW6"  )
+Sherpa_222_NNPDF30NNLO_WWZ_2l4v_EW6    = Sample( name = "Sherpa_222_NNPDF30NNLO_WWZ_2l4v_EW6"  )
+Sherpa_222_NNPDF30NNLO_WZZ_5l1v_EW6    = Sample( name = "Sherpa_222_NNPDF30NNLO_WZZ_5l1v_EW6"  )
+Sherpa_222_NNPDF30NNLO_WZZ_3l3v_EW6    = Sample( name = "Sherpa_222_NNPDF30NNLO_WZZ_3l3v_EW6"  )
+Sherpa_222_NNPDF30NNLO_ZZZ_6l0v_EW6    = Sample( name = "Sherpa_222_NNPDF30NNLO_ZZZ_6l0v_EW6"  ) 
+Sherpa_222_NNPDF30NNLO_ZZZ_4l2v_EW6    = Sample( name = "Sherpa_222_NNPDF30NNLO_ZZZ_4l2v_EW6"  )
+Sherpa_222_NNPDF30NNLO_ZZZ_2l4v_EW6    = Sample( name = "Sherpa_222_NNPDF30NNLO_ZZZ_2l4v_EW6"  )
+Sherpa_222_NNPDF30NNLO_WWZ_3l1v2j_EW6  = Sample( name = "Sherpa_222_NNPDF30NNLO_WWZ_3l1v2j_EW6")
+Sherpa_222_NNPDF30NNLO_WZZ_4l2j_EW6    = Sample( name = "Sherpa_222_NNPDF30NNLO_WZZ_4l2j_EW6"  )
+Sherpa_222_NNPDF30NNLO_WZZ_3l1v2j_EW6  = Sample( name = "Sherpa_222_NNPDF30NNLO_WZZ_3l1v2j_EW6")
+
+Sherpa_221_NNPDF30NNLO_6l0v_EW6        = Sample( name = "Sherpa_221_NNPDF30NNLO_6l0v_EW6" )
+Sherpa_221_NNPDF30NNLO_5l1v_EW6        = Sample( name = "Sherpa_221_NNPDF30NNLO_5l1v_EW6" )
+Sherpa_221_NNPDF30NNLO_4l2v_EW6        = Sample( name = "Sherpa_221_NNPDF30NNLO_4l2v_EW6" )
+Sherpa_221_NNPDF30NNLO_3l3v_EW6        = Sample( name = "Sherpa_221_NNPDF30NNLO_3l3v_EW6" )
+Sherpa_221_NNPDF30NNLO_2l4v_EW6        = Sample( name = "Sherpa_221_NNPDF30NNLO_2l4v_EW6" )
+
+Sherpa_222_NNPDF30NNLO_ggllll_0M4l130  = Sample( name = "Sherpa_222_NNPDF30NNLO_ggllll_0M4l130" )
+Sherpa_222_NNPDF30NNLO_ggllll_130M4l   = Sample( name = "Sherpa_222_NNPDF30NNLO_ggllll_130M4l"  )
+Sherpa_222_NNPDF30NNLO_ggllvvInt       = Sample( name = "Sherpa_222_NNPDF30NNLO_ggllvvInt"      )
+Sherpa_222_NNPDF30NNLO_ggllvvWW        = Sample( name = "Sherpa_222_NNPDF30NNLO_ggllvvWW"       )
+Sherpa_222_NNPDF30NNLO_ggllvvZZ        = Sample( name = "Sherpa_222_NNPDF30NNLO_ggllvvZZ"       )
+Sherpa_222_NNPDF30NNLO_ggZllZqq        = Sample( name = "Sherpa_222_NNPDF30NNLO_ggZllZqq"       )
+Sherpa_222_NNPDF30NNLO_ggZvvZqq        = Sample( name = "Sherpa_222_NNPDF30NNLO_ggZvvZqq"       )
+Sherpa_222_NNPDF30NNLO_ggWmlvWpqq      = Sample( name = "Sherpa_222_NNPDF30NNLO_ggWmlvWpqq"     )
+Sherpa_222_NNPDF30NNLO_ggWplvWmqq      = Sample( name = "Sherpa_222_NNPDF30NNLO_ggWplvWmqq"     )
+  
 
 diboson = Sample( name =   'diboson',
                     tlatex = 'diboson',
-                    fill_color = ROOT.kOrange+4,
-                    line_color =  ROOT.kOrange+3,
-                    marker_color =  ROOT.kOrange+4,
+                    fill_color = ROOT.kGray+1,
+                    line_color =  ROOT.kGray+2,
+                    marker_color =  ROOT.kGray+1,
                     daughters = [
-                                  Sherpa_221_NNPDF30NNLO_ZqqZvv,
-                                  Sherpa_221_NNPDF30NNLO_ZqqZll,  
-                                  Sherpa_221_NNPDF30NNLO_WqqZvv,  
-                                  Sherpa_221_NNPDF30NNLO_WqqZll,  
-                                  Sherpa_221_NNPDF30NNLO_WpqqWmlv,
-                                  #Sherpa_221_NNPDF30NNLO_WplvWmqq,
-                                  Sherpa_221_NNPDF30NNLO_WlvZqq,  
-                                  #Sherpa_222_NNPDF30NNLO_lllljj_EW6,  
-                                  #Sherpa_222_NNPDF30NNLO_lllvjj_EW6,   
-                                  #Sherpa_222_NNPDF30NNLO_llvvjj_EW6,   
-                                  #Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW4,
-                                  #Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW6,
-                                  Sherpa_222_NNPDF30NNLO_llll,
-                                  Sherpa_222_NNPDF30NNLO_lllv,
-                                  Sherpa_222_NNPDF30NNLO_llvv,
-                                  Sherpa_222_NNPDF30NNLO_lvvv,
-                                  Sherpa_221_NNPDF30NNLO_vvvv,
+                                  Sherpa_222_NNPDF30NNLO_llll,          
+                                  Sherpa_222_NNPDF30NNLO_lllv,          
+                                  Sherpa_222_NNPDF30NNLO_llvv,          
+                                  Sherpa_222_NNPDF30NNLO_lvvv,          
+                                  Sherpa_221_NNPDF30NNLO_vvvv,          
+                                  Sherpa_221_NNPDF30NNLO_ZqqZvv,        
+                                  Sherpa_221_NNPDF30NNLO_ZqqZll,        
+                                  Sherpa_221_NNPDF30NNLO_WqqZvv,        
+                                  Sherpa_221_NNPDF30NNLO_WqqZll,        
+                                  Sherpa_221_NNPDF30NNLO_WpqqWmlv,      
+                                  Sherpa_221_NNPDF30NNLO_WplvWmqq,      
+                                  Sherpa_221_NNPDF30NNLO_WlvZqq,        
+                                  Sherpa_222_NNPDF30NNLO_WWW_3l3v_EW6,  
+                                  Sherpa_222_NNPDF30NNLO_WWZ_4l2v_EW6,  
+                                  Sherpa_222_NNPDF30NNLO_WWZ_2l4v_EW6,  
+                                  Sherpa_222_NNPDF30NNLO_WZZ_5l1v_EW6,  
+                                  Sherpa_222_NNPDF30NNLO_WZZ_3l3v_EW6,  
+                                  Sherpa_222_NNPDF30NNLO_ZZZ_6l0v_EW6,  
+                                  Sherpa_222_NNPDF30NNLO_ZZZ_4l2v_EW6,  
+                                  Sherpa_222_NNPDF30NNLO_ZZZ_2l4v_EW6,  
+                                  Sherpa_221_NNPDF30NNLO_6l0v_EW6,      
+                                  Sherpa_221_NNPDF30NNLO_5l1v_EW6,      
+                                  Sherpa_221_NNPDF30NNLO_4l2v_EW6,      
+                                  Sherpa_221_NNPDF30NNLO_3l3v_EW6,      
+                                  Sherpa_221_NNPDF30NNLO_2l4v_EW6,      
+                                  Sherpa_222_NNPDF30NNLO_ggllvvZZ,      
                                 ],
                 ) 
+
+# not available for SUSY3
+###Sherpa_222_NNPDF30NNLO_lllljj_EW6,    
+###Sherpa_222_NNPDF30NNLO_lllvjj_EW6,    
+###Sherpa_222_NNPDF30NNLO_llvvjj_EW6,    
+###Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW4, 
+###Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW6, 
+###Sherpa_222_NNPDF30NNLO_WWZ_3l1v2j_EW6,
+###Sherpa_222_NNPDF30NNLO_WZZ_4l2j_EW6,  
+###Sherpa_222_NNPDF30NNLO_WZZ_3l1v2j_EW6,
+##Sherpa_222_NNPDF30NNLO_ggllll_0M4l130,
+##Sherpa_222_NNPDF30NNLO_ggllll_130M4l, 
+##Sherpa_222_NNPDF30NNLO_ggllvvInt,     
+##Sherpa_222_NNPDF30NNLO_ggllvvWW,     
+##Sherpa_222_NNPDF30NNLO_ggZllZqq,      
+##Sherpa_222_NNPDF30NNLO_ggZvvZqq,      
+##Sherpa_222_NNPDF30NNLO_ggWmlvWpqq,    
+##Sherpa_222_NNPDF30NNLO_ggWplvWmqq,    
+
+
+Pythia8EvtGen_A14NNPDF23LO_DCH200  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH200"  )
+Pythia8EvtGen_A14NNPDF23LO_DCH250  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH250"  )  
+Pythia8EvtGen_A14NNPDF23LO_DCH300  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH300"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH350  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH350"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH400  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH400"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH450  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH450"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH500  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH500"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH550  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH550"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH600  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH600"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH650  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH650"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH700  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH700"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH750  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH750"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH800  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH800"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH850  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH850"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH900  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH900"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH950  = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH950"  ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH1000 = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH1000" ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH1050 = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH1050" ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH1100 = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH1100" ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH1150 = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH1150" ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH1200 = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH1200" ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH1250 = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH1250" ) 
+Pythia8EvtGen_A14NNPDF23LO_DCH1300 = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH1300" ) 
+
+
+
+
+#-------------------------------------------------------------------------------
+# Here we put filtered samples in the global dictionary filtered 
+#-------------------------------------------------------------------------------
+
+getFiltered(dijet, "qfakes")
+getFiltered(dijet, "gfakes")
+getFiltered(dijet, "ufakes")
+
 
 #-------------------------------------------------------------------------------
 # Collections 
 #-------------------------------------------------------------------------------
 
+#---------------------------------
 # Samples loaded for SubmitHist.py
 #---------------------------------
 
@@ -538,37 +704,105 @@ all_data = data.daughters
 
 all_mc = []
 
-all_mc += ttbar.daughters
-#all_mc += singletop.daughters
-
-#all_mc += Wenu.daughters
-#all_mc += Wmunu.daughters
-all_mc += Wtaunu.daughters
-
-#all_mc += Zee.daughters
-#all_mc += Zmumu.daughters
-#all_mc += Ztautau.daughters
-
-#all_mc += diboson.daughters
+#"""
 all_mc += dijet.daughters
 
+all_mc += Wenu.daughters
+all_mc += Wmunu.daughters
+all_mc += Wtaunu.daughters
 
+all_mc += Zee.daughters
+all_mc += Zmumu.daughters
+all_mc += Ztautau.daughters
+
+all_mc += diboson.daughters
+
+all_mc += ttbar.daughters
+all_mc += ttV.daughters
+all_mc += singletop.daughters
+
+#all_mc += samples_DCH.root_AtLeastOneTauFilter_DCH
+#"""
+
+"""
+all_mc += dijet.daughters
+all_mc += dijet_qfakes.daughters
+all_mc += dijet_gfakes.daughters
+all_mc += dijet_ufakes.daughters
+"""
+
+"""
+all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W]
+all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W]
+all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W]
+all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W]
+all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W]
+all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W]
+all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W]
+all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W]
+all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W]
+all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W]
+"""
+
+#---------------------------------
 # Samples loaded for SubmitPlot.py
 #---------------------------------
 
 mc_bkg = []
+#"""
+mc_bkg.append( singletop )
 
-#mc_bkg.append( Wenu )
-#mc_bkg.append( Wmunu )
+mc_bkg.append( Wenu )
+mc_bkg.append( Wmunu )
+
+mc_bkg.append( Zee ) 
+mc_bkg.append( Zmumu )
+mc_bkg.append( Ztautau )
+
+#"""
+mc_bkg.append( diboson )
 mc_bkg.append( Wtaunu )
-
-#mc_bkg.append( Zee ) 
-#mc_bkg.append( Zmumu )
-#mc_bkg.append( Ztautau )
-
-#mc_bkg.append( singletop )
 mc_bkg.append( ttbar )
+mc_bkg.append( ttV )
 
-#mc_bkg.append( diboson )
+
 mc_bkg.append( dijet )
+#mc_bkg.append( dijet_qfakes )
+#mc_bkg.append( dijet_gfakes )
+#mc_bkg.append( dijet_ufakes )
+
+"""
+#mc_bkg.append( Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W )
+mc_bkg.append( Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W )
+mc_bkg.append( Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W )
+mc_bkg.append( Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W )
+mc_bkg.append( Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W )
+mc_bkg.append( Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W )
+mc_bkg.append( Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W )
+mc_bkg.append( Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W )
+mc_bkg.append( Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W )
+mc_bkg.append( Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W )
+"""
+
+# filtered samples
+#---------------------------------
+mc_fakes_bkg = []
+"""
+mc_fakes_bkg.append( ttbar_fakes )
+
+mc_fakes_bkg.append( Wenu_fakes )
+mc_fakes_bkg.append( Wmunu_fakes )
+mc_fakes_bkg.append( Wtaunu_fakes )
+
+mc_fakes_bkg.append( Zee_fakes ) 
+mc_fakes_bkg.append( Zmumu_fakes )
+mc_fakes_bkg.append( Ztautau_fakes )
+
+#mc_fakes_bkg.append( Wtaunu_qfakes )
+#mc_fakes_bkg.append( Wtaunu_gfakes )
+#mc_fakes_bkg.append( dijet_qfakes )
+#mc_fakes_bkg.append( dijet_gfakes )
+"""
+
+
 ## EOF

@@ -10,13 +10,20 @@ ROOT.gStyle.SetOptStat(0000)
 # -------------------------------------------------------------------------------------
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesOneTau"
 
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau1PRevThr"
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/Fakes27Feb"
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWin"
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWinRed"
 
-tag     = "1prong"
+wp = "Medium"
+
+tauType = "3P%s"%wp
+
+tag     = "All"
 #tag     = "final"
 name    = "data"
+
+
+
 
 # pt
 #var     = "mulead_pt"
@@ -33,7 +40,8 @@ axislab = "p_{T}(#tau_{lead}) [GeV]"
 # tau fakes (one tau)
 
 
-new_bins = array('d', [0.,20.,30.,40.,60.,90.,150.,250.,400.,800.])
+#new_bins = array('d', [0.,20.,30.,40.,60.,90.,150.,250.,400.,800.])
+new_bins = array('d', [0.,20.,30.,40.,60.,90.,150.,800.])
 
 # tau fakes (two tau)
 #new_bins = array('d', [0.,50.,60.,70.,80.,120.,160.,260.,460.,700.])
@@ -47,19 +55,25 @@ new_bins = array('d', [-2.5, -2.0, -1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.
 '''
 
 
-infile  = "merged_ff_"+var+"_"+name+"_"+tag+".root"
-outfile = "sys_ff_"+var+"_"+name+"_"+tag+".root"
+infile = "merged_ff_"+var+"_"+name+"_"+tauType+"_"+tag+"_"+tauType+".root"
+outfile = "sys_ff_"+var+"_"+name+"_"+tauType+"_"+tag+"_"+tauType+".root"
 inf     = ROOT.TFile.Open(os.path.join(indir,infile),"READ")
 
+print infile
 
 # -------------------------------------------------------------------------------------
 
 hdict = {}
 
-hdict["NOM"] = inf.Get("h_ff_F1").Clone()
+print "h_ff_"+tauType+"_F1"
+
+
+
+hdict["NOM"] = inf.Get("h_ff_"+tauType+"_F1").Clone()
 n_bins = hdict["NOM"].GetNbinsX()
-for i in [2,3,4,5,6,7,8,9,]: 
-  hdict["SYS%s"%str(i)] = inf.Get("h_ff_F%s"%str(i)).Clone()
+#for i in [2,3,4,5,6,7,8,9,]: 
+for i in [2,10,11]: 
+  hdict["SYS%s"%str(i)] = inf.Get("h_ff_"+tauType+"_F%s"%str(i)).Clone()
 
 slabel = {}
 
@@ -87,7 +101,11 @@ slabel["SYS9"] = "One b-jet"
 # --------------
 #"""
 slabel["NOM"]  = "tau+jet"
+slabel["SYS2"] = "tau+high-pt jet"
+slabel["SYS10"] = "tau is 3rd jet"
+slabel["SYS11"] = "tau is 3rd jet+high-pt jet"
 
+"""
 slabel["SYS2"] = "p_{T}(jet) > 50 GeV"
 slabel["SYS3"] = "E^{miss}_{T} < 40 GeV"
 slabel["SYS4"] = "No #Delta#phi(#tau,jet) cut"
@@ -96,7 +114,7 @@ slabel["SYS6"] = "N_{jet}>1"
 slabel["SYS7"] = "N_{jet}>2"
 slabel["SYS8"] = "One b-jet"
 slabel["SYS9"] = "Veto b-jet"
-#"""
+"""
 
 # --------------
 # two tau FF labels
@@ -148,7 +166,7 @@ for sys,hist in hdict.iteritems():
     if nom_minus_sys<0. and abs(nom_minus_sys) > hdict[sys].GetBinErrorLow(ibin):
      g_sys_ff.SetPointEYhigh(ibin, max(g_sys_ff.GetErrorYhigh(ibin),abs(nom_minus_sys)))
     
-c = ROOT.TCanvas("c_ff","c_ff",650,600)
+c = ROOT.TCanvas("c_"+tauType+"_ff","c_"+tauType+"_ff",650,600)
 c.SetTopMargin(0.05)
 c.SetBottomMargin(0.13)
 c.SetLeftMargin(0.13)
@@ -176,7 +194,7 @@ g_sys_ff.SetMarkerColor(ROOT.kBlack)
 g_sys_ff.SetFillColor(ROOT.kYellow)
 g_sys_ff.SetMarkerSize(1.3)
 #g_sys_ff.SetMaximum(2.0) # for muons
-g_sys_ff.SetMaximum(1.0)  # for taus
+g_sys_ff.SetMaximum(0.4)  # for taus
 g_sys_ff.SetMinimum(0)
 
 g_nom_ff.GetYaxis().SetTitle("Fake-factor")
@@ -194,7 +212,7 @@ g_nom_ff.SetMarkerColor(ROOT.kBlack)
 g_nom_ff.SetMarkerStyle(20)
 g_nom_ff.SetMarkerSize(0.9)
 #g_nom_ff.SetMaximum(2.0)   # for muons
-g_nom_ff.SetMaximum(1.0)   # for taus
+g_nom_ff.SetMaximum(0.4)   # for taus
 g_nom_ff.SetMinimum(0)
 
 c.cd() 
@@ -207,7 +225,7 @@ l.AddEntry(g_nom_ff,"stat.","PL")
 l.Draw()
 c.RedrawAxis()
 
-c2 = ROOT.TCanvas("c_sys","c_sys",650,600)
+c2 = ROOT.TCanvas("c_"+tauType+"_sys","c_"+tauType+"_sys",650,600)
 c2.SetTopMargin(0.05)
 c2.SetBottomMargin(0.13)
 c2.SetLeftMargin(0.13)
@@ -226,8 +244,8 @@ hdict["NOM"].SetStats(0)
 hdict["NOM"].SetLineWidth(2)
 hdict["NOM"].Draw()
 #l2.SetHeader("Systematics")  # for muons
-l2.SetHeader("N_{tracks}=1")  # for one taus
-#l2.SetHeader("N_{tracks}=3")  # for one taus
+#l2.SetHeader("N_{tracks}=1")  # for one taus
+l2.SetHeader("N_{tracks}=3")  # for one taus
 #l2.SetHeader("N_{#tau}=2")  # for two taus
 
 #l2.AddEntry(hdict["NOM"],"nominal","PL")

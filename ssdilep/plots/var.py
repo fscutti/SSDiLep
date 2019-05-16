@@ -17,26 +17,30 @@ class Var(object):
     #________________________________________________________
     def __init__(self,
             name,
-            hname = None,
-            title = None,
-            path  = None,
-            rebin = None,
-            xmin  = None,
-            xmax  = None,
-            log   = None,
+            hname    = None,
+            title    = None,
+            path     = "",
+            rebin    = None,
+            anbins   = None,
+            xmin     = None,
+            xmax     = None,
+            invert_z = None,
+            log      = None,
             ):
         self.name = name
         if not title: title = name
         if not hname: 
           if "cutflow" in name: hname = name
           else: hname = 'h_'+name
-        self.hname = hname
-        self.title = title
-        self.path  = path
-        self.rebin = rebin
-        self.xmin  = xmin
-        self.xmax  = xmax
-        self.log   = log
+        self.hname    = hname
+        self.title    = title
+        self.path     = path
+        self.rebin    = rebin
+        self.anbins   = anbins
+        self.xmin     = xmin
+        self.xmax     = xmax
+        self.invert_z = invert_z
+        self.log      = log
 
 
 

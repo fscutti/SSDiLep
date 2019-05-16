@@ -5,6 +5,7 @@ SubmitHist.py
 
 ## modules
 import os
+import sys
 import re
 import subprocess
 import time
@@ -19,22 +20,39 @@ USER   = os.getenv('USER')
 
 ## global config
 # inputs
-NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY11Data.v1/merged'
-NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY11MC.v1/merged'
-
-#NTUPDATA='/coepp/cephfs/share/atlas/MLA/EXOT22Data.v1/merged'
-#NTUPMC='/coepp/cephfs/share/atlas/MLA/EXOT22MC.v1/merged'
+NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY3Data.v3/merged'
+NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY3MC.v3/merged'
 
 #NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY3Data.v1/merged'
 #NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY3MC.v1/merged'
+#NTUPSIG='/coepp/cephfs/share/atlas/MLA/SUSY3DCH.v1/merged'
 
 JOBDIR = "/coepp/cephfs/mel/%s/jobdir" % USER # Alright this is twisted...
 INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%m_y%Y_H%H_M%M_S%S")) )
 
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
+RESUBMIT  = False
 
 # outputs
-RUN = "HistQGTauTracksIsClCharged"
+#RUN = "HistFFComposition"
+#RUN = "HistFFTracks"
+
+#RUN = "HistEBDTOnePair"
+#RUN = "HistEBDTTwoPairs"
+
+#RUN = "HistCFStudy"
+#RUN = "HistCFFilStudy"
+#RUN = "HistCFFilDebStudy"
+RUN = "HistCF3May"
+
+#RUN = "HistSROnePair"
+#RUN = "HistSRTwoPairs"
+
+#RUN = "HistFF28Feb"
+#RUN = "HistTESTSAMPLES"
+
+#RUN = "HistSROnePairFullc"
+#RUN = "HistSRTwoPairsFullc"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 
@@ -42,17 +60,25 @@ OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) #
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
 
 # pick your script!!!
-SCRIPT="./ssdilep/run/j.plotter_QG_OneTau.py"  
+SCRIPT="./ssdilep/run/j.plotter_CF_MuTau.py"  
+#SCRIPT="./ssdilep/run/j.plotter_QG_OneTau.py"  
 #SCRIPT="./ssdilep/run/j.plotter_VR_MuTau.py"  
 #SCRIPT="./ssdilep/run/j.plotter_FF_OneTau.py"  
 #SCRIPT="./ssdilep/run/j.plotter_VR_OneTauPair.py"  
+
+#SCRIPT="./ssdilep/run/j.plotter_SIG_OnePair.py"  
+#SCRIPT="./ssdilep/run/j.plotter_SIG_TwoPairs.py"  
+
+#SCRIPT="./ssdilep/run/j.plotter_SR_OnePair.py"  
+#SCRIPT="./ssdilep/run/j.plotter_SR_TwoPairs.py"  
 
 #SCRIPT="./ssdilep/run/j.plotter_FF_TwoTau.py"  
 
 
 BEXEC="Hist.sh"                      # exec script (probably dont change) 
 
-EVENT_BLOCK = 200000                  # number of events considered for each individual job
+#EVENT_BLOCK = 100000                  # number of events considered for each individual job
+EVENT_BLOCK = 2000000                  # number of events considered for each individual job
 NJMAX       = 500                    # maximum number of jobs per train: should not exceed 600!!!
 
 DO_NOM = True                        # submit the nominal job
@@ -90,6 +116,7 @@ def main():
     all_mc   = samples.all_mc
 
     nominal = all_data + all_mc 
+    #nominal = all_mc 
 
     
     ntup_sys = [
@@ -195,17 +222,24 @@ def submit(tag,job_sys,samps,config={}):
           
           cfg_name = cfg+".%s.%s"%(RUN,int(nsubjobs/NJMAX))
 
+          if not file_exists(absoutpath,soutput_sliced+".root") and RESUBMIT: 
+            cfg_name = cfg_name.replace("Config","Resubmit")
+
+          if RESUBMIT and "Config" in cfg_name: continue
+          
           if not cfg_name in cfg_dict.keys(): 
             cfg_dict[cfg_name] = {"nsubjobs":1,"sliced_sample":[soutput_sliced]}
           else: 
             cfg_dict[cfg_name]["nsubjobs"] += 1
             cfg_dict[cfg_name]["sliced_sample"] += [soutput_sliced]
-          
+         
           with open(os.path.join(JOBDIR,cfg_name),'a') as f:
             f.write('%s\n'%line)
             f.close()
-          #if not file_exists(absoutpath,s.name+".root"): f.write('%s\n'%line) 
    
+    if not cfg_dict:
+      print "EXIT: configuration dictionary is empy!"
+      sys.exit(1)
 
     # configure input path 
     # --------------------
@@ -214,31 +248,31 @@ def submit(tag,job_sys,samps,config={}):
     prepare_path(abslogpath)
 
     for cfg_file,cfg_listing in cfg_dict.iteritems():
-
-       abscfg     = os.path.abspath(os.path.join(JOBDIR,cfg_file))
-       nsubjobs   = cfg_listing["nsubjobs"]
-       if TESTMODE: nsubjobs = 1
-       
-       vars=[]
-       vars+=["CONFIG=%s"    % abscfg     ]
-       vars+=["INTARBALL=%s" % absintar   ]
-       vars+=["OUTPATH=%s"   % absoutpath ]
-       vars+=["SCRIPT=%s"    % SCRIPT     ]
-       vars+=["NCORES=%d"    % NCORES     ]
-       
-       VARS = ','.join(vars)
-       
-       cmd = 'qsub'
-       cmd += ' -l nodes=1:ppn=%d'  % NCORES
-       cmd += ' -q %s'              % QUEUE
-       cmd += ' -v "%s"'            % VARS
-       cmd += ' -N j.hist.%s.%s'    % (tag,cfg_file)
-       cmd += ' -j oe -o %s/log_%s' % (abslogpath, cfg_file)
-       cmd += ' -t1-%d'             % nsubjobs
-       cmd += ' %s'                 % BEXEC
-       print cmd
-       m = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-       print m.communicate()[0]
+      
+      abscfg     = os.path.abspath(os.path.join(JOBDIR,cfg_file))
+      nsubjobs   = cfg_listing["nsubjobs"]
+      if TESTMODE: nsubjobs = 1
+      
+      vars=[]
+      vars+=["CONFIG=%s"    % abscfg     ]
+      vars+=["INTARBALL=%s" % absintar   ]
+      vars+=["OUTPATH=%s"   % absoutpath ]
+      vars+=["SCRIPT=%s"    % SCRIPT     ]
+      vars+=["NCORES=%d"    % NCORES     ]
+      
+      VARS = ','.join(vars)
+      
+      cmd = 'qsub'
+      cmd += ' -l nodes=1:ppn=%d'  % NCORES
+      cmd += ' -q %s'              % QUEUE
+      cmd += ' -v "%s"'            % VARS
+      cmd += ' -N j.hist.%s.%s'    % (tag,cfg_file)
+      cmd += ' -j oe -o %s/log_%s' % (abslogpath, cfg_file)
+      cmd += ' -t1-%d'             % nsubjobs
+      cmd += ' %s'                 % BEXEC
+      print cmd
+      m = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+      print m.communicate()[0]
 
 def prepare_path(path):
     if not os.path.exists(path):

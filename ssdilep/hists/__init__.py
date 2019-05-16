@@ -1,5 +1,13 @@
 import hists
 import histconfig
+import EVENT_hists
+import TAUS_hists
+import TRUTH_TAUS_hists
+import MUONS_hists
+import MET_hists
+import ONEPAIR_hists
+import MULTIPAIRS_hists
+
 import Main_hists
 import FF_hists
 import TauFF_hists

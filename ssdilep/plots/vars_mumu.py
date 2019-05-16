@@ -479,7 +479,9 @@ vars_list.append(nmuons)
 #vars_list.append(nelectrons)
 vars_list.append(njets)
 #vars_list.append(nmuonpairs)
+"""
 
+vars_list.append(mulead_pt)
 vars_list.append(mulead_eta)
 vars_list.append(mulead_phi)
 vars_list.append(mulead_trkd0)
@@ -495,7 +497,6 @@ vars_list.append(mulead_trkz0sintheta)
 vars_list.append(met_trk_et)
 ##vars_list.append(met_trk_sig)
 #"""
-#vars_list.append(mulead_pt)
 
 # -------------
 # tag-and-probe
@@ -516,13 +517,13 @@ vars_list.append(probe_ptvarcone30)
 #"""
 #vars_list.append(mujet_dphi)
 ##vars_list.append(scdphi)
-vars_list.append(jetlead_pt)
+#vars_list.append(jetlead_pt)
 #"""
 
-vars_list.append(jetlead_pt)
-vars_list.append(jetlead_eta)
-vars_list.append(jetlead_phi)
-vars_list.append(mujet_dphi)
+#vars_list.append(jetlead_pt)
+#vars_list.append(jetlead_eta)
+#vars_list.append(jetlead_phi)
+#vars_list.append(mujet_dphi)
 
 # ---------------------
 # for validation
@@ -550,9 +551,9 @@ vars_list.append(muons_mVis)
 # ---------------------
 # cutflows
 # ---------------------
-"""
 vars_list.append(cutflow_presel)
 vars_list.append(cutflow_weighted_presel)
+"""
 vars_list.append(cutflow_ZCR)
 vars_list.append(cutflow_weighted_ZCR)
 """

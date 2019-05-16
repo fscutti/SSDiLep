@@ -6,7 +6,7 @@
 #PBS -l nodes=1:ppn=1
 
 
-#PBS -l walltime=6:00:00
+#PBS -l walltime=1:00:00
 #PBS -m n
 #
 #   Request 4 gigabyte of memory per process
@@ -32,18 +32,20 @@ echo " Temp dir:    $TMPDIR"
 echo " parameters passed: $*"
 echo 
 
-echo " VAR:       $VAR"
-echo " REG:       $REG"
-echo " LAB:       $LAB"
-echo " TAG:       $TAG"
-echo " ICUT:      $ICUT"
-echo " MAKEPLOT:  $MAKEPLOT"
-echo " RENORM:    $RENORM"
-echo " FAKEST:    $FAKEST"
-echo " INDIR:     $INDIR"
-echo " OUTDIR:    $OUTDIR"
-echo " SCRIPT:    $SCRIPT"
-echo " INTARBALL: $INTARBALL"
+echo " VAR:         $VAR"
+echo " REG:         $REG"
+echo " OVREG:       $OVREG"
+echo " LAB:         $LAB"
+echo " TAG:         $TAG"
+echo " ICUT:        $ICUT"
+echo " MAKEPLOT:    $MAKEPLOT"
+echo " MAKEOVERLAY: $MAKEOVERLAY"
+echo " RENORM:      $RENORM"
+echo " FAKEST:      $FAKEST"
+echo " INDIR:       $INDIR"
+echo " OUTDIR:      $OUTDIR"
+echo " SCRIPT:      $SCRIPT"
+echo " INTARBALL:   $INTARBALL"
 
 echo 
 export 
@@ -68,7 +70,8 @@ echo "cd ${MYDIR}"
 cd ${MYDIR}
 
 setupATLAS
-lsetup root
+lsetup "root 6.14.04-x86_64-slc6-gcc62-opt"
+#lsetup root
 
 ## copy over working area
 echo "copying input tarball ${INTARBALL}..."
@@ -96,8 +99,8 @@ source setup.sh
 
 echo ""
 echo "executing job..."
-echo "python ${SCRIPT} --var=${VAR} --reg=${REG} --lab=${LAB} --tag=${TAG} --icut=${ICUT} --makeplot=${MAKEPLOT} --renorm=${RENORM} --fakest=${FAKEST} --input=${INDIR} --output=${OUTDIR}"
-python ${SCRIPT} --var=${VAR} --reg=${REG} --lab=${LAB} --tag=${TAG} --icut=${ICUT}  --makeplot=${MAKEPLOT} --renorm=${RENORM} --fakest=${FAKEST} --input=${INDIR} --output=${OUTDIR}
+echo "python ${SCRIPT} --var=${VAR} --reg=${REG} --ovreg=${OVREG} --lab=${LAB} --tag=${TAG} --icut=${ICUT} --makeplot=${MAKEPLOT} --makeoverlay=${MAKEOVERLAY} --renorm=${RENORM} --fakest=${FAKEST} --input=${INDIR} --output=${OUTDIR}"
+python ${SCRIPT} --var=${VAR} --reg=${REG} --ovreg=${OVREG} --lab=${LAB} --tag=${TAG} --icut=${ICUT}  --makeplot=${MAKEPLOT} --makeoverlay=${MAKEOVERLAY} --renorm=${RENORM} --fakest=${FAKEST} --input=${INDIR} --output=${OUTDIR}
 echo "finished execution"
 
 echo "copying output"

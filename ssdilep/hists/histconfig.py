@@ -1,5 +1,5 @@
 from hists import *
-
+from itertools import combinations_with_replacement
 
 """
 This contains the histogram
@@ -58,7 +58,7 @@ h_nmuons = Hist1D( hname  = "h_nmuons",
                               xmin   = 0,
                               xmax   = 8,
                               dir    = "event",
-                              vexpr  = "self.chain.muon_pt.size()",
+                              vexpr  = "self.chain.nmuon",
                             )
 
 h_ntaus = Hist1D( hname  = "h_ntaus",
@@ -88,7 +88,7 @@ h_njets = Hist1D( hname  = "h_njets",
                               xmin   = 0,
                               xmax   = 8,
                               dir    = "event",
-                              vexpr  = "self.chain.jet_pt.size()",
+                              vexpr  = "self.chain.njet",
                             )
 
 h_muons_chargeprod  = Hist1D( hname  = "h_muons_chargeprod",
@@ -130,26 +130,6 @@ h_muons_mVis  = Hist1D( hname  = "h_muons_mVis",
                               dir    = "event",
                               vexpr  = "self.store['mVisMM']/GeV",
                             )
-
-h_muons_pTH  = Hist1D( hname  = "h_muons_pTH",
-                              xtitle = "p_T(SS_{lead}) [GeV]",
-                              ytitle = "Events / (1 GeV)", 
-                              nbins  = 2000,
-                              xmin   = 0.0,
-                              xmax   = 2000.,
-                              dir    = "event",
-                              vexpr  = "self.store['muons_pTH']/GeV",
-                              )
-
-h_muons_dR  = Hist1D( hname  = "h_muons_dR",
-                              xtitle = "#DeltaR(SS_{lead})",
-                              ytitle = "Events", 
-                              nbins  = 60,
-                              xmin   = 0.,
-                              xmax   = 6.,
-                              dir    = "event",
-                              vexpr  = "self.store['muons_dR']",
-                              )
 
 h_muons_mTtot  = Hist1D( hname  = "h_muons_mTtot",
                               xtitle = "m^{tot}_{T}(#mu_{lead},#mu_{sublead}) [GeV]",
@@ -209,6 +189,16 @@ h_mutau_mTtot  = Hist1D( hname  = "h_mutau_mTtot",
                               xmax   = 2000.,
                               dir    = "event",
                               vexpr  = "self.store['mTtotMT']/GeV",
+                            )
+
+h_mutau_mTMu  = Hist1D( hname  = "h_mutau_mTMu",
+                              xtitle = "m_{T}(#mu_{lead},E^{miss}_{T}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "event",
+                              vexpr  = "self.store['mTMu']/GeV",
                             )
 
 h_taujet_dphi  = Hist1D( hname  = "h_taujet_dphi",
@@ -366,7 +356,7 @@ h_jets_mVis  = Hist1D( hname  = "h_jets_mVis",
 # -------
 
 # taulead
-# ------
+# -------
 h_taulead_pt = Hist1D( hname  = "h_taulead_pt",
                               xtitle = "p_{T}(#tau_{lead}) [GeV]",
                               ytitle = "Events / (1 GeV)", 
@@ -417,7 +407,58 @@ h_taulead_JetBDTScoreSigTrans = Hist1D( hname  = "h_taulead_JetBDTScoreSigTrans"
                               vexpr  = "self.store['taus'][0].JetBDTScoreSigTrans",
                             )
 
+h_taulead_isTrueHadronicTau = Hist1D( hname  = "h_taulead_isTrueHadronicTau",
+                              xtitle = "isHadTau",
+                              ytitle = "Events", 
+                              nbins  = 4,
+                              xmin   = -2.,
+                              xmax   = 2.,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].isTrueHadronicTau",
+                            )
 
+
+
+
+h_taulead_truthPdgId = Hist1D( hname  = "h_taulead_truthPdgId",
+                              xtitle = "pdg ID (#tau_{lead})",
+                              ytitle = "Events", 
+                              nbins  = 40,
+                              xmin   = -20.,
+                              xmax   = 20.,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].truthPdgId",
+                            )
+
+h_taulead_truthOrigin = Hist1D( hname  = "h_taulead_truthOrigin",
+                              xtitle = "truth origin (#tau_{lead})",
+                              ytitle = "Events", 
+                              nbins  = 41,
+                              xmin   = -1.,
+                              xmax   = 40.,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].truthOrigin",
+                            )
+
+h_taulead_truthType = Hist1D( hname  = "h_taulead_truthType",
+                              xtitle = "truth type (#tau_{lead})",
+                              ytitle = "Events", 
+                              nbins  = 22,
+                              xmin   = -2.,
+                              xmax   = 20.,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].truthType",
+                            )
+
+h_taulead_PartonTruthLabelID = Hist1D( hname  = "h_taulead_PartonTruthLabelID",
+                              xtitle = "parton truth label ID (#tau_{lead})",
+                              ytitle = "Events", 
+                              nbins  = 1060,
+                              xmin   = -1030,
+                              xmax   = 30,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].PartonTruthLabelID",
+                            )
 
 
 
@@ -475,8 +516,11 @@ h_taulead_angeec1 = Hist1D( hname  = "h_taulead_angeec1",
                               dir    = "taus",
                               vexpr  = "self.store['taus'][0].AngEEC(['isClCharged'],1.0)",
                             )
-h_taulead_jetwidth = Hist1D( hname  = "h_taulead_jetwidth",
-                              xtitle = "JetWidth(#tau_{lead})",
+
+
+
+h_taulead_matchjetwidth = Hist1D( hname  = "h_taulead_matchjetwidth",
+                              xtitle = "Matched Jet Width(#tau_{lead})",
                               ytitle = "Events / (0.01)", 
                               nbins  = 100,
                               xmin   = 0.0,
@@ -484,6 +528,36 @@ h_taulead_jetwidth = Hist1D( hname  = "h_taulead_jetwidth",
                               dir    = "taus",
                               vexpr  = "self.store['taus'][0].matchedJetWidth",
                             )
+h_taulead_seedjetwidth = Hist1D( hname  = "h_taulead_seedjetwidth",
+                              xtitle = "Seed Jet Width(#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 100,
+                              xmin   = 0.0,
+                              xmax   = 1.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].seedJetWidth",
+                            )
+
+h_taulead_matchjetjvt = Hist1D( hname  = "h_taulead_matchjetjvt",
+                              xtitle = "Matched Jet JVT(#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 200,
+                              xmin   = -1.0,
+                              xmax   = 1.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].matchedJetJvt",
+                            )
+h_taulead_seedjetjvt = Hist1D( hname  = "h_taulead_seedjetjvt",
+                              xtitle = "Seed Jet JVT(#tau_{lead})",
+                              ytitle = "Events / (0.01)", 
+                              nbins  = 200,
+                              xmin   = -1.0,
+                              xmax   = 1.0,
+                              dir    = "taus",
+                              vexpr  = "self.store['taus'][0].seedJetJvt",
+                            )
+
+
 h_taulead_tracksum = Hist1D( hname  = "h_taulead_tracksum",
                               xtitle = "TrackSum(#tau_{lead})",
                               ytitle = "Events / (1)", 
@@ -755,92 +829,11 @@ h_musublead_ptvarcone30  = Hist1D( hname  = "h_musublead_ptvarcone30",
                               vexpr  = "self.store['muons'][1].ptvarcone30 / self.store['muons'][1].tlv.Pt()",
                             )
 
-# -------------
-# tag and probe
-# -------------
-h_tag_pt = Hist1D( hname  = "h_tag_pt",
-                              xtitle = "p_{T}(#mu_{tag}) [GeV]",
-                              ytitle = "Events / (1 GeV)", 
-                              nbins  = 2000,
-                              xmin   = 0.0,
-                              xmax   = 2000.0,
-                              dir    = "muons",
-                              vexpr  = "self.store['tag'].tlv.Pt() / GeV",
-                            )
 
-h_probe_pt = Hist1D( hname  = "h_probe_pt",
-                              xtitle = "p_{T}(#mu_{probe}) [GeV]",
-                              ytitle = "Events / (1 GeV)", 
-                              nbins  = 2000,
-                              xmin   = 0.0,
-                              xmax   = 2000.0,
-                              dir    = "muons",
-                              vexpr  = "self.store['probe'].tlv.Pt() / GeV",
-                            )
-
-h_probe_ptiso = Hist1D( hname  = "h_probe_ptiso",
-                              xtitle = "p_{T}(#mu_{probe}) + ptvarcone30 [GeV]",
-                              ytitle = "Events / (1 GeV)", 
-                              nbins  = 1000,
-                              xmin   = 0.0,
-                              xmax   = 1000.0,
-                              dir    = "muons",
-                              vexpr  = "( self.store['probe'].tlv.Pt() + self.store['probe'].ptvarcone30 ) / GeV",
-                            )
-
-h_probe_ujet_pt = Hist1D( hname  = "h_probe_ujet_pt",
-                              xtitle = "p_{T}(#mu_{probe} underlying jet) [GeV]",
-                              ytitle = "Events / (1 GeV)", 
-                              nbins  = 2100,
-                              xmin   = -100.0,
-                              xmax   = 2000.0,
-                              dir    = "muons",
-                              vexpr  = "self.store['probe_ujet_pt']",
-                            )
-
-h_tag_ptvarcone30  = Hist1D( hname  = "h_tag_ptvarcone30",
-                              xtitle = "ptvarcone30/p_{T}(#mu_{tag})",
-                              ytitle = "Events / (0.001)", 
-                              nbins  = 10000,
-                              xmin   = 0.,
-                              xmax   = 10.,
-                              dir    = "muons",
-                              vexpr  = "self.store['tag'].ptvarcone30 / self.store['tag'].tlv.Pt()",
-                            )
-h_probe_ptvarcone30  = Hist1D( hname  = "h_probe_ptvarcone30",
-                              xtitle = "ptvarcone30/p_{T}(#mu_{probe})",
-                              ytitle = "Events / (0.001)", 
-                              nbins  = 10000,
-                              xmin   = 0.,
-                              xmax   = 10.,
-                              dir    = "muons",
-                              vexpr  = "self.store['probe'].ptvarcone30 / self.store['probe'].tlv.Pt()",
-                            )
 
 # -------
 # MET
 # -------
-"""
-h_met_clus_et  = Hist1D( hname  = "h_met_clus_et",
-                              xtitle = "E^{miss}_{T}(clus) [GeV]",
-                              ytitle = "Events / (1 GeV)", 
-                              nbins  = 2000,
-                              xmin   = 0.,
-                              xmax   = 2000.,
-                              dir    = "met",
-                              vexpr  = "self.store['met_clus'].tlv.Pt()/GeV",
-                            )
-
-h_met_clus_phi  = Hist1D( hname  = "h_met_clus_phi",
-                              xtitle = "#phi(E^{miss}_{T}(clus))",
-                              ytitle = "Events / (0.1)", 
-                              nbins  = 64,
-                              xmin   = -3.2,
-                              xmax   = 3.2,
-                              dir    = "met",
-                              vexpr  = "self.store['met_clus'].tlv.Phi()",
-                            )
-"""
 h_met_trk_et  = Hist1D( hname  = "h_met_trk_et",
                               xtitle = "E^{miss}_{T}(trk) [GeV]",
                               ytitle = "Events / (1 GeV)", 
@@ -860,17 +853,6 @@ h_met_trk_phi  = Hist1D( hname  = "h_met_trk_phi",
                               dir    = "met",
                               vexpr  = "self.store['met_trk'].tlv.Phi()",
                             )
-"""
-h_met_clus_sumet  = Hist1D( hname  = "h_met_clus_sumet",
-                              xtitle = "#Sigma E_{T}(clus) [GeV]",
-                              ytitle = "Events / (1 GeV)", 
-                              nbins  = 2000,
-                              xmin   = 0.,
-                              xmax   = 2000.,
-                              dir    = "met",
-                              vexpr  = "self.store['met_clus'].sumet/GeV",
-                          )
-"""
 h_met_trk_sumet  = Hist1D( hname  = "h_met_trk_sumet",
                               xtitle = "#Sigma E_{T}(trk) [GeV]",
                               ytitle = "Events / (1 GeV)", 
@@ -889,6 +871,194 @@ h_met_trk_sig  = Hist1D( hname  = "h_met_trk_sig",
                               xmax   = 100.,
                               dir    = "met",
                               vexpr  = "self.store['met_trk'].sig",
+                          )
+
+
+# --------
+# pairs
+# --------
+
+# leadsspair: to be used if there is only one ss pair in the event
+# ----------------------------------------------------------------
+
+h_leadsspair_pt  = Hist1D( hname  = "h_leadsspair_pt",
+                              xtitle = "p_{T}(SS Pairs) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "pairs",
+                              vexpr  = "self.store['leadsspair_pt']/GeV",
+                            )
+
+h_leadsspair_phi  = Hist1D( hname  = "h_leadsspair_phi",
+                              xtitle = "#phi(SS Pairs)",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 64,
+                              xmin   = -3.2,
+                              xmax   = 3.2,
+                              dir    = "pairs",
+                              vexpr  = "self.store['leadsspair_phi']",
+                            )
+
+h_leadsspair_eta  = Hist1D( hname  = "h_leadsspair_eta",
+                              xtitle = "#eta(SS Pairs)",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 50,
+                              xmin   = -2.5,
+                              xmax   = 2.5,
+                              dir    = "pairs",
+                              vexpr  = "self.store['leadsspair_eta']",
+                            )
+
+h_leadsspair_DR  = Hist1D( hname  = "h_leadsspair_DR",
+                              xtitle = "#DeltaR(SS Pairs)",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 60,
+                              xmin   = 0.,
+                              xmax   = 6.,
+                              dir    = "pairs",
+                              vexpr  = "self.store['leadsspair_DR']",
+                            )
+
+h_leadsspair_charge  = Hist1D( hname  = "h_leadsspair_charge",
+                              xtitle = "q(SS Pairs)",
+                              ytitle = "Events", 
+                              nbins  = 7,
+                              xmin   = -3,
+                              xmax   = 4,
+                              dir    = "pairs",
+                              vexpr  = "self.store['leadsspair_charge']",
+                            )
+
+h_leadsspair_mTtot  = Hist1D( hname  = "h_leadsspair_mTtot",
+                              xtitle = "m^{tot}_{T}(SS Pairs) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "pairs",
+                              vexpr  = "self.store['leadsspair_mTtot']/GeV",
+                            )
+
+h_leadsspair_mVis  = Hist1D( hname  = "h_leadsspair_mVis",
+                              xtitle = "m_{vis}(SS Pairs) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "pairs",
+                              vexpr  = "self.store['leadsspair_mVis']/GeV",
+                            )
+
+h_leadsspair_ID  = Hist1D( hname  = "h_leadsspair_ID",
+                              xtitle  = "SS Pair",
+                              ytitle  = "Events", 
+                              anbins  = [ lep[0]+lep[1] for lep in combinations_with_replacement(['El','Mu','Tau'],2)],
+                              dir     = "pairs",
+                              vexpr   = "self.store['leadsspair_ID']",
+                          )
+
+
+# sspairs: to be used if there are two ss pairs in the event
+# ----------------------------------------------------------
+
+h_sspairs_pt  = Hist1D( hname  = "h_sspairs_pt",
+                              xtitle = "p_{T}(SS Pairs) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "pairs",
+                              vexpr  = "self.store['sspairs_pt']/GeV",
+                            )
+
+h_sspairs_phi  = Hist1D( hname  = "h_sspairs_phi",
+                              xtitle = "#phi(SS Pairs)",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 64,
+                              xmin   = -3.2,
+                              xmax   = 3.2,
+                              dir    = "pairs",
+                              vexpr  = "self.store['sspairs_phi']",
+                            )
+
+h_sspairs_eta  = Hist1D( hname  = "h_sspairs_eta",
+                              xtitle = "#eta(SS Pairs)",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 50,
+                              xmin   = -2.5,
+                              xmax   = 2.5,
+                              dir    = "pairs",
+                              vexpr  = "self.store['sspairs_eta']",
+                            )
+
+h_sspairs_DR  = Hist1D( hname  = "h_sspairs_DR",
+                              xtitle = "#DeltaR(SS Pairs)",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 60,
+                              xmin   = 0.,
+                              xmax   = 6.,
+                              dir    = "pairs",
+                              vexpr  = "self.store['sspairs_DR']",
+                            )
+
+h_sspairs_charge  = Hist1D( hname  = "h_sspairs_charge",
+                              xtitle = "q(SS Pairs)",
+                              ytitle = "Events", 
+                              nbins  = 7,
+                              xmin   = -3,
+                              xmax   = 4,
+                              dir    = "pairs",
+                              vexpr  = "self.store['sspairs_charge']",
+                            )
+
+h_sspairs_mTtot  = Hist1D( hname  = "h_sspairs_mTtot",
+                              xtitle = "m^{tot}_{T}(SS Pairs) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "pairs",
+                              vexpr  = "self.store['sspairs_mTtot']/GeV",
+                            )
+
+h_sspairs_mVis  = Hist1D( hname  = "h_sspairs_mVis",
+                              xtitle = "m_{vis}(SS Pairs) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "pairs",
+                              vexpr  = "self.store['sspairs_mVis']/GeV",
+                            )
+
+h_sspairs_avgM  = Hist1D( hname  = "h_sspairs_avgM",
+                              xtitle = "<m_{vis}>(SS Pairs) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.,
+                              dir    = "pairs",
+                              vexpr  = "self.store['sspairs_avgM']/GeV",
+                            )
+
+h_sspairs_DM  = Hist1D( hname  = "h_sspairs_DM",
+                              xtitle = "#Delta m_{vis} / <m_{vis}>(SS Pairs)",
+                              ytitle = "Events / (0.1)", 
+                              nbins  = 60,
+                              xmin   = -3,
+                              xmax   = 3.,
+                              dir    = "pairs",
+                              vexpr  = "self.store['sspairs_DM']",
+                            )
+
+h_sspairs_ID  = Hist1D( hname  = "h_sspairs_ID",
+                              xtitle  = "SS Pairs",
+                              ytitle  = "Events", 
+                              anbins  = [ pair[0]+pair[1] for pair in combinations_with_replacement([ lep[0]+lep[1] for lep in combinations_with_replacement(['El','Mu','Tau'],2)],2)],
+                              dir     = "pairs",
+                              vexpr   = "self.store['sspairs_ID']",
                           )
 
 

@@ -20,7 +20,7 @@ import logging
 log = logging.getLogger(__name__)
 
 ## python
-from itertools import combinations
+from itertools import combinations, product
 import collections
 from copy import copy
 import sys
@@ -57,18 +57,65 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def apply_cut(self,cutname):
         if self.store.has_key(cutname): return self.store[cutname]
-        cut_function = 'cut_%s'%cutname
-        assert hasattr(self,cut_function),"cut %s doesnt exist!'"%(cutname)
-        self.store[cutname] = result = getattr(self,cut_function)()
+
+        cut_list = cutname.split("-OR-")
+        
+        result = False
+
+        for cut in cut_list:
+          cut_function = 'cut_%s'%cut
+          assert hasattr(self,cut_function),"cut %s doesnt exist!'"%(cut)
+          result = result or getattr(self,cut_function)()
+        self.store[cutname] = result
         return result
-    
+
     #__________________________________________________________________________
-    """
-    def cut_CutTest(self):
-      print self.chain.trigMatchMap.
-      #print self.chain.passedTriggers.__dict__
+    def cut_OneOSPair(self):
+      n_os_pairs = 0 
+      for c in self.store['pairs']:
+        if c.isOS(): n_os_pairs+=1
+      return n_os_pairs == 1
+    #__________________________________________________________________________
+    def cut_OneSSPair(self):
+      n_ss_pairs = 0 
+      for c in self.store['pairs']:
+        if c.isSS(): n_ss_pairs+=1
+      return n_ss_pairs == 1
+    #__________________________________________________________________________
+    def cut_TwoSSPairs(self):
+      n_ss_pairs = 0 
+      for c in self.store['pairs']:
+        if c.isSS(): n_ss_pairs+=1
+      return n_ss_pairs == 2
+
+    #__________________________________________________________________________
+    def cut_AtLeastOneSSPairIsSF(self):
+      for c in self.store['pairs']:
+        if c.isSF() and c.isSS(): return True
+      return False
+    #__________________________________________________________________________
+    def cut_AtLeastOneSSPairIsDF(self):
+      for c in self.store['pairs']:
+        if c.isDF() and c.isSS(): return True
+      return False
+    #__________________________________________________________________________
+    def cut_AllSSPairsAreSF(self):
+      for c in self.store['pairs']:
+        if c.isSS() and not c.isSF(): return False
       return True
-    """ 
+
+
+    #__________________________________________________________________________
+    def cut_TwoLeptons(self):
+      return self.chain.nmuon + self.chain.nel + self.chain.ntau == 2
+    #__________________________________________________________________________
+    def cut_ThreeLeptons(self):
+      return self.chain.nmuon + self.chain.nel + self.chain.ntau == 3
+    #__________________________________________________________________________
+    def cut_FourLeptons(self):
+      return self.chain.nmuon + self.chain.nel + self.chain.ntau == 4
+
+
     #__________________________________________________________________________
     def cut_AtLeastTwoMuons(self):
       return self.chain.nmuon > 1
@@ -120,6 +167,18 @@ class CutAlg(pyframe.core.Algorithm):
     
     
     #__________________________________________________________________________
+    def cut_AtLeastOneTau(self):
+        return self.chain.ntau >= 1
+    #__________________________________________________________________________
+    def cut_AtLeastTwoTaus(self):
+        return self.chain.ntau >= 2
+    #__________________________________________________________________________
+    def cut_AtLeastThreeTaus(self):
+        return self.chain.ntau >= 3
+    #__________________________________________________________________________
+    def cut_AtLeastFourTaus(self):
+        return self.chain.ntau >= 4
+    #__________________________________________________________________________
     def cut_One1PTau(self):
         return self.chain.ntau == 1 and self.store["taus"][0].ntrk == 1
     #__________________________________________________________________________
@@ -130,9 +189,15 @@ class CutAlg(pyframe.core.Algorithm):
         return self.chain.ntau == 1
     #__________________________________________________________________________
     def cut_TwoTaus(self):
-        if self.chain.ntau == 2:
-          return self.store["taus"][0].ntrk in [1, 3] and self.store["taus"][1].ntrk in [1, 3]
-        return False
+        return self.chain.ntau == 2
+    
+    #__________________________________________________________________________
+    def cut_AllTaus1OR3Prong(self):
+        if self.chain.ntau >= 1:
+          for tau in self.store["taus"]:
+            if not tau.ntrk in [1, 3]: return False
+        return True
+    
     #__________________________________________________________________________
     def cut_AllTausEleBDTMedium(self):
         for tau in self.store['taus']:
@@ -141,8 +206,14 @@ class CutAlg(pyframe.core.Algorithm):
         return True
     
     #__________________________________________________________________________
+    def cut_TauIsThirdJet(self):
+        #return ( len(self.store["jets_tight"]) >= 2 ) and ( self.store["jets_tight"][1].tlv.Pt() >= self.store["taus"][0].tlv.Pt() )
+        return ( len(self.store["jets"]) >= 2 ) and ( self.store["jets"][1].tlv.Pt() >= self.store["taus"][0].tlv.Pt() )
+
+    #__________________________________________________________________________
     def cut_OneJet(self):
-        return self.chain.jet_pt.size() == 1
+        #return len(self.store["jets_tight"]) == 1
+        return len(self.store["jets"]) == 1
     #__________________________________________________________________________
     def cut_OneMuon(self):
         return self.chain.nmuon == 1
@@ -159,19 +230,24 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_AtLeastOneJet(self):
-        return self.chain.jet_pt.size() >=1
+        #return len(self.store["jets_tight"]) >= 1
+        return len(self.store["jets"]) >= 1
     #__________________________________________________________________________
     def cut_AtLeastTwoJets(self):
-        return self.chain.jet_pt.size() >=2
+        #return len(self.store["jets_tight"]) >= 2
+        return len(self.store["jets"]) >= 2
     #__________________________________________________________________________
     def cut_AtLeastThreeJets(self):
-        return self.chain.jet_pt.size() >=3
+        #return len(self.store["jets_tight"]) >= 3
+        return len(self.store["jets"]) >= 3
     #__________________________________________________________________________
     def cut_TwoJets(self):
-        return self.chain.jet_pt.size() ==2
+        #return len(self.store["jets_tight"]) == 2
+        return len(self.store["jets"]) == 2
     #__________________________________________________________________________
     def cut_ThreeJets(self):
-        return self.chain.jet_pt.size() ==2
+        #return len(self.store["jets_tight"]) == 3
+        return len(self.store["jets"]) == 3
     
     
     #__________________________________________________________________________
@@ -209,11 +285,13 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_OneTightJet(self):
-      return len(self.store['jets_tight']) == 1
+      #return len(self.store['jets_tight']) == 1
+      return len(self.store['jets']) == 1
     
     #__________________________________________________________________________
     def cut_AtLeastTwoTightJets(self):
-      return len(self.store['jets_tight']) >=2
+      #return len(self.store['jets_tight']) >=2
+      return len(self.store['jets']) >=2
     
     #__________________________________________________________________________
     def cut_LeadJetPt50(self):
@@ -228,7 +306,35 @@ class CutAlg(pyframe.core.Algorithm):
       #return self.store['jets_tight'][0].tlv.Pt()>50*GeV
       return self.store['jets'][0].tlv.Pt()>20*GeV
     
-    
+   
+
+
+
+    #__________________________________________________________________________
+    def cut_LeadTauPtBinAll(self):
+      return self.store['taus'][0].tlv.Pt()>20*GeV
+    #__________________________________________________________________________
+    def cut_LeadTauPtBin2030(self):
+      return self.store['taus'][0].tlv.Pt()>20*GeV and self.store['taus'][0].tlv.Pt()<=30*GeV
+    #__________________________________________________________________________
+    def cut_LeadTauPtBin3040(self):
+      return self.store['taus'][0].tlv.Pt()>30*GeV and self.store['taus'][0].tlv.Pt()<=40*GeV
+    #__________________________________________________________________________
+    def cut_LeadTauPtBin4060(self):
+      return self.store['taus'][0].tlv.Pt()>40*GeV and self.store['taus'][0].tlv.Pt()<=60*GeV
+    #__________________________________________________________________________
+    def cut_LeadTauPtBin6090(self):
+      return self.store['taus'][0].tlv.Pt()>60*GeV and self.store['taus'][0].tlv.Pt()<=90*GeV
+    #__________________________________________________________________________
+    def cut_LeadTauPtBin90150(self):
+      return self.store['taus'][0].tlv.Pt()>90*GeV and self.store['taus'][0].tlv.Pt()<=150*GeV
+    #__________________________________________________________________________
+    def cut_LeadTauPtBin150inf(self):
+      return self.store['taus'][0].tlv.Pt()>150*GeV and self.store['taus'][0].tlv.Pt()<=90000*GeV
+
+
+
+
     #__________________________________________________________________________
     def cut_LeadTauPt170(self):
       return self.store['taus'][0].tlv.Pt()>170*GeV
@@ -259,7 +365,6 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_EleVeto(self):
       return self.chain.nel == 0
-    
     #__________________________________________________________________________
     def cut_MuVeto(self):
       return self.chain.nmuon == 0
@@ -270,35 +375,106 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_OneOrTwoBjets(self):
         nbjets = 0
+        #jets = self.store['jets_tight']
         jets = self.store['jets']
         for jet in jets:
           if jet.is_MV2c10_FixedCutBEff_77: nbjets += 1
         return nbjets in [1,2]
     #__________________________________________________________________________
     def cut_AtLeastOneBjet(self):
-        jets = self.store['jets_tight']
+        #jets = self.store['jets_tight']
+        jets = self.store['jets']
         for jet in jets:
           if jet.is_MV2c10_FixedCutBEff_77: return True
         return False
     #__________________________________________________________________________
     def cut_AtLeastTwoBjets(self):
         nbjets = 0
+        #jets = self.store['jets_tight']
         jets = self.store['jets']
         for jet in jets:
           if jet.is_MV2c10_FixedCutBEff_77: nbjets += 1
         return nbjets > 1
     #__________________________________________________________________________
     def cut_BVeto(self):
-        jets = self.store['jets_tight']
+        #jets = self.store['jets_tight']
+        jets = self.store['jets']
         for jet in jets:
           if jet.is_MV2c10_FixedCutBEff_77: return False
         return True
     #__________________________________________________________________________
     def cut_JetCleaning(self):
       return bool(self.chain.cleanEvent)
-   
+  
 
-    
+
+
+    #__________________________________________________________________________
+    def cut_AllElPt30(self):
+      electrons = self.store['electrons']
+      passed = True
+      for e in electrons:
+        passed = passed and e.tlv.Pt()>=30.0*GeV
+      return passed
+    #__________________________________________________________________________
+    def cut_AllElFCLoose(self):
+      electrons = self.store['electrons']
+      passed = True
+      for e in electrons:
+        passed = passed and bool(e.isIsolated_FCLoose)
+      return passed
+    #__________________________________________________________________________
+    def cut_AllElLHTight(self):
+      electrons = self.store['electrons']
+      passed = True
+      for e in electrons:
+        passed = passed and bool(e.LHTight)
+      return passed
+    #__________________________________________________________________________
+    def cut_AllElEta247(self):
+      electrons = self.store['electrons']
+      passed = True
+      for e in electrons:
+        passed = passed and abs(e.tlv.Eta())<2.47 and (abs(e.tlv.Eta())<1.37 or abs(e.tlv.Eta())>1.52)
+      return passed
+    #__________________________________________________________________________
+    def cut_AllElZ0SinTheta05(self):
+      electrons = self.store['electrons']
+      passed = True
+      for e in electrons:
+        passed = passed and abs(e.trkz0sintheta)<0.5
+      return passed
+    #__________________________________________________________________________
+    def cut_AllElD0Sig5(self):
+      electrons = self.store['electrons']
+      passed = True
+      for e in electrons:
+        passed = passed and e.trkd0sig<5.
+      return passed
+    #__________________________________________________________________________
+    def cut_TrueElFilter(self):
+      electrons = self.store['electrons']
+      if self.sampletype=="mc":
+        for e in electrons:
+          if not e.isTrueIsoElectron(): return False
+      return True
+
+
+
+
+    #__________________________________________________________________________
+    def cut_AllMuMedium(self):
+      muons = self.store['muons']
+      for m in muons:
+        if not bool(m.isMedium): return False
+      return True
+    #__________________________________________________________________________
+    def cut_AllMuPt50(self):
+      muons = self.store['muons']
+      passed = True
+      for m in muons:
+        passed = passed and m.tlv.Pt()>=50.0*GeV
+      return passed
     #__________________________________________________________________________
     def cut_AllMuPt30(self):
       muons = self.store['muons']
@@ -306,7 +482,6 @@ class CutAlg(pyframe.core.Algorithm):
       for m in muons:
         passed = passed and m.tlv.Pt()>=30.0*GeV
       return passed
-    
     #__________________________________________________________________________
     def cut_AllMuEta247(self):
       muons = self.store['muons']
@@ -321,6 +496,27 @@ class CutAlg(pyframe.core.Algorithm):
       for m in muons:
         passed = passed and abs(m.trkz0sintheta)<0.5
       return passed
+    #__________________________________________________________________________
+    def cut_AllMuD0Sig3(self):
+      muons = self.store['muons']
+      passed = True
+      for m in muons:
+        passed = passed and m.trkd0sig<3.
+      return passed
+    #__________________________________________________________________________
+    def cut_AllMuFCTightTrackOnly(self):
+      muons = self.store['muons']
+      passed = True
+      for m in muons:
+        passed = passed and bool(m.isIsolated_FCTightTrackOnly_FixedRad)
+      return passed
+    #__________________________________________________________________________
+    def cut_TrueMuonFilter(self):
+      muons = self.store['muons']
+      if self.sampletype=="mc":
+        for mu in muons:
+          if not mu.isTrueIsoMuon(): return False
+      return True
 
 
 
@@ -345,8 +541,42 @@ class CutAlg(pyframe.core.Algorithm):
         for tau in taus:
           if not tau.isQuarkFake(): return False
       return True
+    #__________________________________________________________________________
+    def cut_UnknownFilter(self):
+      taus = self.store['taus']
+      if self.sampletype=="mc":
+        for tau in taus:
+          if not tau.isUnknownFake(): return False
+      return True
 
 
+    #__________________________________________________________________________
+    def cut_TrueLeptonFilter(self):
+      taus = self.store['taus']
+      muons = self.store['muons']
+      
+      if self.sampletype=="mc":
+        for tau in taus:
+          if not tau.isTrueHadTau(): return False
+        for mu in muons:
+          if not mu.isTrueIsoMuon(): return False
+      
+      return True
+    
+    #__________________________________________________________________________
+    def cut_FakeLeptonFilter(self):
+      taus = self.store['taus']
+      muons = self.store['muons']
+      
+      if self.sampletype=="mc":
+        for tau in taus:
+          if not tau.isTrueHadTau(): return True
+        for mu in muons:
+          if not mu.isTrueIsoMuon(): return True
+      
+        return False
+
+      return True
 
     #__________________________________________________________________________
     def cut_DCHFilter(self):
@@ -371,319 +601,47 @@ class CutAlg(pyframe.core.Algorithm):
         if not collections.Counter(pdgId_branch) == collections.Counter(pdgId_sampl): return False
       return True
 
-    #__________________________________________________________________________
-    def cut_MuNoFilterTT(self):
-      muons = self.store['muons']
-      lead_is_tight    = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      sublead_is_tight = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      
-      return lead_is_tight and sublead_is_tight
-    #__________________________________________________________________________
-    def cut_MuNoFilterTL(self):
-      muons = self.store['muons']
-      lead_is_tight    = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      sublead_is_loose = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<10.)
 
-      return lead_is_tight and sublead_is_loose 
     #__________________________________________________________________________
-    def cut_MuNoFilterLT(self):
-      muons = self.store['muons']
-      sublead_is_tight = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      lead_is_loose = bool(not muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<10.)
-
-      return lead_is_loose and sublead_is_tight
-    #__________________________________________________________________________
-    def cut_MuNoFilterLL(self):
-      muons = self.store['muons']
-      lead_is_loose = bool(not muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<10.)
-      sublead_is_loose = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<10.)
-
-      return lead_is_loose and sublead_is_loose
-    
-    
-    #__________________________________________________________________________
-    def cut_MuTT(self):
-      muons = self.store['muons']
-      lead_is_tight    = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      sublead_is_tight = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      pass_mc_filter   = True
+    def cut_AllPassLeptons(self):
       
-      if self.sampletype=="mc":
-        lead_is_real     = muons[0].isTrueIsoMuon()
-        sublead_is_real  = muons[1].isTrueIsoMuon()
-        pass_mc_filter   = lead_is_real and sublead_is_real     
-
-      return lead_is_tight and sublead_is_tight and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_MuTL(self):
-      muons = self.store['muons']
-      lead_is_tight    = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      sublead_is_loose = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<10.)
-      pass_mc_filter   = True
+      leptons = self.store['muons']+self.store['electrons']+self.store['taus']
       
-      if self.sampletype=="mc":
-        sublead_is_real  = muons[1].isTrueIsoMuon()
-        pass_mc_filter   = sublead_is_real   
-
-      return lead_is_tight and sublead_is_loose and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_MuLT(self):
-      muons = self.store['muons']
-      sublead_is_tight = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      lead_is_loose = bool(not muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<10.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        lead_is_real   = muons[0].isTrueIsoMuon()
-        pass_mc_filter = lead_is_real   
-
-      return lead_is_loose and sublead_is_tight and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_MuLL(self):
-      muons = self.store['muons']
-      lead_is_loose = bool(not muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<10.)
-      sublead_is_loose = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<10.)
-      pass_mc_filter   = True
-
-      if self.sampletype=="mc":
-        lead_is_real     = muons[0].isTrueIsoMuon()
-        sublead_is_real  = muons[1].isTrueIsoMuon()
-        pass_mc_filter   = lead_is_real or sublead_is_real     
-
-      return lead_is_loose and sublead_is_loose and pass_mc_filter
-    
-    
-    #__________________________________________________________________________
-    def cut_MuTTT(self):
-      muons = self.store['muons']
-      if len(muons) < 3: return False
-      
-      mu0_is_tight     = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      mu1_is_tight     = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      mu2_is_tight     = bool(muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<3.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu0_is_real      = muons[0].isTrueIsoMuon()
-        mu1_is_real      = muons[1].isTrueIsoMuon()
-        mu2_is_real      = muons[2].isTrueIsoMuon()
-        pass_mc_filter   = mu0_is_real and mu1_is_real and mu2_is_real   
-
-      return mu0_is_tight and mu1_is_tight and mu2_is_tight and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_MuTTL(self):
-      muons = self.store['muons']
-      if len(muons) < 3: return False
-      
-      mu0_is_tight     = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      mu1_is_tight     = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      mu2_is_loose     = bool(not muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<10.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu2_is_real      = muons[2].isTrueIsoMuon()
-        pass_mc_filter   = mu2_is_real   
-
-      return mu0_is_tight and mu1_is_tight and mu2_is_loose and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_MuTLT(self):
-      muons = self.store['muons']
-      if len(muons) < 3: return False
-      
-      mu0_is_tight     = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      mu1_is_loose     = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<10.)
-      mu2_is_tight     = bool(muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<3.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu1_is_real      = muons[1].isTrueIsoMuon()
-        pass_mc_filter   = mu1_is_real   
-
-      return mu0_is_tight and mu1_is_loose and mu2_is_tight and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_MuLTT(self):
-      muons = self.store['muons']
-      if len(muons) < 3: return False
-      
-      mu0_is_loose     = bool(not muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<10.)
-      mu1_is_tight     = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      mu2_is_tight     = bool(muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<3.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu0_is_real      = muons[0].isTrueIsoMuon()
-        pass_mc_filter   = mu0_is_real   
-
-      return mu0_is_loose and mu1_is_tight and mu2_is_tight and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_MuLLT(self):
-      muons = self.store['muons']
-      if len(muons) < 3: return False
-      
-      mu0_is_loose     = bool(not muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<10.)
-      mu1_is_loose     = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<10.)
-      mu2_is_tight     = bool(muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<3.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu0_is_real      = muons[0].isTrueIsoMuon()
-        mu1_is_real      = muons[1].isTrueIsoMuon()
-        pass_mc_filter   = mu0_is_real or mu1_is_real
-
-      return mu0_is_loose and mu1_is_loose and mu2_is_tight and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_MuLTL(self):
-      muons = self.store['muons']
-      if len(muons) < 3: return False
-      
-      mu0_is_loose     = bool(not muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<10.)
-      mu1_is_tight     = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      mu2_is_loose     = bool(not muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<10.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu0_is_real      = muons[0].isTrueIsoMuon()
-        mu2_is_real      = muons[2].isTrueIsoMuon()
-        pass_mc_filter   = mu0_is_real or mu2_is_real
-
-      return mu0_is_loose and mu1_is_tight and mu2_is_loose and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_MuTLL(self):
-      muons = self.store['muons']
-      if len(muons) < 3: return False
-      
-      mu0_is_tight     = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      mu1_is_loose     = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<10.)
-      mu2_is_loose     = bool(not muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<10.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu1_is_real      = muons[1].isTrueIsoMuon()
-        mu2_is_real      = muons[2].isTrueIsoMuon()
-        pass_mc_filter   = mu1_is_real or mu2_is_real
-
-      return mu0_is_tight and mu1_is_loose and mu2_is_loose and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_MuLLL(self):
-      muons = self.store['muons']
-      if len(muons) < 3: return False
-      
-      mu0_is_loose     = bool(not muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<10.)
-      mu1_is_loose     = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<10.)
-      mu2_is_loose     = bool(not muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<10.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu0_is_real      = muons[0].isTrueIsoMuon()
-        mu1_is_real      = muons[1].isTrueIsoMuon()
-        mu2_is_real      = muons[2].isTrueIsoMuon()
-        pass_mc_filter   = mu0_is_real or mu1_is_real or mu2_is_real
-
-      return mu0_is_loose and mu1_is_loose and mu2_is_loose and pass_mc_filter
-    
-    
-    #__________________________________________________________________________
-    def cut_MuTTTT(self):
-      muons = self.store['muons']
-      if len(muons) < 4: return False
-      
-      mu0_is_tight     = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      mu1_is_tight     = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      mu2_is_tight     = bool(muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<3.)
-      mu3_is_tight     = bool(muons[3].isIsolated_FixedCutTightTrackOnly and abs(muons[3].trkd0sig)<3.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu0_is_real      = muons[0].isTrueIsoMuon()
-        mu1_is_real      = muons[1].isTrueIsoMuon()
-        mu2_is_real      = muons[2].isTrueIsoMuon()
-        mu3_is_real      = muons[3].isTrueIsoMuon()
-        pass_mc_filter   = mu0_is_real and mu1_is_real and mu2_is_real and mu3_is_real
-
-      return mu0_is_tight and mu1_is_tight and mu2_is_tight and mu3_is_tight and pass_mc_filter
-    
-    #__________________________________________________________________________
-    def cut_MuTTTL(self):
-      muons = self.store['muons']
-      if len(muons) < 4: return False
-      
-      mu0_is_tight     = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      mu1_is_tight     = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      mu2_is_tight     = bool(muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<3.)
-      mu3_is_loose     = bool(not muons[3].isIsolated_FixedCutTightTrackOnly and abs(muons[3].trkd0sig)<10.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu3_is_real      = muons[3].isTrueIsoMuon()
-        pass_mc_filter   = mu3_is_real
-
-      return mu0_is_tight and mu1_is_tight and mu2_is_tight and mu3_is_loose and pass_mc_filter
-    
-    #__________________________________________________________________________
-    def cut_MuTTLT(self):
-      muons = self.store['muons']
-      if len(muons) < 4: return False
-      
-      mu0_is_tight     = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      mu1_is_tight     = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      mu2_is_loose     = bool(not muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<10.)
-      mu3_is_tight     = bool(muons[3].isIsolated_FixedCutTightTrackOnly and abs(muons[3].trkd0sig)<3.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu2_is_real      = muons[2].isTrueIsoMuon()
-        pass_mc_filter   = mu2_is_real
-
-      return mu0_is_tight and mu1_is_tight and mu2_is_loose and mu3_is_tight and pass_mc_filter
-    
-    #__________________________________________________________________________
-    def cut_MuTLTT(self):
-      muons = self.store['muons']
-      if len(muons) < 4: return False
-      
-      mu0_is_tight     = bool(muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<3.)
-      mu1_is_loose     = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<10.)
-      mu2_is_tight     = bool(muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<3.)
-      mu3_is_tight     = bool(muons[3].isIsolated_FixedCutTightTrackOnly and abs(muons[3].trkd0sig)<3.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu1_is_real      = muons[1].isTrueIsoMuon()
-        pass_mc_filter   = mu1_is_real
-
-      return mu0_is_tight and mu1_is_loose and mu2_is_tight and mu3_is_tight and pass_mc_filter
-    
-    #__________________________________________________________________________
-    def cut_MuLTTT(self):
-      muons = self.store['muons']
-      if len(muons) < 4: return False
-      
-      mu0_is_loose     = bool(not muons[0].isIsolated_FixedCutTightTrackOnly and abs(muons[0].trkd0sig)<10.)
-      mu1_is_tight     = bool(muons[1].isIsolated_FixedCutTightTrackOnly and abs(muons[1].trkd0sig)<3.)
-      mu2_is_tight     = bool(muons[2].isIsolated_FixedCutTightTrackOnly and abs(muons[2].trkd0sig)<3.)
-      mu3_is_tight     = bool(muons[3].isIsolated_FixedCutTightTrackOnly and abs(muons[3].trkd0sig)<3.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        mu0_is_real      = muons[0].isTrueIsoMuon()
-        pass_mc_filter   = mu0_is_real
-
-      return mu0_is_loose and mu1_is_tight and mu2_is_tight and mu3_is_tight and pass_mc_filter
-    
-    
-    #__________________________________________________________________________
-    def cut_AllMuMedium(self):
-      muons = self.store['muons']
-      for m in muons:
-        if not bool(m.isMedium): return False
+      for lep in leptons:
+        if self.sampletype=="mc":
+          if lep.isFake(): return False
+        if lep.isFail(): return False
       return True
     #__________________________________________________________________________
-    def cut_AllMuLoose(self):
-      muons = self.store['muons']
-      for m in muons:
-        is_loose = bool(m.isLoose) or bool(m.isMedium) or bool(m.isTight)
-        if not is_loose: return False
+    def cut_AtLeastOneFailLepton(self):
+      
+      leptons = self.store['muons']+self.store['electrons']+self.store['taus']
+       
+      for lep in leptons:
+        if self.sampletype=="mc":
+            if lep.isTrue() and lep.isFail(): return True
+            else: continue
+        elif lep.isFail(): return True
+      return False
+
+
+    #__________________________________________________________________________
+    def cut_AllPassLeptonsNoFilter(self):
+      
+      leptons = self.store['muons']+self.store['electrons']+self.store['taus']
+      
+      for lep in leptons:
+        if lep.isFail(): return False
       return True
+    #__________________________________________________________________________
+    def cut_AtLeastOneFailLeptonNoFilter(self):
+      
+      leptons = self.store['muons']+self.store['electrons']+self.store['taus']
+      
+      for lep in leptons:
+        if lep.isFail(): return True
+      return False
+
 
 
     #__________________________________________________________________________
@@ -738,6 +696,9 @@ class CutAlg(pyframe.core.Algorithm):
 
   
     #__________________________________________________________________________
+    def cut_LeadTauBDT0005(self):
+      return self.store['taus'][0].JetBDTScoreSigTrans > 0.005
+    #__________________________________________________________________________
     def cut_LeadTauIsVeryLoose(self):
       return self.store['taus'][0].isJetBDTSigVeryLoose
     #__________________________________________________________________________
@@ -749,6 +710,55 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_SubLeadTauNotVeryLoose(self):
       return not self.store['taus'][1].isJetBDTSigVeryLoose
+
+
+    
+    #__________________________________________________________________________
+    def cut_AllTausBDT0005(self):
+      for tau in self.store['taus']:
+        if not tau.JetBDTScoreSigTrans > 0.005:
+          return False
+      return True
+    #__________________________________________________________________________
+    def cut_AllTausVeryLoose(self):
+      for tau in self.store['taus']:
+        if not tau.isJetBDTSigVeryLoose: return False
+      return True
+    #__________________________________________________________________________
+    def cut_AllTausLoose(self):
+      for tau in self.store['taus']:
+        if not tau.isJetBDTSigLoose: return False
+      return True
+    #__________________________________________________________________________
+    def cut_AllTausMedium(self):
+      for tau in self.store['taus']:
+        if not tau.isJetBDTSigMedium: return False
+      return True
+    #__________________________________________________________________________
+    def cut_AllTausTight(self):
+      for tau in self.store['taus']:
+        if not tau.isJetBDTSigTight: return False
+      return True
+    #__________________________________________________________________________
+    def cut_AllTausEleBDTLoose(self):
+      for tau in self.store['taus']:
+        if not tau.isEleBDTLoose: return False
+      return True
+    #__________________________________________________________________________
+    def cut_AllTausEleBDTMedium(self):
+      for tau in self.store['taus']:
+        if not tau.isEleBDTMedium: return False
+      return True
+    #__________________________________________________________________________
+    def cut_AllTausEleBDTTight(self):
+      for tau in self.store['taus']:
+        if not tau.isEleBDTTight: return False
+      return True
+    #__________________________________________________________________________
+    def cut_AllTausEleBDTNONE(self):
+      for tau in self.store['taus']:
+        if not tau.passEleOLR: return False
+      return True
 
 
     #__________________________________________________________________________
@@ -842,15 +852,15 @@ class CutAlg(pyframe.core.Algorithm):
 
 
     #__________________________________________________________________________
-    def cut_LeadMuIsoFixedCutTightTrackOnly(self):
+    def cut_LeadMuIsoFCTightTrackOnly(self):
       muons = self.store['muons']
       lead_mu = muons[0]
-      return lead_mu.isIsolated_FixedCutTightTrackOnly
+      return lead_mu.isIsolated_FCTightTrackOnly_FixedRad
     #__________________________________________________________________________
-    def cut_LeadMuIsoNotFixedCutTightTrackOnly(self):
+    def cut_LeadMuIsoNotFCTightTrackOnly(self):
       muons = self.store['muons']
       lead_mu = muons[0]
-      return not lead_mu.isIsolated_FixedCutTightTrackOnly
+      return not lead_mu.isIsolated_FCTightTrackOnly_FixedRad
     
     #__________________________________________________________________________
     def cut_AllMuIsoBound08(self):
@@ -866,90 +876,6 @@ class CutAlg(pyframe.core.Algorithm):
       return True
     
     
-    #__________________________________________________________________________
-    def cut_MZwindow(self):
-      mZ = 91.1876*GeV
-      muons = self.store['muons']
-      mu_lead = muons[0] 
-      mu_sublead = muons[1] 
-      m_vis = (mu_lead.tlv + mu_sublead.tlv).M()
-
-      return abs(m_vis - mZ) < 10*GeV
-    
-    #__________________________________________________________________________
-    def cut_VetoMZwindow(self):
-      mZ = 91.1876*GeV
-      muons = self.store['muons']
-      mu_lead = muons[0] 
-      mu_sublead = muons[1] 
-      m_vis = (mu_lead.tlv + mu_sublead.tlv).M()
-
-      return abs(m_vis - mZ) > 20 * GeV
-    
-    #__________________________________________________________________________
-    def cut_AllPairsM20(self):
-      muons = self.store['muons']
-      if self.chain.nmuon >= 2:
-        for p in combinations(muons,2):
-          if (p[0].tlv + p[1].tlv).M()<20*GeV: return False
-      return True
-    
-    
-    #__________________________________________________________________________
-    def cut_M15(self):
-      muons = self.store['muons']
-      mu_lead = muons[0] 
-      mu_sublead = muons[1] 
-      m_vis = (mu_lead.tlv + mu_sublead.tlv).M()
-
-      return abs(m_vis)>15*GeV
-    
-    #__________________________________________________________________________
-    def cut_dRhigh35(self):
-      return self.store['muons_dR'] > 3.5
-    
-    #__________________________________________________________________________
-    def cut_pTHlow80(self):
-      return self.store['muons_pTH'] < 80*GeV
-    
-    #__________________________________________________________________________
-    def cut_Mlow200(self):
-      muons = [self.store['muon1'],self.store['muon2']]
-      mu_lead = muons[0] 
-      mu_sublead = muons[1] 
-      m_vis = (mu_lead.tlv + mu_sublead.tlv).M()
-
-      return abs(m_vis)<200*GeV
-   
-
-
-    #__________________________________________________________________________
-    def cut_mVisJJfrom60to100(self):
-      mVisJJ = self.store['mVisJJ']
-      return mVisJJ == min(max(self.store['mVisJJ'],60*GeV),100*GeV)
-    #__________________________________________________________________________
-    def cut_mVisJJfrom35to60orFrom100to125(self):
-      mVisJJ = self.store['mVisJJ']
-      return mVisJJ == min(max(self.store['mVisJJ'],35*GeV),60*GeV) or mVisJJ == min(max(self.store['mVisJJ'],100*GeV),125*GeV)
-    
-    #__________________________________________________________________________
-    def cut_mVisMMfrom60to130(self):
-      mVisMM = self.store['mVisMM']
-      return mVisMM == min(max(self.store['mVisMM'],60*GeV),130*GeV)
-    #__________________________________________________________________________
-    def cut_mVisMMfrom130toINF(self):
-      mVisMM = self.store['mVisMM']
-      return mVisMM == max(self.store['mVisMM'],130*GeV)
-    #__________________________________________________________________________
-    def cut_mVisMMfrom60to100(self):
-      mVisMM = self.store['mVisMM']
-      return mVisMM == min(max(self.store['mVisMM'],60*GeV),100*GeV)
-    #__________________________________________________________________________
-    def cut_mVisMMfrom100toINF(self):
-      mVisMM = self.store['mVisMM']
-      return mVisMM == max(self.store['mVisMM'],100*GeV)
-
-
 
     #__________________________________________________________________________
     def cut_SingleJetTrigger(self):
@@ -959,6 +885,7 @@ class CutAlg(pyframe.core.Algorithm):
       
       if not 'trigJets' in self.store.keys(): return False
 
+      #lead_jet = self.store['jets_tight'][0]
       lead_jet = self.store['jets'][0]
       lead_trigJet = self.store['trigJets'][0]
       
@@ -966,15 +893,16 @@ class CutAlg(pyframe.core.Algorithm):
       thr_dict['HLT_j15']  = 20
       thr_dict['HLT_j25']  = 25
       thr_dict['HLT_j35']  = 35
-      thr_dict['HLT_j55']  = 55
+      thr_dict['HLT_j45']  = 45
+      ###thr_dict['HLT_j55']  = 55
       thr_dict['HLT_j60']  = 60
       thr_dict['HLT_j85']  = 85
       thr_dict['HLT_j110'] = 110
-      thr_dict['HLT_j150'] = 154
+      ###thr_dict['HLT_j150'] = 154
       thr_dict['HLT_j175'] = 175
       thr_dict['HLT_j260'] = 260
-      thr_dict['HLT_j360'] = 360
-      thr_dict['HLT_j380'] = 400
+      ###thr_dict['HLT_j360'] = 360
+      thr_dict['HLT_j380'] = 380
       thr_dict['HLT_j400'] = 400
       thr_dict['HLT_j420'] = 422
 
@@ -991,17 +919,46 @@ class CutAlg(pyframe.core.Algorithm):
       passed_triggers    = self.store["passTrig"].keys()
       disabled_triggers  = self.store["disTrig"].keys()
 
+      if self.chain.ntau == 0: return False
+
       taus = self.store['taus']
 
       for trig in required_triggers:
         if trig in disabled_triggers: continue
-        if trig in self.store["ChainsWithTau"].keys():
+        if trig in self.store["ChainsWithSingleTau"].keys():
           event_is_triggered = bool( trig in passed_triggers )
           for tau in taus:
-            tau_is_matched      = bool( tau.isTrigMatchedToChain.at(self.store["ChainsWithTau"][trig]) )
+            tau_is_matched      = bool( tau.isTrigMatchedToChain.at(self.store["ChainsWithSingleTau"][trig]) )
             tau_is_above_trigPt = tau.tlv.Pt() > float(trig.split("_")[1][3:]) * 1.1 * GeV
             if event_is_triggered and tau_is_matched and tau_is_above_trigPt: 
               return True
+
+      return False
+
+
+    #__________________________________________________________________________
+    def cut_DiTauTriggerMatch(self):
+      required_triggers  = self.store["reqTrig"]
+      passed_triggers    = self.store["passTrig"].keys()
+      disabled_triggers  = self.store["disTrig"].keys()
+
+      if self.chain.ntau < 2: return False
+
+      taus = self.store['taus']
+      lead_tau = taus[0] 
+      sublead_tau = taus[1] 
+
+      for trig in required_triggers:
+        if trig in disabled_triggers: continue
+        if trig in self.store["ChainsWithDiTau"].keys():
+          event_is_triggered = bool( trig in passed_triggers )
+          
+          lead_tau_is_matched         = bool( lead_tau.isTrigMatchedToChain.at(self.store["ChainsWithDiTau"][trig]) )
+          sublead_tau_is_matched      = bool( sublead_tau.isTrigMatchedToChain.at(self.store["ChainsWithDiTau"][trig]) )
+          lead_tau_is_above_trigPt    = lead_tau.tlv.Pt()    > float(trig.split("_")[1][3:]) * 1.1 * GeV
+          sublead_tau_is_above_trigPt = sublead_tau.tlv.Pt() > float(trig.split("_")[4][3:]) * 1.1 * GeV
+          if event_is_triggered and lead_tau_is_matched and lead_tau_is_above_trigPt and sublead_tau_is_matched and sublead_tau_is_above_trigPt : 
+            return True
 
       return False
 
@@ -1032,6 +989,7 @@ class CutAlg(pyframe.core.Algorithm):
   
       if not 'trigJets' in self.store.keys(): return False
 
+      #lead_jet = self.store['jets_tight'][0]
       lead_jet = self.store['jets'][0]
       lead_trigJet = self.store['trigJets'][0]
 
@@ -1041,15 +999,40 @@ class CutAlg(pyframe.core.Algorithm):
             return True
       return False
 
+    
+    #__________________________________________________________________________
+    def cut_SingleElTriggerMatch(self):
+      required_triggers  = self.store["reqTrig"]
+      passed_triggers    = self.store["passTrig"].keys()
+      disabled_triggers  = self.store["disTrig"].keys()
+      
+      if self.chain.nel == 0: return False
 
+      electrons = self.store['electrons']
+      
+      for trig in required_triggers:
+        if trig in disabled_triggers: continue
+        if trig in self.store["ChainsWithElectron"].keys():
+          event_is_triggered = bool( trig in passed_triggers )
+          for el in electrons:
+            el_is_matched      = bool( el.isTrigMatchedToChain.at(self.store["ChainsWithElectron"][trig]) )
+            el_is_above_trigPt = el.tlv.Pt() > float(trig.split("_")[1][1:]) * 1.01 * GeV
+            if event_is_triggered and el_is_matched and el_is_above_trigPt: 
+              return True
+
+      return False
+
+    
     #__________________________________________________________________________
     def cut_SingleMuTriggerMatch(self):
       required_triggers  = self.store["reqTrig"]
       passed_triggers    = self.store["passTrig"].keys()
       disabled_triggers  = self.store["disTrig"].keys()
+      
+      if self.chain.nmuon == 0: return False
 
       muons = self.store['muons']
-
+      
       for trig in required_triggers:
         if trig in disabled_triggers: continue
         if trig in self.store["ChainsWithMuon"].keys():
@@ -1059,6 +1042,76 @@ class CutAlg(pyframe.core.Algorithm):
             mu_is_above_trigPt = mu.tlv.Pt() > float(trig.split("_")[1][2:]) * 1.01 * GeV
             if event_is_triggered and mu_is_matched and mu_is_above_trigPt: 
               return True
+
+      return False
+
+
+    #__________________________________________________________________________
+    def cut_MuTauTriggerMatch(self):
+      required_triggers  = self.store["reqTrig"]
+      passed_triggers    = self.store["passTrig"].keys()
+      disabled_triggers  = self.store["disTrig"].keys()
+      
+      if self.chain.nmuon == 0 or self.chain.ntau == 0: return False
+
+      muons = self.store['muons']
+      taus = self.store['taus']
+      
+      for trig in required_triggers:
+        if trig in disabled_triggers: continue
+        if trig in self.store["ChainsWithMuonTau"].keys():
+          event_is_triggered = bool( trig in passed_triggers )
+          mu_is_matched = mu_is_above_trigPt = tau_is_matched = tau_is_above_trigPt = False
+          mu_pt_thr = tau_pt_thr = 0.0
+          for t in trig.split("_"):
+            if t.startswith("mu"): mu_pt_thr = float(t[2:])
+            if t.startswith("tau"): tau_pt_thr = float(t[3:])
+          for mu in muons:
+            mu_is_matched      = bool( mu.isTrigMatchedToChain.at(self.store["ChainsWithMuonTau"][trig][0]) )
+            mu_is_above_trigPt = mu.tlv.Pt() > mu_pt_thr * 1.01 * GeV
+            if mu_is_matched and mu_is_above_trigPt: break
+          for tau in taus:
+            tau_is_matched      = bool( tau.isTrigMatchedToChain.at(self.store["ChainsWithMuonTau"][trig][1]) )
+            tau_is_above_trigPt = tau.tlv.Pt() > tau_pt_thr * 1.1 * GeV
+            if tau_is_matched and tau_is_above_trigPt: break
+
+          if event_is_triggered and mu_is_matched and mu_is_above_trigPt and tau_is_matched and tau_is_above_trigPt: 
+            return True
+
+      return False
+
+
+    #__________________________________________________________________________
+    def cut_ElTauTriggerMatch(self):
+      required_triggers  = self.store["reqTrig"]
+      passed_triggers    = self.store["passTrig"].keys()
+      disabled_triggers  = self.store["disTrig"].keys()
+      
+      if self.chain.nel == 0 or self.chain.ntau == 0: return False
+
+      electrons = self.store['electrons']
+      taus = self.store['taus']
+      
+      for trig in required_triggers:
+        if trig in disabled_triggers: continue
+        if trig in self.store["ChainsWithElectronTau"].keys():
+          event_is_triggered = bool( trig in passed_triggers )
+          el_is_matched = el_is_above_trigPt = tau_is_matched = tau_is_above_trigPt = False
+          el_pt_thr = tau_pt_thr = 0.0
+          for t in trig.split("_"):
+            if t.startswith("e"): el_pt_thr = float(t[1:])
+            if t.startswith("tau"): tau_pt_thr = float(t[3:])
+          for el in electrons:
+            el_is_matched      = bool( el.isTrigMatchedToChain.at(self.store["ChainsWithElectronTau"][trig][0]) )
+            el_is_above_trigPt = el.tlv.Pt() > el_pt_thr * 1.01 * GeV
+            if el_is_matched and el_is_above_trigPt: break
+          for tau in taus:
+            tau_is_matched      = bool( tau.isTrigMatchedToChain.at(self.store["ChainsWithElectronTau"][trig][1]) )
+            tau_is_above_trigPt = tau.tlv.Pt() > tau_pt_thr * 1.1 * GeV
+            if tau_is_matched and tau_is_above_trigPt: break
+
+          if event_is_triggered and el_is_matched and el_is_above_trigPt and tau_is_matched and tau_is_above_trigPt: 
+            return True
 
       return False
 
@@ -1130,18 +1183,21 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_TauJetDphi27(self):
       lead_tau = self.store["taus"][0]
+      #lead_jet = self.store["jets_tight"][0]
       lead_jet = self.store["jets"][0]
       if abs(lead_tau.tlv.DeltaPhi(lead_jet.tlv)) > 2.7: return True
       return False
     #__________________________________________________________________________
     def cut_TauJetDphi29(self):
       lead_tau = self.store["taus"][0]
+      #lead_jet = self.store["jets_tight"][0]
       lead_jet = self.store["jets"][0]
       if abs(lead_tau.tlv.DeltaPhi(lead_jet.tlv)) > 2.9: return True
       return False
     #__________________________________________________________________________
     def cut_TauJetDphi25(self):
       lead_tau = self.store["taus"][0]
+      #lead_jet = self.store["jets_tight"][0]
       lead_jet = self.store["jets"][0]
       if abs(lead_tau.tlv.DeltaPhi(lead_jet.tlv)) > 2.5: return True
       return False
@@ -1158,44 +1214,112 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_MuJetDphi27(self):
       lead_mu = self.store["muons"][0]
-      if self.store["jets_tight"]:
-        for j in self.store["jets_tight"]:
+      #if self.store["jets_tight"]:
+      if self.store["jets"]:
+        #for j in self.store["jets_tight"]:
+        for j in self.store["jets"]:
           if abs(lead_mu.tlv.DeltaPhi(j.tlv)) > 2.7: return True
       return False
     #__________________________________________________________________________
     def cut_MuJetDphi29(self):
       lead_mu = self.store["muons"][0]
-      if self.store["jets_tight"]:
-        for j in self.store["jets_tight"]:
+      #if self.store["jets_tight"]:
+      if self.store["jets"]:
+        #for j in self.store["jets_tight"]:
+        for j in self.store["jets"]:
           if abs(lead_mu.tlv.DeltaPhi(j.tlv)) > 2.9: return True
       return False
     #__________________________________________________________________________
     def cut_MuJetDphi25(self):
       lead_mu = self.store["muons"][0]
-      if self.store["jets_tight"]:
-        for j in self.store["jets_tight"]:
+      #if self.store["jets_tight"]:
+      if self.store["jets"]:
+        #for j in self.store["jets_tight"]:
+        for j in self.store["jets"]:
           if abs(lead_mu.tlv.DeltaPhi(j.tlv)) > 2.5: return True
       return False
 
+
+    #__________________________________________________________________________
+    def cut_MuTauSumCosDphi05(self):
+      return self.store['mutau_scdphi'] > -0.5
+    #__________________________________________________________________________
+    def cut_mTMu50(self):
+      return self.store['mTMu'] < 50 * GeV
+    #__________________________________________________________________________
+    def cut_MuTauZwin(self):
+      if self.store['pairs'][0].ID() == "MuTau":
+        return (self.store['pairs'][0].mVis() > 45 * GeV) and (self.store['pairs'][0].mVis() < 80 * GeV)
+      return True
+
+
     #__________________________________________________________________________
     def cut_TightJetPt35(self):
-      if self.store["jets_tight"]:
-        jets = self.store["jets_tight"]
+      #if self.store["jets_tight"]:
+      if self.store["jets"]:
+        #jets = self.store["jets_tight"]
+        jets = self.store["jets"]
         for j in jets:
           if j.tlv.Pt() > 35 * GeV: return True
       return False
     #__________________________________________________________________________
     def cut_TightJetPt40(self):
-      if self.store["jets_tight"]:
-        jets = self.store["jets_tight"]
+      #if self.store["jets_tight"]:
+      if self.store["jets"]:
+        #jets = self.store["jets_tight"]
+        jets = self.store["jets"]
         for j in jets:
           if j.tlv.Pt() > 40 * GeV: return True
       return False
+
+
+    #__________________________________________________________________________
+    def cut_ZVeto(self):
+      # adjust for tau cases
+      mZ = 91.1876
+      pairs = self.store["pairs"]
+      for p in pairs:
+        if p.isOS() and p.isSF(): 
+          if abs(p.mVis()/GeV - mZ) < 10.: return False
+      return True
+
+    #__________________________________________________________________________
+    def cut_PairPt150(self):
+      pairs = self.store["pairs"]
+      for p in pairs:
+        if p.isSS() and p.Pt()/GeV < 150.: 
+          return False
+      return True
+
+    #__________________________________________________________________________
+    def cut_PairDR35(self):
+      pairs = self.store["pairs"]
+      for p in pairs:
+        if p.isSS() and p.DeltaR() > 3.5: 
+          return False
+      return True
+
+
+    #__________________________________________________________________________
+    def cut_mTtot300(self):
+      nleptons = self.chain.nmuon + self.chain.nel + self.chain.ntau
+      
+      if nleptons == 4 and 'sspairs_mTtot' in self.store:
+        return self.store['sspairs_mTtot'] > 300 * GeV
+      elif nleptons < 4 and 'leadsspair_mTtot' in self.store:
+        return self.store['leadsspair_mTtot'] > 300 * GeV
+      
+      return True
+
+    #__________________________________________________________________________
+    def cut_PASS(self):
+      #print self.samplename
+      #print self.chain.crossSection
+      return True
     
     #__________________________________________________________________________
-    def cut_TEST(self):
-      tau = self.store["taus"][0]
-      return True
+    def cut_NOTPASS(self):
+      return False
     
 #------------------------------------------------------------------------------
 class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
@@ -1269,6 +1393,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         for h in self.hist_list:
             if h.get_name() == "Hist1D":
               h.instance = self.hist(h.hname, "ROOT.TH1F('$', ';%s;%s', %d, %lf, %lf)" % (h.xtitle,h.ytitle,h.nbins,h.xmin,h.xmax), dir=os.path.join(region, '%s'%h.dir))
+              h.init_axis()
             elif h.get_name() == "Hist2D": 
               h.instance = self.hist(h.hname, "ROOT.TH2F('$', ';%s;%s', %d, %lf, %lf, %d, %lf, %lf)" % (h.hname,h.hname,h.nbinsx,h.xmin,h.xmax,h.nbinsy,h.ymin,h.ymax), dir=os.path.join(region, '%s'%h.dir))
               h.set_axis_titles()
@@ -1285,20 +1410,20 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
                 sys.exit( "ERROR: variable %s  not found for hist %s"%(h.vexpr,h.hname) )
             
             if h.get_name() == "Hist1D":
-              var = -999.
+              var = -9999.
               
               # this all part gives me the shivers. But is just temporary. Don't panic
               if hasattr(self.chain,"njets") and "njets" in h.vexpr: exec( "var = self.chain.njets" ) 
               elif hasattr(self.chain,"njet") and "njet" in h.vexpr: exec( "var = self.chain.njet" ) 
               else: exec( "var = %s" % h.vexpr ) # so dirty !!!
               
-              if h.instance and var!=-999.: h.fill(var, weight)
+              if h.instance and var!=-9999.: h.fill(var, weight)
             
             elif h.get_name() == "Hist2D":
-              varx = -999.
-              vary = -999.
+              varx = -9999.
+              vary = -9999.
               exec( "varx,vary = %s" % h.vexpr ) # so dirty !!!
-              if h.instance and varx!=-999. and vary!=-999.: h.fill(varx,vary, weight)
+              if h.instance and varx!=-9999. and vary!=-9999.: h.fill(varx,vary, weight)
 
 
     #__________________________________________________________________________

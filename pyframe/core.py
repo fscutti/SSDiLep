@@ -43,13 +43,14 @@ class EventLoop(object):
     loop.run(tree)
     """
     #_________________________________________________________________________
-    def __init__(self, name="loop", version="test", sampletype=None, samplename=None, outfile=None, quiet=False):
+    def __init__(self, name="loop", version="test", sampletype=None, samplename=None, sample=None, outfile=None, quiet=False):
         self.name        = name
         self.version     = version
         self.outfile     = outfile or "%s.%s.%s.hist.root" % (name, version, timestamp)
         self.quiet       = quiet if sys.stdout.isatty() else True
         self.sampletype  = sampletype
         self.samplename  = samplename
+        self.sample      = sample
         self._algorithms = []
         self._hists      = dict() # persists for the entire event-loop
         self._store      = dict() # cleared event-by-event
@@ -158,7 +159,7 @@ class EventLoop(object):
     #_________________________________________________________________________
     def setup_algs(self, tree_proxy):
         for alg in self._algorithms:
-            alg.setup(tree_proxy, self._hists, self._store, self.sampletype, self.samplename)
+            alg.setup(tree_proxy, self._hists, self._store, self.sampletype, self.samplename, self.sample)
     #_________________________________________________________________________
     def initialize(self):
         log.debug("EventLoop.initialize: %s %s" % (self.name, self.version))
@@ -277,6 +278,7 @@ class Algorithm(object):
         self.store      = None
         self.sampletype = None
         self.samplename = None
+        self.sample     = None
 
         # initialized in +=
         self._parent = None             
@@ -354,12 +356,13 @@ class Algorithm(object):
     #-------------------------------------------------------------------------
 
     #_________________________________________________________________________
-    def setup(self, tree_proxy, hists, store, sampletype, samplename):
+    def setup(self, tree_proxy, hists, store, sampletype, samplename, sample):
         self.chain      = tree_proxy
         self.hists      = hists
         self.store      = store
         self.sampletype = sampletype
         self.samplename = samplename
+        self.sample     = sample
 
 #-----------------------------------------------------------------------------
 class TreeProxy(object):

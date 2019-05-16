@@ -6,6 +6,7 @@ weights applied
 to the event
 """
 
+import os
 from math import sqrt
 from array import array
 from copy import copy
@@ -13,6 +14,7 @@ from copy import copy
 import logging
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
+
 
 # ROOT
 import ROOT
@@ -93,15 +95,42 @@ class MCEventWeight(pyframe.core.Algorithm):
     if 'key' is specified the MC weight will be put in the store
     """
     #__________________________________________________________________________
-    def __init__(self, cutflow=None,key=None):
-        pyframe.core.Algorithm.__init__(self, name="MCEventWeight", isfilter=True)
+    def __init__(self, cutflow=None,metadata=None,key=None):
+        pyframe.core.Algorithm.__init__(self, name="MCEventWeight",isfilter=True)
+        self.metadata = metadata
         self.cutflow = cutflow
         self.key = key
     #__________________________________________________________________________
     def execute(self, weight):
         if "mc" in self.sampletype: 
-            wmc = self.chain.mcEventWeight
-            if self.key: self.store[self.key] = wmc
+            
+            lumi = 1.
+            
+            metadata_name = "MetaData_"+str(self.chain.mcChannelNumber)+"_"+str(self.chain.runNumber)
+            if self.chain.runNumber == 284500: lumi *= 36207.66
+            if self.chain.runNumber == 300000: lumi *= 44307.4 
+            if self.chain.runNumber == 310000: lumi *= 59937.2 
+            
+            nevents = 0.
+            
+            print self.sample.xsec
+            
+            """ 
+            if "jetjet" in self.samplename:
+              nevents = self.metadata[metadata_name].GetBinContent(1)
+            else:
+            """
+            nevents = self.metadata[metadata_name].GetBinContent(3)
+            
+            #xsection = self.chain.crossSection
+            xsection = 1.
+            
+            mc_weight = self.chain.mcEventWeight
+
+            wmc = lumi * xsection * mc_weight / nevents
+
+            if self.key: self.store[self.key] = wmc 
+
             self.set_weight(wmc*weight)
         return True
 
@@ -186,6 +215,7 @@ class MuTrigSF(pyframe.core.Algorithm):
     def __init__(self, name="MuTrigSF",
             trig_list   = None,
             match_all   = False,
+            merge_menus = False,
             mu_iso      = None,
             mu_reco     = None,
             key         = None,
@@ -194,6 +224,7 @@ class MuTrigSF(pyframe.core.Algorithm):
         pyframe.core.Algorithm.__init__(self, name=name)
         self.trig_list   = trig_list # if for some reason a different list is needed
         self.match_all   = match_all
+        self.merge_menus = merge_menus
         self.mu_iso      = mu_iso
         self.mu_reco     = mu_reco
         self.key         = key
@@ -219,6 +250,8 @@ class MuTrigSF(pyframe.core.Algorithm):
           
           eff_data_chain = 1.0 
           eff_mc_chain   = 1.0
+
+          if self.merge_menus: self.trig_list = ["_OR_".join(self.trig_list)]
           
           for i,m in enumerate(muons):
           
@@ -269,6 +302,10 @@ class MuTrigSF(pyframe.core.Algorithm):
 class GlobalBjet(pyframe.core.Algorithm):
     """
     GlobalBjet
+    This weight is to be applied to the event if any b-tagging/veto selection on 
+    jets_tight is applied. The loop is performed inclusively on all tight_jets 
+    as in our ntuples we save efficiency and inefficiency scale-factors in the 
+    same branch.
     """
     #__________________________________________________________________________
     def __init__(self, name="GlobalBjet",
@@ -286,9 +323,7 @@ class GlobalBjet(pyframe.core.Algorithm):
     def execute(self, weight):
       sf=1.0
       if "mc" in self.sampletype: 
-        jets = self.store['jets_tight']
-        for jet in jets:
-          sf *= getattr(jet,"SF_MV2c10_FixedCutBEff_77").at(0)
+        sf *= self.chain.FTagEff_SF_MV2c10_FixedCutBEff_77.at(0)
 
       if self.key: 
         self.store[self.key] = sf
@@ -299,6 +334,9 @@ class GlobalBjet(pyframe.core.Algorithm):
 class GlobalJVT(pyframe.core.Algorithm):
     """
     GlobalJVT
+    This weight is to be applied to the event if any selection on jets_tight is 
+    applied. The loop is performed inclusively on all jets which are the sum of 
+    tight and antitight.
     """
     #__________________________________________________________________________
     def __init__(self, name="GlobalJVT",
@@ -316,10 +354,11 @@ class GlobalJVT(pyframe.core.Algorithm):
     def execute(self, weight):
       sf=1.0
       if "mc" in self.sampletype: 
-        jets = self.store['jets']
-        for jet in jets:
-          sf *= getattr(jet,"JvtEff_SF_Medium").at(0)
-          sf *= getattr(jet,"fJvtEff_SF_Medium").at(0)
+        sf_jvt  = self.chain.JvtEff_SF.at(0)
+        #sf_fjvt = self.chain.fJvtEff_SF.at(0)
+        
+        if sf_jvt > 0:  sf *= sf_jvt
+        #if sf_fjvt > 0: sf *= sf_fjvt
 
       if self.key: 
         self.store[self.key] = sf

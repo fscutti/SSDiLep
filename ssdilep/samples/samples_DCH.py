@@ -23,150 +23,161 @@ import ROOT
 #       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryHiggsBSMOthers 
 #------------------------------------------------------------------------------------------------------
 
-DCH300 = Sample(name = "DCH300", 
-                tlatex = 'm_{H^{\pm\pm}}=300 GeV',         
+Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH300 = Sample(name = "Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH300", 
+                tlatex = 'm_{H^{\pm\pm}}=300 \:GeV',         
+                #tlatex = 'm_{H}(300)',         
                 line_color   = ROOT.kRed+1,
                 marker_color = ROOT.kRed+1,
                 fill_color   = ROOT.kRed+1,
                 line_width   = 3,
                 line_style   = 1,
                 fill_style   = 3004,
-                xsec         = 0.020179, 
-                feff         = 1.0,  
+                #xsec         = 0.011157, 
+                feff         = 100.0,  
                 )
 
-DCH400 = Sample(name = "DCH400", 
-                tlatex = 'm_{H^{\pm\pm}}=400 GeV',         
+Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH400 = Sample(name = "Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH400", 
+                tlatex = 'm_{H^{\pm\pm}}=400\:GeV',         
+                #tlatex = 'm_{H}(400)',         
+                line_color   = ROOT.kRed-3,
+                marker_color = ROOT.kRed-3,
+                fill_color   = ROOT.kRed-3,
+                line_width   = 3,
+                line_style   = 1,
+                fill_style   = 3004,
+                #xsec         = 0.0033041, 
+                feff         = 100.0,  
+                )
+
+Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH500 = Sample(name = "Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH500", 
+                tlatex = 'm_{H^{\pm\pm}}=500 \:GeV',         
+                #tlatex = 'm_{H}(500)',         
                 line_color   = ROOT.kOrange-3,
                 marker_color = ROOT.kOrange-3,
                 fill_color   = ROOT.kOrange-3,
                 line_width   = 3,
                 line_style   = 1,
                 fill_style   = 3004,
-                xsec         = 0.0059727, 
-                feff         = 1.0,  
+                #xsec         = 0.0011917 , 
+                feff         = 100.0,  
                 )
 
-DCH500 = Sample(name = "DCH500", 
-                tlatex = 'm_{H^{\pm\pm}}=500 GeV',         
+Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH600 = Sample(name = "Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH600", 
+                tlatex = 'm_{H^{\pm\pm}}=600 \:GeV',         
+                #tlatex = 'm_{H}(600)',         
                 line_color   = ROOT.kOrange-3,
                 marker_color = ROOT.kOrange-3,
                 fill_color   = ROOT.kOrange-3,
                 line_width   = 3,
                 line_style   = 1,
                 fill_style   = 3004,
-                xsec         = 0.0021733, 
-                feff         = 1.0,  
+                #xsec         = 0.00049181, 
+                feff         = 100.0,  
                 )
 
-DCH600 = Sample(name = "DCH600", 
-                tlatex = 'm_{H^{\pm\pm}}=600 GeV',         
-                line_color   = ROOT.kOrange-3,
-                marker_color = ROOT.kOrange-3,
-                fill_color   = ROOT.kOrange-3,
+Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH700 = Sample(name = "Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH700", 
+                tlatex = 'm_{H^{\pm\pm}}=700 \:GeV',         
+                #tlatex = 'm_{H}(700)',         
+                line_color   = ROOT.kBlue-3,
+                marker_color = ROOT.kBlue-3,
+                fill_color   = ROOT.kBlue-3,
                 line_width   = 3,
                 line_style   = 1,
                 fill_style   = 3004,
-                xsec         = 0.00089447, 
-                feff         = 1.0,  
+                #xsec         = 0.00022201, 
+                feff         = 100.0,  
                 )
 
-DCH700 = Sample(name = "DCH700", 
-                tlatex = 'm_{H^{\pm\pm}}=700 GeV',         
-                line_color   = ROOT.kOrange-3,
-                marker_color = ROOT.kOrange-3,
-                fill_color   = ROOT.kOrange-3,
-                line_width   = 3,
-                line_style   = 1,
-                fill_style   = 3004,
-                xsec         = 0.00040462, 
-                feff         = 1.0,  
-                )
-
-DCH800 = Sample(name = "DCH800", 
-                tlatex = 'm_{H^{\pm\pm}}=800 GeV',         
+Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH800 = Sample(name = "Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH800", 
+                tlatex = 'm_{H^{\pm\pm}}=800 \:GeV',         
+                #tlatex = 'm_{H}(800)',         
                 line_color   = ROOT.kBlue+1,
                 marker_color = ROOT.kBlue+1,
                 fill_color   = ROOT.kBlue+1,
                 line_width   = 3,
                 line_style   = 1,
                 fill_style   = 3004,
-                xsec         = 0.00019397, 
-                feff         = 1.0,  
+                #xsec         = 0.00010675, 
+                feff         = 100.0,  
                 )
 
-DCH900 = Sample(name = "DCH900", 
-                tlatex = 'm_{H^{\pm\pm}}=900 GeV',         
+Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH900 = Sample(name = "Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH900", 
+                tlatex = 'm_{H^{\pm\pm}}=900 \:GeV',         
+                #tlatex = 'm_{H}(900)',         
                 line_color   = ROOT.kOrange-3,
                 marker_color = ROOT.kOrange-3,
                 fill_color   = ROOT.kOrange-3,
                 line_width   = 3,
                 line_style   = 1,
                 fill_style   = 3004,
-                xsec         = 9.8716e-05, 
-                feff         = 1.0,  
+                #xsec         = 5.3944E-05, 
+                feff         = 100.0,  
                 )
 
-DCH1000 = Sample(name = "DCH1000", 
-                tlatex = 'm_{H^{\pm\pm}}=1000 GeV',         
+Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1000 = Sample(name = "Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1000", 
+                tlatex = 'm_{H^{\pm\pm}}=1000 \:GeV',         
+                #tlatex = 'm_{H}(1000)',         
                 line_color   = ROOT.kOrange-3,
                 marker_color = ROOT.kOrange-3,
                 fill_color   = ROOT.kOrange-3,
                 line_width   = 3,
                 line_style   = 1,
                 fill_style   = 3004,
-                xsec         = 5.2052e-05, 
-                feff         = 1.0,  
+                #xsec         = 2.8407E-05 , 
+                feff         = 100.0,  
                 )
 
-DCH1100 = Sample(name = "DCH1100", 
-                tlatex = 'm_{H^{\pm\pm}}=1100 GeV',         
+Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1100 = Sample(name = "Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1100", 
+                tlatex = 'm_{H^{\pm\pm}}=1100 \:GeV',         
+                #tlatex = 'm_{H}(1100)',         
+                line_color   = ROOT.kGreen-3,
+                marker_color = ROOT.kGreen-3,
+                fill_color   = ROOT.kGreen-3,
+                line_width   = 3,
+                line_style   = 1,
+                fill_style   = 3004,
+                #xsec         = 1.5375E-05, 
+                feff         = 100.0,  
+                )
+
+Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1200 = Sample(name = "Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1200", 
+                tlatex = 'm_{H^{\pm\pm}}=1200 \:GeV',         
+                #tlatex = 'm_{H}(1200)',         
                 line_color   = ROOT.kOrange-3,
                 marker_color = ROOT.kOrange-3,
                 fill_color   = ROOT.kOrange-3,
                 line_width   = 3,
                 line_style   = 1,
                 fill_style   = 3004,
-                xsec         = 2.8246e-05, 
-                feff         = 1.0,  
+                #xsec         = 8.5342E-06, 
+                feff         = 100.0,  
                 )
 
-DCH1200 = Sample(name = "DCH1200", 
-                tlatex = 'm_{H^{\pm\pm}}=1200 GeV',         
-                line_color   = ROOT.kOrange-3,
-                marker_color = ROOT.kOrange-3,
-                fill_color   = ROOT.kOrange-3,
-                line_width   = 3,
-                line_style   = 1,
-                fill_style   = 3004,
-                xsec         = 1.5651e-05, 
-                feff         = 1.0,  
-                )
-
-DCH1300 = Sample(name = "DCH1300", 
-                tlatex = 'm_{H^{\pm\pm}}=1300 GeV',         
+Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1300 = Sample(name = "Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1300", 
+                tlatex = 'm_{H^{\pm\pm}}=1300 \:GeV',         
+                #tlatex = 'm_{H}(1300)',         
                 line_color   = ROOT.kGreen+1,
                 marker_color = ROOT.kGreen+1,
                 fill_color   = ROOT.kGreen+1,
                 line_width   = 3,
                 line_style   = 1,
                 fill_style   = 3004,
-                xsec         = 8.877e-06, 
-                feff         = 1.0,  
+                #xsec         = 4.8282E-06, 
+                feff         = 100.0,  
                 )
 
-root_DCH = []
-root_DCH.append(DCH300)
-root_DCH.append(DCH400)
-root_DCH.append(DCH500)
-root_DCH.append(DCH600)
-root_DCH.append(DCH700)
-root_DCH.append(DCH800)
-root_DCH.append(DCH900)
-root_DCH.append(DCH1000)
-root_DCH.append(DCH1100)
-root_DCH.append(DCH1200)
-root_DCH.append(DCH1300)
+root_AtLeastOneTauFilter_DCH = []
+root_AtLeastOneTauFilter_DCH.append(Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH300)
+root_AtLeastOneTauFilter_DCH.append(Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH400)
+root_AtLeastOneTauFilter_DCH.append(Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH500)
+root_AtLeastOneTauFilter_DCH.append(Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH600)
+root_AtLeastOneTauFilter_DCH.append(Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH700)
+root_AtLeastOneTauFilter_DCH.append(Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH800)
+root_AtLeastOneTauFilter_DCH.append(Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH900)
+root_AtLeastOneTauFilter_DCH.append(Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1000)
+root_AtLeastOneTauFilter_DCH.append(Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1100)
+root_AtLeastOneTauFilter_DCH.append(Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1200)
+root_AtLeastOneTauFilter_DCH.append(Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1300)
 
 
 # -----------------
@@ -191,12 +202,12 @@ neg_decay["EmEm"] = {"feff": 1. / 0.25, "tlatex": " #mu^{-} #mu^{-}"}
 # and appends the decay modes taking into
 # account the different efficiencies
 
-full_DCH = []
+full_AtLeastOneTauFilter_DCH = []
 for boson in parent.keys():
   for pos_mode in pos_decay.keys():
     for neg_mode in neg_decay.keys():
       sname = "%s%s_%s%s"%(boson,pos_mode,boson,neg_mode)
-      for sroot in root_DCH:
+      for sroot in root_AtLeastOneTauFilter_DCH:
         if "HL" in sname:
           globals()[full_sname].line_color   += 2
           globals()[full_sname].marker_color += 2
@@ -207,7 +218,7 @@ for boson in parent.keys():
         globals()[full_sname].name    = full_sname
         globals()[full_sname].tlatex  = parent[boson]["tlatex"]%(sroot.name.replace("DCH",""))+" #rightarrow" + pos_decay[pos_mode]["tlatex"] + neg_decay[neg_mode]["tlatex"]
         globals()[full_sname].feff    = parent[boson]["feff"] * pos_decay[pos_mode]["feff"] * neg_decay[neg_mode]["feff"]
-        full_DCH.append(globals()[full_sname])
+        full_AtLeastOneTauFilter_DCH.append(globals()[full_sname])
 
 
 # EOF

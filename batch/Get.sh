@@ -114,7 +114,8 @@ cp -rf ${JOBTMP}/${MYDIR}/*_cutflow.root ${OUTCUTFLOW}
 # --------------
 # hadd with root
 # --------------
-lsetup root
+#lsetup root
+lsetup "root 6.14.04-x86_64-slc6-gcc62-opt"
 
 replace=".root/*.root*"
 
