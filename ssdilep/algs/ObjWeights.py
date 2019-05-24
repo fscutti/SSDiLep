@@ -299,4 +299,97 @@ class JetPtWeightHist(pyframe.core.Algorithm):
         return True
 
 
+#------------------------------------------------------------------------------
+class FakeFactor(pyframe.core.Algorithm):
+    """
+    Applies the fake-factors to muon pairs
+    """
+    #__________________________________________________________________________
+    def __init__(self, 
+                 name                     = "FakeFactor",
+                 config_file_light_lepton = None,
+                 config_file_tau_lepton   = [],
+                 key                      = None,
+                 scale                    = None
+                 ):
+        pyframe.core.Algorithm.__init__(self,name=name)
+        
+        self.config_file_light_lepton  = config_file_light_lepton
+        self.config_file_tau_lepton    = config_file_tau_lepton
+        self.key                       = key
+        self.scale                     = scale
+        
+        assert config_file_light_lepton, "Must provide config file for light leptons!"
+        assert config_file_tau_lepton,   "Must provide config file for tau leptons!"
+        assert key, "Must provide key for storing fakefactor"
+    #_________________________________________________________________________
+    def initialize(self):
+        f_lep = ROOT.TFile.Open(self.config_file_light_lepton)
+        f_tau_1p = ROOT.TFile.Open(self.config_file_tau_lepton[0])
+        f_tau_3p = ROOT.TFile.Open(self.config_file_tau_lepton[1])
+
+        assert f_lep, "Failed to open fake-factor config file: %s"%(self.config_file_light_lepton)
+        assert f_tau_1p, "Failed to open fake-factor config file: %s"%(self.config_file_tau_lepton[0])
+        assert f_tau_3p, "Failed to open fake-factor config file: %s"%(self.config_file_tau_lepton[1])
+        
+        H_ff = dict()
+        
+        H_ff["muon"]   = f_lep.Get("m/highPt_anyjet/FF")
+        H_ff["el"]     = f_lep.Get("e/highPt_anyjet/FF")
+        H_ff["tau_1p"] = f_tau_1p.Get("h_ff_1PMedium_F1")
+        H_ff["tau_3p"] = f_tau_3p.Get("h_ff_3PMedium_F1")
+
+        assert H_ff["muon"],   "Failed to get 'H_ff_mu' from %s"%(self.config_file_light_lepton)
+        assert H_ff["el"],     "Failed to get 'H_ff_el' from %s"%(self.config_file_light_lepton)
+        assert H_ff["tau_1p"], "Failed to get 'H_ff_tau_1p' from %s"%(self.config_file_tau_lepton[0])
+        assert H_ff["tau_3p"], "Failed to get 'H_ff_tau_3p' from %s"%(self.config_file_tau_lepton[1])
+        
+        self.H_ff = dict()
+        self.H_ff["muon"]   = copy(H_ff["muon"])
+        self.H_ff["el"]     = copy(H_ff["el"])
+        self.H_ff["tau_1p"] = copy(H_ff["tau_1p"])
+        self.H_ff["tau_3p"] = copy(H_ff["tau_3p"])
+
+        f_lep.Close()
+        f_tau_1p.Close()
+        f_tau_3p.Close()
+    
+    #_________________________________________________________________________
+    def execute(self, weight):
+        ff_lep  = 1.0 
+        ff_sign = -1.
+
+        leptons = self.store['muons']+self.store['electrons']+self.store['taus']
+        
+        met = self.store["met_trk"].tlv.Pt() / GeV
+        
+        for lep in leptons:
+          if lep.isFail():
+            
+            ff_sign *= -1.
+            
+            lep_pt = lep.tlv.Pt() / GeV
+            lep_eta = lep.tlv.Eta()
+            
+            if "tau" in lep.prefix:
+              bin_idx = self.H_ff["tau_"+str(lep.ntrk)+"p"].FindBin(lep_pt)
+              ff_lep *= self.H_ff["tau_"+str(lep.ntrk)+"p"].GetBinContent(bin_idx)
+            
+            else:
+              
+              maxPt = self.H_ff[lep.prefix.strip("_")].GetXaxis().GetBinCenter(self.H_ff[lep.prefix.strip("_")].GetNbinsX())
+              minMet = self.H_ff[lep.prefix.strip("_")].GetZaxis().GetBinCenter(1)
+              maxMet = self.H_ff[lep.prefix.strip("_")].GetZaxis().GetBinCenter(self.H_ff[lep.prefix.strip("_")].GetNbinsZ())
+              
+              bin_idx = self.H_ff[lep.prefix.strip("_")].FindBin(min(lep_pt,maxPt), lep_eta, max(min(met, maxMet), minMet))
+              ff_lep *= self.H_ff[lep.prefix.strip("_")].GetBinContent(bin_idx)
+
+            ff_lep *= ff_sign
+
+        if self.key: 
+          self.store[self.key] = ff_lep
+
+        return True
+
+
 # EOF

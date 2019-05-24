@@ -16,6 +16,8 @@ import pyframe
 
 ## local modules
 import ssdilep
+from ssdilep.samples.SamplesID import SampleID
+from ssdilep.samples.xsections import xsdict
 
 #_____________________________________________________________________________
 def analyze(config):
@@ -62,13 +64,13 @@ def analyze(config):
     else: 
         assert False, "Invalid systematic %s!"%(systematic)
 
-
     ##-------------------------------------------------------------------------
     ## event loop
     ##-------------------------------------------------------------------------
     loop = pyframe.core.EventLoop(name='ssdilep',
                                   sampletype=config['sampletype'],
                                   samplename=config['samplename'],
+                                  sampleDB={"ID":SampleID, "xs":xsdict},
                                   outfile=config['samplename']+".root",
                                   quiet=False,
                                   )
@@ -150,8 +152,8 @@ def analyze(config):
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTau') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TrueTauHadFilter') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsVeryLoose') # do we need to test this?
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauBDT0005') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsVeryLoose') # do we need to test this?
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauBDT0005') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='MuVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleJetTrigger') 
@@ -195,7 +197,8 @@ def analyze(config):
     ## make plots
     ##-------------------------------------------------------------------------
     
-    for tauPtBin in ["All","2030","3040","4060","6090","90150","150inf"]:
+    #for tauPtBin in ["All","2030","3040","4060","6090","90150","150inf"]:
+    for tauPtBin in ["All"]:
        for tauProngs in ["1P","3P"]:
          #for tauType in ["Loose","Medium","Tight"]:
          for tauType in ["Medium"]:

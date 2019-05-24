@@ -109,11 +109,11 @@ signals = []
 #"""
 #signals.append(samples.DCH800)
 
-#"""
+"""
 signals += [samples.samples_DCH.Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH300]
 signals += [samples.samples_DCH.Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH700]
 signals += [samples.samples_DCH.Pythia8EvtGen_A14NNPDF23LO_AtLeastOneTauFilter_DCH1100]
-#"""
+"""
 
 #--------------
 # Estimators

@@ -279,9 +279,12 @@ class Estimator(BaseEstimator):
             else:            sysname = '%s_dn'%(sys.name)
 
         if not self.mc_lumi_frac.has_key(sysname): 
-            xsec    = self.sample.xsec 
-            feff    = self.sample.feff
-            kfactor = self.sample.kfactor
+            #xsec    = self.sample.xsec 
+            #kfactor = self.sample.kfactor
+            #feff    = self.sample.feff
+            xsec    = 1.
+            kfactor = 1.
+            feff    = 1.
             #Ntotal  = self.hm.get_nevents(self.sample.name,sys,mode)
             Ntotal  = 1.0 # normalise within loop
             

@@ -20,8 +20,14 @@ USER   = os.getenv('USER')
 
 ## global config
 # inputs
-NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY3Data.v3/merged'
-NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY3MC.v3/merged'
+#NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY11Data.v3/group'
+#NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY11MC.v3/group'
+
+NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY3Data.v3/group'
+NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY3MC.v3/group'
+
+#NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY3Data.v3/merged'
+#NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY3MC.v3/merged'
 
 #NTUPDATA='/coepp/cephfs/share/atlas/MLA/SUSY3Data.v1/merged'
 #NTUPMC='/coepp/cephfs/share/atlas/MLA/SUSY3MC.v1/merged'
@@ -34,7 +40,6 @@ AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 RESUBMIT  = False
 
 # outputs
-#RUN = "HistFFComposition"
 #RUN = "HistFFTracks"
 
 #RUN = "HistEBDTOnePair"
@@ -43,13 +48,16 @@ RESUBMIT  = False
 #RUN = "HistCFStudy"
 #RUN = "HistCFFilStudy"
 #RUN = "HistCFFilDebStudy"
-RUN = "HistCF3May"
+#RUN = "HistCF3May"
 
 #RUN = "HistSROnePair"
 #RUN = "HistSRTwoPairs"
 
+RUN = "HistVROnePair"
+#RUN = "HistSRTwoPairs"
+
 #RUN = "HistFF28Feb"
-#RUN = "HistTESTSAMPLES"
+#RUN = "HistFFgroupV5"
 
 #RUN = "HistSROnePairFullc"
 #RUN = "HistSRTwoPairsFullc"
@@ -60,9 +68,9 @@ OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) #
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
 
 # pick your script!!!
-SCRIPT="./ssdilep/run/j.plotter_CF_MuTau.py"  
+#SCRIPT="./ssdilep/run/j.plotter_CF_MuTau.py"  
 #SCRIPT="./ssdilep/run/j.plotter_QG_OneTau.py"  
-#SCRIPT="./ssdilep/run/j.plotter_VR_MuTau.py"  
+SCRIPT="./ssdilep/run/j.plotter_VR_OnePair.py"  
 #SCRIPT="./ssdilep/run/j.plotter_FF_OneTau.py"  
 #SCRIPT="./ssdilep/run/j.plotter_VR_OneTauPair.py"  
 
@@ -77,9 +85,8 @@ SCRIPT="./ssdilep/run/j.plotter_CF_MuTau.py"
 
 BEXEC="Hist.sh"                      # exec script (probably dont change) 
 
-#EVENT_BLOCK = 100000                  # number of events considered for each individual job
-EVENT_BLOCK = 2000000                  # number of events considered for each individual job
-NJMAX       = 500                    # maximum number of jobs per train: should not exceed 600!!!
+EVENT_BLOCK = 10000000                  # number of events considered for each individual job
+NJMAX       = 100                    # maximum number of jobs per train: should not exceed 600!!!
 
 DO_NOM = True                        # submit the nominal job
 DO_NTUP_SYS = False                  # submit the NTUP systematics jobs

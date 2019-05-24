@@ -14,11 +14,11 @@ from array import array
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWin"
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWinRed"
 
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/Fakes27Feb"
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesGroupV5"
 
 wp = "Medium"
 
-tauType = "1P%s"%wp
+tauType = "3P%s"%wp
 
 
 #tag       = "onetau"
@@ -99,8 +99,8 @@ samples =  [
             "diboson",
             ]
 """
-#samples =  ["fakes"]
-samples =  ["data"]
+samples =  ["fakes"]
+#samples =  ["data"]
 
 merged_ff_file = ROOT.TFile.Open(os.path.join(indir,outmerged),"UPDATE")
 
@@ -183,7 +183,7 @@ for i in [1,2,10,11]:
     h_ff.SetStats(0)
     h_ff.Draw("E1")
     
-    if s=="data":
+    if s=="fakes":
       merged_ff_file.WriteTObject(h_ff.Clone())
       merged_ff_file.WriteTObject(c.Clone())
     

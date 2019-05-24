@@ -55,7 +55,8 @@ data = Sample(name         = "data",
               line_style   = 1,
               marker_color = black,
               marker_style = 20,
-              daughters    = list_runs,
+              type         = "data",
+              #daughters    = list_runs,
               )
 
 
@@ -219,22 +220,22 @@ Wtaunu = Sample( name =   'Wtaunu',
                   fill_color = ROOT.kBlue+1,
                   line_color =  ROOT.kBlue+2,
                   marker_color =  ROOT.kBlue+2,
-                  daughters = [
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CVetoBVeto,        
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CVetoBVeto,                                    
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CVetoBVeto,     
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CVetoBVeto,     
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CFilterBVeto,      
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CFilterBVeto,    
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CFilterBVeto,   
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CFilterBVeto,   
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_BFilter,           
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_BFilter,         
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_BFilter,        
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_BFilter,        
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV500_1000,        
-                               Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV1000_E_CMS,       
-                              ],
+                  #daughters = [
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CVetoBVeto,        
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CVetoBVeto,                                    
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CVetoBVeto,     
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CVetoBVeto,     
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_CFilterBVeto,      
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_CFilterBVeto,    
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_CFilterBVeto,   
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_CFilterBVeto,   
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV0_70_BFilter,           
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV70_140_BFilter,         
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV140_280_BFilter,        
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_BFilter,        
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV500_1000,        
+                  #             Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV1000_E_CMS,       
+                  #            ],
                 ) 
 
 Wtaunu_fakes = Sample( name =   'Wtaunu_fakes',
@@ -411,11 +412,11 @@ ttbar = Sample( name =  'ttbar',
                     fill_color = ROOT.kCyan+1,
                     line_color =  ROOT.kCyan+2,
                     marker_color =  ROOT.kCyan+2,
-                    daughters = [
-                                 PhPy8EG_A14_ttbar_hdamp258p75_nonallhad,
-                                 PhPy8EG_A14_ttbar_hdamp258p75_allhad,
-                                 PhPy8EG_A14_ttbar_hdamp258p75_dil      
-                                ],
+                    #daughters = [
+                    #             PhPy8EG_A14_ttbar_hdamp258p75_nonallhad,
+                    #             PhPy8EG_A14_ttbar_hdamp258p75_allhad,
+                    #             PhPy8EG_A14_ttbar_hdamp258p75_dil      
+                    #            ],
                     ) 
 
 
@@ -527,23 +528,23 @@ for jz,jz_color in JZ_dict.iteritems():
 
 dijet = Sample( name =   'dijet',
                     tlatex = 'Di-Jet',
-                    fill_color = ROOT.kGray+2,
-                    line_color =  ROOT.kGray+2,
-                    marker_color =  ROOT.kGray+3,
+                    fill_color = ROOT.kOrange+6,
+                    line_color =  ROOT.kOrange+5,
+                    marker_color =  ROOT.kOrange+5,
                     daughters = [
-                              #Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0WithSW,         
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1WithSW, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2WithSW, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3WithSW, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4WithSW, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5WithSW, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6WithSW, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7WithSW, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8WithSW, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9WithSW, 
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10WithSW,
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11WithSW,
-                              Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12WithSW,
+                             ##Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0WithSW,         
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1WithSW, 
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2WithSW, 
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3WithSW, 
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4WithSW, 
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5WithSW, 
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6WithSW, 
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7WithSW, 
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8WithSW, 
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9WithSW, 
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10WithSW,
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11WithSW,
+                             # Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12WithSW,
                               ],
                 ) 
 
@@ -681,8 +682,6 @@ Pythia8EvtGen_A14NNPDF23LO_DCH1250 = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_D
 Pythia8EvtGen_A14NNPDF23LO_DCH1300 = Sample( name ="Pythia8EvtGen_A14NNPDF23LO_DCH1300" ) 
 
 
-
-
 #-------------------------------------------------------------------------------
 # Here we put filtered samples in the global dictionary filtered 
 #-------------------------------------------------------------------------------
@@ -700,26 +699,26 @@ getFiltered(dijet, "ufakes")
 # Samples loaded for SubmitHist.py
 #---------------------------------
 
-all_data = data.daughters
+all_data = [data]
 
 all_mc = []
 
+all_mc += [dijet]
+all_mc += [Wtaunu]
 #"""
-all_mc += dijet.daughters
+all_mc += [Wenu]
+all_mc += [Wmunu]
 
-all_mc += Wenu.daughters
-all_mc += Wmunu.daughters
-all_mc += Wtaunu.daughters
+all_mc += [Zee]
+all_mc += [Zmumu]
+all_mc += [Ztautau]
 
-all_mc += Zee.daughters
-all_mc += Zmumu.daughters
-all_mc += Ztautau.daughters
+all_mc += [diboson]
 
-all_mc += diboson.daughters
-
-all_mc += ttbar.daughters
-all_mc += ttV.daughters
-all_mc += singletop.daughters
+all_mc += [singletop]
+all_mc += [ttV]
+#"""
+all_mc += [ttbar]
 
 #all_mc += samples_DCH.root_AtLeastOneTauFilter_DCH
 #"""
@@ -749,7 +748,7 @@ all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W]
 #---------------------------------
 
 mc_bkg = []
-#"""
+"""
 mc_bkg.append( singletop )
 
 mc_bkg.append( Wenu )
@@ -759,14 +758,14 @@ mc_bkg.append( Zee )
 mc_bkg.append( Zmumu )
 mc_bkg.append( Ztautau )
 
-#"""
-mc_bkg.append( diboson )
+"""
+#mc_bkg.append( diboson )
 mc_bkg.append( Wtaunu )
 mc_bkg.append( ttbar )
-mc_bkg.append( ttV )
+#mc_bkg.append( ttV )
 
 
-mc_bkg.append( dijet )
+#mc_bkg.append( dijet )
 #mc_bkg.append( dijet_qfakes )
 #mc_bkg.append( dijet_gfakes )
 #mc_bkg.append( dijet_ufakes )
@@ -804,5 +803,27 @@ mc_fakes_bkg.append( Ztautau_fakes )
 #mc_fakes_bkg.append( dijet_gfakes )
 """
 
+#----------------------------------
+# Samples loaded for SubmitMerge.py
+#----------------------------------
+
+data_merge = [data]
+
+mc_merge = []
+mc_merge.append( singletop )
+
+mc_merge.append( Wenu )
+mc_merge.append( Wmunu )
+
+#mc_merge.append( Zee ) 
+#mc_merge.append( Zmumu )
+#mc_merge.append( Ztautau )
+
+#mc_merge.append( diboson )
+#mc_merge.append( Wtaunu )
+#mc_merge.append( ttbar )
+#mc_merge.append( ttV )
+
+#mc_merge.append( dijet )
 
 ## EOF

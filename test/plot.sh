@@ -13,9 +13,33 @@
 #python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_NUM_1PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFF24Feb" --output="./" --makeplot=False --fakest="NoFakes"
 
 
-#python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_1PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFF24Feb" --output="./" --makeplot=False --fakest="NoFakes"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_1PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_1PMedium_All_F1" --lab="denominator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
 
-#python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_NUM_1PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFF27Feb" --output="./" --makeplot=True --fakest="NoFakes"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_3PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_3PMedium_All_F1" --lab="denominator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_1PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_1PMedium_All_F10" --lab="denominator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_3PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_3PMedium_All_F10" --lab="denominator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+
+
+#python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_NUM_1PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_DEN_1PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_NUM_3PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_DEN_3PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+
+#python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_NUM_1PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_DEN_1PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_NUM_3PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_DEN_3PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+
+
+
+
+
 
 #python ../ssdilep/scripts/merge.py --var="taulead_truthOrigin" --reg="FAKES_NUM_1PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFF27Feb" --output="./" --makeplot=True --fakest="NoFakes"
 
@@ -87,7 +111,7 @@
 #python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="OSTTBAR" --lab="OSTTBAR_incl" --tag="osttbarincl" --icut="3" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistCFStudy" --output="./" --makeplot=True --fakest="NoFakes"
 
 
-python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FullSSTTBAR_nofil" --lab="FullSSTTBAR_incl" --tag="fullssttbarincl" --icut="2" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistCF3May" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FullSSTTBAR_nofil" --lab="FullSSTTBAR_incl" --tag="fullssttbarincl" --icut="2" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistCF3May" --output="./" --makeplot=True --fakest="NoFakes"
 #python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FullSSTTBAR" --lab="FullSSTTBAR_incl" --tag="fullssttbarincl" --icut="1" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistCFStudy" --output="./" --makeplot=True --fakest="NoFakes"
 
 #python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FullOSTTBARfil" --lab="FullOSTTBAR_truth" --tag="fullosttbartruth" --icut="2" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistCFFilStudy" --output="./" --makeplot=True --fakest="NoFakes"

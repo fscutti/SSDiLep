@@ -113,8 +113,7 @@ class MCEventWeight(pyframe.core.Algorithm):
             
             nevents = 0.
             
-            print self.sample.xsec
-            
+
             """ 
             if "jetjet" in self.samplename:
               nevents = self.metadata[metadata_name].GetBinContent(1)
@@ -122,8 +121,12 @@ class MCEventWeight(pyframe.core.Algorithm):
             """
             nevents = self.metadata[metadata_name].GetBinContent(3)
             
+            # xs retrieved directly from ntuple is buggy
             #xsection = self.chain.crossSection
-            xsection = 1.
+            
+            # we retrieve xs info from a sample database 
+            # using the sample id retrieved from the ntuple
+            xsection = self.sampleDB["xs"][self.sampleDB["ID"][self.chain.mcChannelNumber]]
             
             mc_weight = self.chain.mcEventWeight
 

@@ -15,8 +15,8 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-#indir    = 'HistSROnePair'
-#outdir   = 'PlotsSROnePair'
+#indir    = 'HistVROnePair'
+#outdir   = 'PlotsVROnePair'
 
 #indir    = 'HistSRTwoPairs'
 #outdir   = 'PlotsSRTwoPairs'
@@ -39,15 +39,14 @@ ana      = 'ssdilep'
 #indir    = 'HistFFComposition'
 #outdir   = 'PlotsFFComposition'
 
-#indir    = 'HistFF24Feb'
-#outdir   = 'PlotsFF27Feb'
-#outdir   = 'PlotsFedericoInputs'
+indir    = 'HistFFgroupV5'
+outdir   = 'PlotsFFgroupV5'
 
 #indir    = 'HistSROnePairFullc'
 #outdir   = 'PlotsSROnePairFullc'
 
-indir    = 'HistSRTwoPairsFullc'
-outdir   = 'PlotsSRTwoPairsFullc'
+#indir    = 'HistSRTwoPairsFullc'
+#outdir   = 'PlotsSRTwoPairsFullc'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -91,7 +90,7 @@ fake_estimate = "NoFakes"
 #---------------------
 renorm = False
 makeoverlay = False
-makeplot = False
+makeplot = True
 
 regions = {}
 # use it as such:
@@ -115,13 +114,13 @@ regions["1SF3L_SignalRegionNonFiltered"]    = [3, "1SF3L_SignalRegionNonFiltered
 regions["1DF3L_SignalRegionNonFiltered"]    = [3, "1DF3L_SignalRegionNonFiltered", "1DF3L_SignalRegionNonFiltered"]
 """
 
-#"""
+"""
 regions["2SF4L_SignalRegionFiltered"]    = [3, "2SF4L_SignalRegionFiltered", "2SF4L_SignalRegionFiltered"]
 regions["al1DF4L_SignalRegionFiltered"]  = [2, "al1DF4L_SignalRegionFiltered", "al1DF4L_SignalRegionFiltered"]
 
 regions["2SF4L_SignalRegionNonFiltered"]    = [3, "2SF4L_SignalRegionNonFiltered", "2SF4L_SignalRegionNonFiltered"]
 regions["al1DF4L_SignalRegionNonFiltered"]  = [2, "al1DF4L_SignalRegionNonFiltered", "al1DF4L_SignalRegionNonFiltered"]
-#"""
+"""
 
 
 # ---------------------------
@@ -209,22 +208,23 @@ regions["HiPtFullSSTTBAR_antifil"] = [4, "HiPtSSTTBARalOneBJet", "antifiltaucf"]
 #"""
 #for wp in ["Loose","Medium","Tight"]:
 #for ptbin in ["All","2030","3040","4060","6090","90150","150inf"]:
-"""
+#for ptbin in ["All","2030","3040","4060","6090","90150","150inf"]:
+#"""
 for wp in ["Medium"]:
   for prongs in ["1P","3P"]:
-    for ptbin in ["All","2030","3040","4060","6090","90150","150inf"]:
+    for ptbin in ["All"]:
 
-      #regions["FAKES_NUM_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [5,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
-      #regions["FAKES_DEN_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [5,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
+      regions["FAKES_NUM_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [5,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
+      regions["FAKES_DEN_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [5,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
      
-      #regions["FAKES_NUM_%s%s_%s_F2"%(prongs,wp,ptbin)]   = [5,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
-      #regions["FAKES_DEN_%s%s_%s_F2"%(prongs,wp,ptbin)]   = [5,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
+      regions["FAKES_NUM_%s%s_%s_F2"%(prongs,wp,ptbin)]   = [5,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
+      regions["FAKES_DEN_%s%s_%s_F2"%(prongs,wp,ptbin)]   = [5,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
 
       regions["FAKES_NUM_%s%s_%s_F10"%(prongs,wp,ptbin)]   = [4,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
       regions["FAKES_DEN_%s%s_%s_F10"%(prongs,wp,ptbin)]   = [4,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
      
-      #regions["FAKES_NUM_%s%s_%s_F11"%(prongs,wp,ptbin)]   = [4,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
-      #regions["FAKES_DEN_%s%s_%s_F11"%(prongs,wp,ptbin)]   = [4,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
+      regions["FAKES_NUM_%s%s_%s_F11"%(prongs,wp,ptbin)]   = [4,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
+      regions["FAKES_DEN_%s%s_%s_F11"%(prongs,wp,ptbin)]   = [4,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
 
       #regions["FAKES_QNUM_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [6,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
       #regions["FAKES_QDEN_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [6,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
@@ -234,7 +234,7 @@ for wp in ["Medium"]:
 
       #regions["FAKES_UNUM_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [6,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
       #regions["FAKES_UDEN_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [6,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
-""" 
+#""" 
 #"""
 
 
@@ -448,7 +448,7 @@ vars_list = []
 #vars_list += plots.vars_mumu.vars_list
 vars_list += plots.vars_tau.vars_list
 #vars_list += plots.vars_onepair.vars_list
-vars_list += plots.vars_multipairs.vars_list
+#vars_list += plots.vars_multipairs.vars_list
 
 for REG,OPT in regions.iteritems():
   

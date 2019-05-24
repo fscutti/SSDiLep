@@ -1,5 +1,5 @@
-#PBS -l walltime=4:00:00
-#PBS -l pmem=1gb
+#PBS -l walltime=60:00:00
+#PBS -l pmem=4gb
 
 #!/bin/bash
 STARTTIME=`date +%s`
@@ -115,10 +115,11 @@ echo "copying input locally..."
 # avoid to fuck the cluster up:
 # -----------------------------
 
-cgcreate -a ${USER}:people -t ${USER}:people -g cpu,memory:user/${USER}/${PBS_JOBID}
-MEMLIMIT="$((3 * ${NCORES}))"
-echo "${MEMLIMIT}g" > /cgroup/memory/user/${USER}/${PBS_JOBID}/memory.limit_in_bytes
-echo $$ > /cgroup/memory/user/${USER}/${PBS_JOBID}/tasks
+
+#cgcreate -a ${USER}:people -t ${USER}:people -g cpu,memory:user/${USER}/${PBS_JOBID}
+#MEMLIMIT="$((3 * ${NCORES}))"
+#echo "${MEMLIMIT}g" > /cgroup/memory/user/${USER}/${PBS_JOBID}/memory.limit_in_bytes
+#echo $$ > /cgroup/memory/user/${USER}/${PBS_JOBID}/tasks
 
 
 echo ""

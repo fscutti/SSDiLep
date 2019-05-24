@@ -10,7 +10,7 @@ ROOT.gStyle.SetOptStat(0000)
 # -------------------------------------------------------------------------------------
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesOneTau"
 
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/Fakes27Feb"
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesGroupV5"
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWin"
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWinRed"
 
@@ -72,7 +72,7 @@ print "h_ff_"+tauType+"_F1"
 hdict["NOM"] = inf.Get("h_ff_"+tauType+"_F1").Clone()
 n_bins = hdict["NOM"].GetNbinsX()
 #for i in [2,3,4,5,6,7,8,9,]: 
-for i in [2,10,11]: 
+for i in [10]: 
   hdict["SYS%s"%str(i)] = inf.Get("h_ff_"+tauType+"_F%s"%str(i)).Clone()
 
 slabel = {}
@@ -101,9 +101,9 @@ slabel["SYS9"] = "One b-jet"
 # --------------
 #"""
 slabel["NOM"]  = "tau+jet"
-slabel["SYS2"] = "tau+high-pt jet"
+#slabel["SYS2"] = "tau+high-pt jet"
 slabel["SYS10"] = "tau is 3rd jet"
-slabel["SYS11"] = "tau is 3rd jet+high-pt jet"
+#slabel["SYS11"] = "tau is 3rd jet+high-pt jet"
 
 """
 slabel["SYS2"] = "p_{T}(jet) > 50 GeV"
@@ -244,8 +244,8 @@ hdict["NOM"].SetStats(0)
 hdict["NOM"].SetLineWidth(2)
 hdict["NOM"].Draw()
 #l2.SetHeader("Systematics")  # for muons
-#l2.SetHeader("N_{tracks}=1")  # for one taus
-l2.SetHeader("N_{tracks}=3")  # for one taus
+l2.SetHeader("N_{tracks}=1")  # for one taus
+#l2.SetHeader("N_{tracks}=3")  # for one taus
 #l2.SetHeader("N_{#tau}=2")  # for two taus
 
 #l2.AddEntry(hdict["NOM"],"nominal","PL")

@@ -10,8 +10,8 @@ hist_list = []
 
 # taulead
 hist_list.append(h_taulead_pt)
-hist_list.append(h_taulead_eta)
-hist_list.append(h_taulead_phi)
+#hist_list.append(h_taulead_eta)
+#hist_list.append(h_taulead_phi)
 
 
 # tausublead
