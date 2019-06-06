@@ -40,6 +40,7 @@ AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 RESUBMIT  = False
 
 # outputs
+RUN = "HistFFDCH"
 #RUN = "HistFFTracks"
 
 #RUN = "HistEBDTOnePair"
@@ -53,11 +54,10 @@ RESUBMIT  = False
 #RUN = "HistSROnePair"
 #RUN = "HistSRTwoPairs"
 
-RUN = "HistVROnePair"
+#RUN = "HistVROnePairNewFF"
 #RUN = "HistSRTwoPairs"
 
-#RUN = "HistFF28Feb"
-#RUN = "HistFFgroupV5"
+#RUN = "HistFFisLoose"
 
 #RUN = "HistSROnePairFullc"
 #RUN = "HistSRTwoPairsFullc"
@@ -70,9 +70,9 @@ QUEUE="long"                        # length of pbs queue (short, long, extralon
 # pick your script!!!
 #SCRIPT="./ssdilep/run/j.plotter_CF_MuTau.py"  
 #SCRIPT="./ssdilep/run/j.plotter_QG_OneTau.py"  
-SCRIPT="./ssdilep/run/j.plotter_VR_OnePair.py"  
+#SCRIPT="./ssdilep/run/j.plotter_VR_OnePair.py"  
 #SCRIPT="./ssdilep/run/j.plotter_FF_OneTau.py"  
-#SCRIPT="./ssdilep/run/j.plotter_VR_OneTauPair.py"  
+SCRIPT="./ssdilep/run/j.plotter_FF_MultiLeptons.py"  
 
 #SCRIPT="./ssdilep/run/j.plotter_SIG_OnePair.py"  
 #SCRIPT="./ssdilep/run/j.plotter_SIG_TwoPairs.py"  
@@ -85,8 +85,8 @@ SCRIPT="./ssdilep/run/j.plotter_VR_OnePair.py"
 
 BEXEC="Hist.sh"                      # exec script (probably dont change) 
 
-EVENT_BLOCK = 10000000                  # number of events considered for each individual job
-NJMAX       = 100                    # maximum number of jobs per train: should not exceed 600!!!
+EVENT_BLOCK = 2000000                  # number of events considered for each individual job
+NJMAX       = 200                    # maximum number of jobs per train: should not exceed 600!!!
 
 DO_NOM = True                        # submit the nominal job
 DO_NTUP_SYS = False                  # submit the NTUP systematics jobs

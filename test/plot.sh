@@ -13,17 +13,20 @@
 #python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_NUM_1PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFF24Feb" --output="./" --makeplot=False --fakest="NoFakes"
 
 
-python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_1PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
-python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_1PMedium_All_F1" --lab="denominator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_1PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFF2Jun" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_1PMedium_All_F10" --lab="denominator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFF2Jun" --output="./" --makeplot=True --fakest="NoFakes"
 
-python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_3PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
-python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_3PMedium_All_F1" --lab="denominator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_3PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFF2Jun" --output="./" --makeplot=True --fakest="NoFakes"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_3PMedium_All_F10" --lab="denominator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFF2Jun" --output="./" --makeplot=True --fakest="NoFakes"
 
-python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_1PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
-python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_1PMedium_All_F10" --lab="denominator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_3PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_3PMedium_All_F1" --lab="denominator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
 
-python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_3PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
-python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_3PMedium_All_F10" --lab="denominator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_1PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_1PMedium_All_F10" --lab="denominator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+
+#python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_NUM_3PMedium_All_F10" --lab="numerator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
+#python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_3PMedium_All_F10" --lab="denominator" --tag="hp" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
 
 
 #python ../ssdilep/scripts/merge.py --var="taulead_PartonTruthLabelID" --reg="FAKES_NUM_1PMedium_All_F1" --lab="numerator" --tag="hp" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistFFgroupV5" --output="./" --makeplot=True --fakest="NoFakes"
@@ -82,6 +85,8 @@ python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FAKES_DEN_3PMedium_
 # ----------
 # VALIDATION
 # ----------
+#python ../ssdilep/scripts/merge.py --var="leadsspair_mVis" --reg="1DF2L_invANTIPairPt150_ValRegionFiltered" --lab="1DF2L_invANTIPairPt150_ValRegionFiltered" --tag="1df2l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairNewFF" --output="./" --makeplot=True --fakest="AllRegions"
+
 
 #python ../ssdilep/scripts/merge.py --var="sspairs_mTtot" --reg="2SF4L_SideBandFiltered" --lab="2SF4L_SideBandFiltered" --tag="2sf4l_filter" --icut="3" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSRTwoPairsLumi" --output="./" --makeplot=True --fakest="NoFakes"
 

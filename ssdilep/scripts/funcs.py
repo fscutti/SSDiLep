@@ -514,7 +514,7 @@ def plot_hist(
     textsize = 0.8
     if not do_ratio_plot or not do_z_plot: textsize = 0.8
     latex_y = ty-2.*th
-    tlatex.DrawLatex(tx,latex_y,'#scale[%lf]{#scale[%lf]{#int}L dt = %2.1f fb^{-1}, #sqrt{s} = 13 TeV}'%(textsize,0.8*textsize,lumi) )
+    tlatex.DrawLatex(tx,latex_y,'#scale[%lf]{#scale[%lf]{#int}L dt = %2.1f fb^{-1}, #sqrt{s} = 13 TeV}'%(textsize,0.8*textsize,140.5) )
     if label:
       latex_y -= 0.06
       #for i,line in enumerate(label):
@@ -903,7 +903,7 @@ def plot_overlay(
     textsize = 0.8
     if not do_ratio_plot: textsize = 0.8
     latex_y = ty-2.*th
-    tlatex.DrawLatex(tx,latex_y,'#scale[%lf]{#scale[%lf]{#int}L dt = %2.1f fb^{-1}, #sqrt{s} = 13 TeV}'%(textsize,0.8*textsize,lumi) )
+    tlatex.DrawLatex(tx,latex_y,'#scale[%lf]{#scale[%lf]{#int}L dt = %2.1f fb^{-1}, #sqrt{s} = 13 TeV}'%(textsize,0.8*textsize,140.5) )
     if label:
       latex_y -= 0.06
       #for i,line in enumerate(label):

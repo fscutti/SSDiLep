@@ -408,7 +408,13 @@ class CutAlg(pyframe.core.Algorithm):
   
 
 
-
+    #__________________________________________________________________________
+    def cut_AllElPt40(self):
+      electrons = self.store['electrons']
+      passed = True
+      for e in electrons:
+        passed = passed and e.tlv.Pt()>=40.0*GeV
+      return passed
     #__________________________________________________________________________
     def cut_AllElPt30(self):
       electrons = self.store['electrons']
@@ -481,6 +487,13 @@ class CutAlg(pyframe.core.Algorithm):
       passed = True
       for m in muons:
         passed = passed and m.tlv.Pt()>=30.0*GeV
+      return passed
+    #__________________________________________________________________________
+    def cut_AllMuPt40(self):
+      muons = self.store['muons']
+      passed = True
+      for m in muons:
+        passed = passed and m.tlv.Pt()>=40.0*GeV
       return passed
     #__________________________________________________________________________
     def cut_AllMuEta247(self):
@@ -894,14 +907,14 @@ class CutAlg(pyframe.core.Algorithm):
       thr_dict['HLT_j25']  = 25
       thr_dict['HLT_j35']  = 35
       thr_dict['HLT_j45']  = 45
-      ###thr_dict['HLT_j55']  = 55
+      thr_dict['HLT_j55']  = 55
       thr_dict['HLT_j60']  = 60
       thr_dict['HLT_j85']  = 85
       thr_dict['HLT_j110'] = 110
-      ###thr_dict['HLT_j150'] = 154
+      thr_dict['HLT_j150'] = 154
       thr_dict['HLT_j175'] = 175
       thr_dict['HLT_j260'] = 260
-      ###thr_dict['HLT_j360'] = 360
+      thr_dict['HLT_j360'] = 360
       thr_dict['HLT_j380'] = 380
       thr_dict['HLT_j400'] = 400
       thr_dict['HLT_j420'] = 422
@@ -912,6 +925,26 @@ class CutAlg(pyframe.core.Algorithm):
             return True
       return False
 
+    #__________________________________________________________________________
+    def cut_SingleJetTriggerMatch(self):
+      required_triggers  = self.store["reqTrig"]
+      passed_triggers    = self.store["passTrig"].keys()
+      disabled_triggers  = self.store["disTrig"].keys()
+  
+      if not 'trigJets' in self.store.keys(): return False
+
+      #lead_jet = self.store['jets_tight'][0]
+      lead_jet = self.store['jets'][0]
+      lead_trigJet = self.store['trigJets'][0]
+
+      for t in required_triggers:
+        if t in disabled_triggers: continue
+        #if t in passed_triggers and lead_trigJet.tlv.Pt() > float(t[5:]) * GeV and lead_trigJet.tlv.DeltaR(lead_jet.tlv) < 0.5: 
+        if t in passed_triggers and lead_trigJet.tlv.DeltaR(lead_jet.tlv) < 0.5: 
+            return True
+      return False
+
+    
 
     #__________________________________________________________________________
     def cut_SingleTauTriggerMatch(self):
@@ -919,6 +952,8 @@ class CutAlg(pyframe.core.Algorithm):
       passed_triggers    = self.store["passTrig"].keys()
       disabled_triggers  = self.store["disTrig"].keys()
 
+      ## WARNING: tau trigger matching is broken for SUSY11
+      
       if self.chain.ntau == 0: return False
 
       taus = self.store['taus']
@@ -929,6 +964,7 @@ class CutAlg(pyframe.core.Algorithm):
           event_is_triggered = bool( trig in passed_triggers )
           for tau in taus:
             tau_is_matched      = bool( tau.isTrigMatchedToChain.at(self.store["ChainsWithSingleTau"][trig]) )
+            #tau_is_matched      = True
             tau_is_above_trigPt = tau.tlv.Pt() > float(trig.split("_")[1][3:]) * 1.1 * GeV
             if event_is_triggered and tau_is_matched and tau_is_above_trigPt: 
               return True
@@ -941,6 +977,8 @@ class CutAlg(pyframe.core.Algorithm):
       required_triggers  = self.store["reqTrig"]
       passed_triggers    = self.store["passTrig"].keys()
       disabled_triggers  = self.store["disTrig"].keys()
+      
+      ## WARNING: tau trigger matching is broken for SUSY11
 
       if self.chain.ntau < 2: return False
 
@@ -953,8 +991,10 @@ class CutAlg(pyframe.core.Algorithm):
         if trig in self.store["ChainsWithDiTau"].keys():
           event_is_triggered = bool( trig in passed_triggers )
           
-          lead_tau_is_matched         = bool( lead_tau.isTrigMatchedToChain.at(self.store["ChainsWithDiTau"][trig]) )
-          sublead_tau_is_matched      = bool( sublead_tau.isTrigMatchedToChain.at(self.store["ChainsWithDiTau"][trig]) )
+          #lead_tau_is_matched         = bool( lead_tau.isTrigMatchedToChain.at(self.store["ChainsWithDiTau"][trig]) )
+          lead_tau_is_matched         = True
+          #sublead_tau_is_matched      = bool( sublead_tau.isTrigMatchedToChain.at(self.store["ChainsWithDiTau"][trig]) )
+          sublead_tau_is_matched      = True
           lead_tau_is_above_trigPt    = lead_tau.tlv.Pt()    > float(trig.split("_")[1][3:]) * 1.1 * GeV
           sublead_tau_is_above_trigPt = sublead_tau.tlv.Pt() > float(trig.split("_")[4][3:]) * 1.1 * GeV
           if event_is_triggered and lead_tau_is_matched and lead_tau_is_above_trigPt and sublead_tau_is_matched and sublead_tau_is_above_trigPt : 
@@ -981,25 +1021,6 @@ class CutAlg(pyframe.core.Algorithm):
 
       return False
 
-    #__________________________________________________________________________
-    def cut_SingleJetTriggerMatch(self):
-      required_triggers  = self.store["reqTrig"]
-      passed_triggers    = self.store["passTrig"].keys()
-      disabled_triggers  = self.store["disTrig"].keys()
-  
-      if not 'trigJets' in self.store.keys(): return False
-
-      #lead_jet = self.store['jets_tight'][0]
-      lead_jet = self.store['jets'][0]
-      lead_trigJet = self.store['trigJets'][0]
-
-      for t in required_triggers:
-        if t in disabled_triggers: continue
-        if t in passed_triggers and lead_trigJet.tlv.Pt() > float(t[5:]) * GeV and lead_trigJet.tlv.DeltaR(lead_jet.tlv) < 0.5: 
-            return True
-      return False
-
-    
     #__________________________________________________________________________
     def cut_SingleElTriggerMatch(self):
       required_triggers  = self.store["reqTrig"]
@@ -1282,6 +1303,17 @@ class CutAlg(pyframe.core.Algorithm):
         if p.isOS() and p.isSF(): 
           if abs(p.mVis()/GeV - mZ) < 10.: return False
       return True
+    #__________________________________________________________________________
+    def cut_ANTIZVeto(self):
+      # adjust for tau cases
+      mZ = 91.1876
+      pairs = self.store["pairs"]
+      for p in pairs:
+        if p.isOS() and p.isSF(): 
+          if abs(p.mVis()/GeV - mZ) > 10.: return False
+      return True
+
+
 
     #__________________________________________________________________________
     def cut_PairPt150(self):
@@ -1290,6 +1322,15 @@ class CutAlg(pyframe.core.Algorithm):
         if p.isSS() and p.Pt()/GeV < 150.: 
           return False
       return True
+    #__________________________________________________________________________
+    def cut_ANTIPairPt150(self):
+      pairs = self.store["pairs"]
+      for p in pairs:
+        if p.isSS() and p.Pt()/GeV > 150.: 
+          return False
+      return True
+
+
 
     #__________________________________________________________________________
     def cut_PairDR35(self):
@@ -1298,6 +1339,15 @@ class CutAlg(pyframe.core.Algorithm):
         if p.isSS() and p.DeltaR() > 3.5: 
           return False
       return True
+    #__________________________________________________________________________
+    def cut_ANTIPairDR35(self):
+      pairs = self.store["pairs"]
+      for p in pairs:
+        if p.isSS() and p.DeltaR() < 3.5: 
+          return False
+      return True
+
+
 
 
     #__________________________________________________________________________
@@ -1310,6 +1360,20 @@ class CutAlg(pyframe.core.Algorithm):
         return self.store['leadsspair_mTtot'] > 300 * GeV
       
       return True
+    #__________________________________________________________________________
+    def cut_ANTImTtot300(self):
+      nleptons = self.chain.nmuon + self.chain.nel + self.chain.ntau
+      
+      if nleptons == 4 and 'sspairs_mTtot' in self.store:
+        return self.store['sspairs_mTtot'] < 300 * GeV
+      elif nleptons < 4 and 'leadsspair_mTtot' in self.store:
+        return self.store['leadsspair_mTtot'] < 300 * GeV
+      
+      return True
+
+
+
+
 
     #__________________________________________________________________________
     def cut_PASS(self):

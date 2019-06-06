@@ -89,20 +89,22 @@ def analyze(config):
                              'HLT_j25',
                              'HLT_j35',
                              'HLT_j45',
-                             #'HLT_j55',  # 2015-2016 only
+                             'HLT_j55',  # 2015-2016 only, rem
                              'HLT_j60',
                              'HLT_j85',
                              'HLT_j110',
-                             ####'HLT_j150', # 2015-2016 only Frank removed
+                             'HLT_j150', # 2015-2016 only Frank removed
                              'HLT_j175',
                              'HLT_j260', # 2017- only
-                             #'HLT_j360', # 2017- only
+                             'HLT_j360', # 2017- only, rem
                              'HLT_j380', # 2015-2016 only
                              'HLT_j400',
                              'HLT_j420',
+                             #'HLT_tau160_medium1_tracktwo',
+                             #'HLT_tau35_medium1_tracktwo_tau25_medium1_tracktwo',
                              ],
                              get_prescales_lumi = True,
-                             key                = 'jets',
+                             key                = ['jets','taus'],
                              )
 
     ## build and pt-sort objects
@@ -152,11 +154,12 @@ def analyze(config):
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTau') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TrueTauHadFilter') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsVeryLoose') # do we need to test this?
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauBDT0005') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsVeryLoose') # do we need to test this?
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsLoose') # do we need to test this?
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauBDT0005') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='MuVeto') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleJetTrigger') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='SingleJetTriggerMatch') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTauPt20') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastOneJet') 
@@ -187,7 +190,7 @@ def analyze(config):
     ## ---------------------------------------
     hist_list = []
     hist_list += ssdilep.hists.OneTauFF_hists.hist_list
-    hist_list += ssdilep.hists.TauTracks_hists.hist_list
+    #hist_list += ssdilep.hists.TauTracks_hists.hist_list
 
     if config['sampletype'] == "mc":
       hist_list += ssdilep.hists.TRUTH_TAUS_hists.hist_list
@@ -200,9 +203,26 @@ def analyze(config):
     #for tauPtBin in ["All","2030","3040","4060","6090","90150","150inf"]:
     for tauPtBin in ["All"]:
        for tauProngs in ["1P","3P"]:
-         #for tauType in ["Loose","Medium","Tight"]:
+         
+         ## F0
+         ## ---------------------------------------
+         loop += ssdilep.algs.algs.PlotAlg(
+                 region       = 'FAKES_NOSEL_%sPass_%s_F0'%(tauProngs,tauPtBin),
+                 plot_all     = False,
+                 do_var_check = True,
+                 hist_list    = hist_list,
+                 cut_flow     = [
+                   #['SingleJetTriggerMatch', None],
+                   ['One%sTau'%tauProngs, None],
+                   ['OneJet', ['JVTSF']],
+                   ['LeadJetPt20', None],
+                   ['TauJetDphi27', None],
+                   ['LeadTauPtBin%s'%tauPtBin, None],
+                   ],
+                 )
+
          for tauType in ["Medium"]:
-       
+             
              ## F1
              ## ---------------------------------------
              loop += ssdilep.algs.algs.PlotAlg(
@@ -211,6 +231,7 @@ def analyze(config):
                      do_var_check = True,
                      hist_list    = hist_list,
                      cut_flow     = [
+                       #['SingleJetTriggerMatch', None],
                        ['One%sTau'%tauProngs, None],
                        ['OneJet', ['JVTSF']],
                        ['LeadJetPt20', None],
@@ -225,6 +246,7 @@ def analyze(config):
                      do_var_check = True,
                      hist_list    = hist_list,
                      cut_flow     = [
+                       #['SingleJetTriggerMatch', None],
                        ['One%sTau'%tauProngs, None],
                        ['OneJet', ['JVTSF']],
                        ['LeadJetPt20', None],
@@ -233,7 +255,7 @@ def analyze(config):
                        ['LeadTauPtBin%s'%tauPtBin, None],
                        ],
                      )
-             
+             """
              ## F2
              ## ---------------------------------------
              loop += ssdilep.algs.algs.PlotAlg(
@@ -242,9 +264,10 @@ def analyze(config):
                      do_var_check = True,
                      hist_list    = hist_list,
                      cut_flow     = [
+                       ['SingleTauTriggerMatch', None],
                        ['One%sTau'%tauProngs, None],
                        ['OneJet', ['JVTSF']],
-                       ['LeadJetPt50', None],
+                       ['LeadJetPt20', None],
                        ['TauJetDphi27', None],
                        ['LeadTauIs%s'%tauType, None],
                        ['LeadTauPtBin%s'%tauPtBin, None],
@@ -256,14 +279,51 @@ def analyze(config):
                      do_var_check = True,
                      hist_list    = hist_list,
                      cut_flow     = [
+                       ['SingleTauTriggerMatch', None],
                        ['One%sTau'%tauProngs, None],
                        ['OneJet', ['JVTSF']],
-                       ['LeadJetPt50', None],
+                       ['LeadJetPt20', None],
                        ['TauJetDphi27', None],
                        ['LeadTauIsNot%s'%tauType, None],
                        ['LeadTauPtBin%s'%tauPtBin, None],
                        ],
                      )
+             """
+
+             """
+             ## F3
+             ## ---------------------------------------
+             loop += ssdilep.algs.algs.PlotAlg(
+                     region       = 'FAKES_NUM_%s%s_%s_F3'%(tauProngs,tauType,tauPtBin),
+                     plot_all     = False,
+                     do_var_check = True,
+                     hist_list    = hist_list,
+                     cut_flow     = [
+                       ['DiTauTriggerMatch', None],
+                       ['One%sTau'%tauProngs, None],
+                       ['OneJet', ['JVTSF']],
+                       ['LeadJetPt20', None],
+                       ['TauJetDphi27', None],
+                       ['LeadTauIs%s'%tauType, None],
+                       ['LeadTauPtBin%s'%tauPtBin, None],
+                       ],
+                     )
+             loop += ssdilep.algs.algs.PlotAlg(
+                     region       = 'FAKES_DEN_%s%s_%s_F3'%(tauProngs,tauType,tauPtBin),
+                     plot_all     = False,
+                     do_var_check = True,
+                     hist_list    = hist_list,
+                     cut_flow     = [
+                       ['DiTauTriggerMatch', None],
+                       ['One%sTau'%tauProngs, None],
+                       ['OneJet', ['JVTSF']],
+                       ['LeadJetPt20', None],
+                       ['TauJetDphi27', None],
+                       ['LeadTauIsNot%s'%tauType, None],
+                       ['LeadTauPtBin%s'%tauPtBin, None],
+                       ],
+                     )
+             """
 
 
              ## F10
@@ -274,6 +334,7 @@ def analyze(config):
                      do_var_check = True,
                      hist_list    = hist_list,
                      cut_flow     = [
+                       #['SingleJetTriggerMatch', None],
                        ['One%sTau'%tauProngs, None],
                        ['TauIsThirdJet', ['JVTSF']],
                        ['LeadJetPt20', None],
@@ -287,6 +348,7 @@ def analyze(config):
                      do_var_check = True,
                      hist_list    = hist_list,
                      cut_flow     = [
+                       #['SingleJetTriggerMatch', None],
                        ['One%sTau'%tauProngs, None],
                        ['TauIsThirdJet', ['JVTSF']],
                        ['LeadJetPt20', None],
@@ -294,7 +356,8 @@ def analyze(config):
                        ['LeadTauPtBin%s'%tauPtBin, None],
                        ],
                      )
-
+             
+             """
              ## F11
              ## ---------------------------------------
              loop += ssdilep.algs.algs.PlotAlg(
@@ -303,9 +366,10 @@ def analyze(config):
                      do_var_check = True,
                      hist_list    = hist_list,
                      cut_flow     = [
+                       ['SingleTauTriggerMatch', None],
                        ['One%sTau'%tauProngs, None],
                        ['TauIsThirdJet', ['JVTSF']],
-                       ['LeadJetPt50', None],
+                       ['LeadJetPt20', None],
                        ['LeadTauIs%s'%tauType, None],
                        ['LeadTauPtBin%s'%tauPtBin, None],
                        ],
@@ -316,13 +380,48 @@ def analyze(config):
                      do_var_check = True,
                      hist_list    = hist_list,
                      cut_flow     = [
+                       ['SingleTauTriggerMatch', None],
                        ['One%sTau'%tauProngs, None],
                        ['TauIsThirdJet', ['JVTSF']],
-                       ['LeadJetPt50', None],
+                       ['LeadJetPt20', None],
                        ['LeadTauIsNot%s'%tauType, None],
                        ['LeadTauPtBin%s'%tauPtBin, None],
                        ],
                      )
+
+             """
+             """
+             ## F12
+             ## ---------------------------------------
+             loop += ssdilep.algs.algs.PlotAlg(
+                     region       = 'FAKES_NUM_%s%s_%s_F12'%(tauProngs,tauType,tauPtBin),
+                     plot_all     = False,
+                     do_var_check = True,
+                     hist_list    = hist_list,
+                     cut_flow     = [
+                       ['DiTauTriggerMatch', None],
+                       ['One%sTau'%tauProngs, None],
+                       ['TauIsThirdJet', ['JVTSF']],
+                       ['LeadJetPt20', None],
+                       ['LeadTauIs%s'%tauType, None],
+                       ['LeadTauPtBin%s'%tauPtBin, None],
+                       ],
+                     )
+             loop += ssdilep.algs.algs.PlotAlg(
+                     region       = 'FAKES_DEN_%s%s_%s_F12'%(tauProngs,tauType,tauPtBin),
+                     plot_all     = False,
+                     do_var_check = True,
+                     hist_list    = hist_list,
+                     cut_flow     = [
+                       ['DiTauTriggerMatch', None],
+                       ['One%sTau'%tauProngs, None],
+                       ['TauIsThirdJet', ['JVTSF']],
+                       ['LeadJetPt20', None],
+                       ['LeadTauIsNot%s'%tauType, None],
+                       ['LeadTauPtBin%s'%tauPtBin, None],
+                       ],
+                     )
+             """
 
              """
              if config['sampletype'] == "mc":

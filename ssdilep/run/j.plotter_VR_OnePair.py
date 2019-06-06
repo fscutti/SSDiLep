@@ -89,7 +89,7 @@ def analyze(config):
                              #'HLT_tau160_medium1_tracktwo_L1TAU100',
                              #'HLT_tau35_medium1_tracktwo_tau25_medium1_tracktwo_L1TAU20IM_2TAU12IM',
                              #'HLT_tau80_medium1_TAU60_tau50_medium1_L1TAU12',
-                             'HLT_tau35_medium1_tracktwo_tau25_medium1_tracktwo',
+                             #######'HLT_tau35_medium1_tracktwo_tau25_medium1_tracktwo', # KILLED
                              #'HLT_tau80_medium1_tracktwo_L1TAU60_tau60_medium1_tracktwo_L1TAU40',
                              #'HLT_tau35_medium1_tracktwo_tau25_medium1_tracktwo_L1DR-TAU20ITAU12I-J25',
                              # -------------
@@ -163,15 +163,17 @@ def analyze(config):
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausEleBDTLoose') 
     
     # not strictly necessary
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausBDT0005') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausBDT0005') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausVeryLoose') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTauPt20') 
 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='BVeto') 
     
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt30') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt40') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuMedium') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllElPt30') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllElPt40') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllElEta247') 
 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='ZVeto') 
@@ -197,8 +199,8 @@ def analyze(config):
     loop += ssdilep.algs.ObjWeights.FakeFactor(
             config_file_light_lepton = os.path.join(main_path,'ssdilep/data/fake_factors.root'),
             config_file_tau_lepton   = [
-              os.path.join(main_path,'ssdilep/data/merged_May23_ff_taulead_pt_data_1PMedium_All_1PMedium.root'),
-              os.path.join(main_path,'ssdilep/data/merged_May23_ff_taulead_pt_data_3PMedium_All_3PMedium.root')],
+              os.path.join(main_path,'ssdilep/data/merged_Jun2_ff_taulead_pt_data_1PMedium_All_1PMedium.root'),
+              os.path.join(main_path,'ssdilep/data/merged_Jun2_ff_taulead_pt_data_3PMedium_All_3PMedium.root')],
             key                      = 'FF',
             scale                    = None,
             )
@@ -220,7 +222,7 @@ def analyze(config):
     # ------------------
 
 
-    for vrCut in ["ZVeto","PairPt150","PairDR35","mTtot300"]:
+    for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTIPairDR35","ANTImTtot300"]:
 
         loop += ssdilep.algs.algs.PlotAlg(
                 region       = '1SF2L_inv%s_ValRegionFiltered'%vrCut,
@@ -228,11 +230,12 @@ def analyze(config):
                 do_var_check = True,
                 hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
                 cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-DiTauTriggerMatch', None],
+                  #['SingleTauTriggerMatch-OR-DiTauTriggerMatch', None],
+                  ['SingleTauTriggerMatch', None],
                   ['TwoLeptons', None],
                   ['AtLeastOneSSPairIsSF', None],
                   ['AllPassLeptons', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
         loop += ssdilep.algs.algs.PlotAlg(
@@ -241,11 +244,12 @@ def analyze(config):
                 do_var_check = True,
                 hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
                 cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-DiTauTriggerMatch', None],
+                  #['SingleTauTriggerMatch-OR-DiTauTriggerMatch', None],
+                  ['SingleTauTriggerMatch', None],
                   ['TwoLeptons', None],
                   ['AtLeastOneSSPairIsSF', None],
                   ['AtLeastOneFailLepton', None],
-                  ['!%s'%vrCut, ['FF']],
+                  ['%s'%vrCut, ['FF']],
                   ],
                 )
        
@@ -259,7 +263,7 @@ def analyze(config):
                   ['TwoLeptons', None],
                   ['AtLeastOneSSPairIsDF', None],
                   ['AllPassLeptons', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
         loop += ssdilep.algs.algs.PlotAlg(
@@ -272,7 +276,7 @@ def analyze(config):
                   ['TwoLeptons', None],
                   ['AtLeastOneSSPairIsDF', None],
                   ['AtLeastOneFailLepton', None],
-                  ['!%s'%vrCut, ['FF']],
+                  ['%s'%vrCut, ['FF']],
                   ],
                 )
        
@@ -285,11 +289,12 @@ def analyze(config):
                 do_var_check = True,
                 hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
                 cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                  #['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
                   ['ThreeLeptons', None],
                   ['AtLeastOneSSPairIsSF', None],
                   ['AllPassLeptons', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
         loop += ssdilep.algs.algs.PlotAlg(
@@ -298,11 +303,12 @@ def analyze(config):
                 do_var_check = True,
                 hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
                 cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                  #['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
                   ['ThreeLeptons', None],
                   ['AtLeastOneSSPairIsSF', None],
                   ['AtLeastOneFailLepton', None],
-                  ['!%s'%vrCut, ['FF']],
+                  ['%s'%vrCut, ['FF']],
                   ],
                 )
        
@@ -315,11 +321,12 @@ def analyze(config):
                 do_var_check = True,
                 hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
                 cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                  #['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
                   ['ThreeLeptons', None],
                   ['AtLeastOneSSPairIsDF', None],
                   ['AllPassLeptons', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
         loop += ssdilep.algs.algs.PlotAlg(
@@ -328,19 +335,19 @@ def analyze(config):
                 do_var_check = True,
                 hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
                 cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                  #['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
                   ['ThreeLeptons', None],
                   ['AtLeastOneSSPairIsDF', None],
                   ['AtLeastOneFailLepton', None],
-                  ['!%s'%vrCut, ['FF']],
+                  ['%s'%vrCut, ['FF']],
                   ],
                 )
        
        
        
        
-       
-       
+        """ 
         # non filtered MC
         loop += ssdilep.algs.algs.PlotAlg(
                 region       = '1SF2L_inv%s_ValRegionNonFiltered'%vrCut,
@@ -352,10 +359,9 @@ def analyze(config):
                   ['TwoLeptons', None],
                   ['AtLeastOneSSPairIsSF', None],
                   ['AllPassLeptonsNoFilter', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
-        """
         loop += ssdilep.algs.algs.PlotAlg(
                 region       = '1SF2L_inv%s_SideBandNonFiltered'%vrCut,
                 plot_all     = False,
@@ -366,10 +372,9 @@ def analyze(config):
                   ['TwoLeptons', None],
                   ['AtLeastOneSSPairIsSF', None],
                   ['AtLeastOneFailLeptonNoFilter', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
-        """ 
        
         loop += ssdilep.algs.algs.PlotAlg(
                 region       = '1DF2L_inv%s_ValRegionNonFiltered'%vrCut,
@@ -381,10 +386,9 @@ def analyze(config):
                   ['TwoLeptons', None],
                   ['AtLeastOneSSPairIsDF', None],
                   ['AllPassLeptonsNoFilter', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
-        """
         loop += ssdilep.algs.algs.PlotAlg(
                 region       = '1DF2L_inv%s_SideBandNonFiltered'%vrCut,
                 plot_all     = False,
@@ -395,10 +399,9 @@ def analyze(config):
                   ['TwoLeptons', None],
                   ['AtLeastOneSSPairIsDF', None],
                   ['AtLeastOneFailLeptonNoFilter', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
-        """
        
        
         # three lepton regions
@@ -413,10 +416,9 @@ def analyze(config):
                   ['ThreeLeptons', None],
                   ['AtLeastOneSSPairIsSF', None],
                   ['AllPassLeptonsNoFilter', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
-        """
         loop += ssdilep.algs.algs.PlotAlg(
                 region       = '1SF3L_inv%s_SideBandNonFiltered'%vrCut,
                 plot_all     = False,
@@ -427,10 +429,9 @@ def analyze(config):
                   ['ThreeLeptons', None],
                   ['AtLeastOneSSPairIsSF', None],
                   ['AtLeastOneFailLeptonNoFilter', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
-        """
        
        
        
@@ -445,10 +446,9 @@ def analyze(config):
                   ['ThreeLeptons', None],
                   ['AtLeastOneSSPairIsDF', None],
                   ['AllPassLeptonsNoFilter', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
-        """
         loop += ssdilep.algs.algs.PlotAlg(
                 region       = '1DF3L_inv%s_SideBandNonFiltered'%vrCut,
                 plot_all     = False,
@@ -459,7 +459,7 @@ def analyze(config):
                   ['ThreeLeptons', None],
                   ['AtLeastOneSSPairIsDF', None],
                   ['AtLeastOneFailLeptonNoFilter', None],
-                  ['!%s'%vrCut, None],
+                  ['%s'%vrCut, None],
                   ],
                 )
         """

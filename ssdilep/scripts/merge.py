@@ -128,59 +128,16 @@ fake_subtraction_regions = []
 
 reg_prefix, reg_suffix = funcs.get_pref_and_suff(options.region)
 
-if reg_suffix == "MAINREG":
+
+if reg_suffix == "ValRegionFiltered" or reg_suffix == "SignalRegionFiltered":
   
   # including all regions for fake-factor method
   # ---------------------------------------------
   if options.fakest == "AllRegions":
-    main_addition_regions = ["TT","TTT","TTTT"]
+    main_addition_regions = [options.region]
     
-    fake_addition_regions = []
-    fake_addition_regions += ["TL","LT"]
-    fake_addition_regions += ["TTL","TLT","LTT"]
-    fake_addition_regions += ["LLL"]
-    #fake_addition_regions += ["TTTL","TTLT","TLTT","LTTT"]
-
-    fake_subtraction_regions = []
-    fake_subtraction_regions += ["LL"]
-    fake_subtraction_regions += ["LLT","LTL","TLL"]
-  
-  # only two lepton regions
-  # ---------------------------------------------
-  if options.fakest == "TwoLepRegions":
-    
-    main_addition_regions    = ["TT"]
-    fake_addition_regions    = ["TL","LT"]
-    fake_subtraction_regions = ["LL"]
-
-  # only three lepton regions
-  # ---------------------------------------------
-  if options.fakest == "ThreeLepRegions":
-    
-    main_addition_regions = ["TTT"]
-    
-    fake_addition_regions = []
-    fake_addition_regions += ["TTL","TLT","LTT"]
-    fake_addition_regions += ["LLL"]
-
-    fake_subtraction_regions = []
-    fake_subtraction_regions += ["LLT","LTL","TLL"]
-
-
-  # leading lepton region
-  # ---------------------------------------------
-  if options.fakest == "LeadLepRegions":
-    
-    main_addition_regions    = ["PP"]
-    fake_addition_regions    = ["PF"]
-    fake_subtraction_regions = []
-
-  # leading lepton region
-  # ---------------------------------------------
-  if options.fakest == "MixedRegions":
-    
-    main_addition_regions    = ["TT"]
-    fake_addition_regions    = ["TL","LT"]
+    fake_addition_regions = [options.region.replace(reg_suffix, "SideBandFiltered")]
+    fake_addition_regions += []
     fake_subtraction_regions = []
 
 if options.fakest in [ "Subtraction", "NoFakes" ]:
@@ -190,7 +147,6 @@ if options.fakest in [ "Subtraction", "NoFakes" ]:
 if options.fakest in [ "Simulation"]:
   main_addition_regions =  fake_addition_regions = [""]
   reg_prefix            =  options.region
-
 
 
 # -------------------------------------------------------
@@ -204,6 +160,8 @@ fakes.estimator = histmgr.AddRegEstimator(
       mc_samples          = mc_bkg, 
       addition_regions    = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in fake_addition_regions],
       subtraction_regions = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in fake_subtraction_regions]
+      #addition_regions    = fake_addition_regions,
+      #subtraction_regions = fake_subtraction_regions
       )
 
 for s in recom_mc_bkg + [recom_data]:
@@ -213,6 +171,7 @@ for s in recom_mc_bkg + [recom_data]:
       data_sample      = data,
       mc_samples       = mc_bkg, 
       addition_regions = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in main_addition_regions]
+      #addition_regions = main_addition_regions
       )
 """
 if options.fakest in ["Simulation"]:

@@ -17,6 +17,9 @@ import pyframe
 ## local modules
 import ssdilep
 
+from ssdilep.samples.SamplesID import SampleID
+from ssdilep.samples.xsections import xsdict
+
 #_____________________________________________________________________________
 def analyze(config):
   
@@ -66,6 +69,7 @@ def analyze(config):
     loop = pyframe.core.EventLoop(name='ssdilep',
                                   sampletype=config['sampletype'],
                                   samplename=config['samplename'],
+                                  sampleDB={"ID":SampleID, "xs":xsdict},
                                   outfile=config['samplename']+".root",
                                   quiet=False,
                                   )
@@ -183,6 +187,17 @@ def analyze(config):
             scale        = None,
             )
 
+    ## objects
+    ## +++++++++++++++++++++++++++++++++++++++
+    loop += ssdilep.algs.ObjWeights.FakeFactor(
+            exclude_obj              = ['electrons'],
+            config_file_light_lepton = os.path.join(main_path,'ssdilep/data/fake_factors.root'),
+            config_file_tau_lepton   = [
+              os.path.join(main_path,'ssdilep/data/merged_May23_ff_taulead_pt_data_1PMedium_All_1PMedium.root'),
+              os.path.join(main_path,'ssdilep/data/merged_May23_ff_taulead_pt_data_3PMedium_All_3PMedium.root')],
+            key                      = 'FF',
+            scale                    = None,
+            )
 
     ## configure histograms
     ## ---------------------------------------

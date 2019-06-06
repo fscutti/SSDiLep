@@ -309,6 +309,7 @@ class FakeFactor(pyframe.core.Algorithm):
                  name                     = "FakeFactor",
                  config_file_light_lepton = None,
                  config_file_tau_lepton   = [],
+                 exclude_obj              = [],
                  key                      = None,
                  scale                    = None
                  ):
@@ -316,6 +317,7 @@ class FakeFactor(pyframe.core.Algorithm):
         
         self.config_file_light_lepton  = config_file_light_lepton
         self.config_file_tau_lepton    = config_file_tau_lepton
+        self.exclude_obj               = exclude_obj
         self.key                       = key
         self.scale                     = scale
         
@@ -336,8 +338,8 @@ class FakeFactor(pyframe.core.Algorithm):
         
         H_ff["muon"]   = f_lep.Get("m/highPt_anyjet/FF")
         H_ff["el"]     = f_lep.Get("e/highPt_anyjet/FF")
-        H_ff["tau_1p"] = f_tau_1p.Get("h_ff_1PMedium_F1")
-        H_ff["tau_3p"] = f_tau_3p.Get("h_ff_3PMedium_F1")
+        H_ff["tau_1p"] = f_tau_1p.Get("h_ff_1PMedium_F10")
+        H_ff["tau_3p"] = f_tau_3p.Get("h_ff_3PMedium_F10")
 
         assert H_ff["muon"],   "Failed to get 'H_ff_mu' from %s"%(self.config_file_light_lepton)
         assert H_ff["el"],     "Failed to get 'H_ff_el' from %s"%(self.config_file_light_lepton)
@@ -358,8 +360,11 @@ class FakeFactor(pyframe.core.Algorithm):
     def execute(self, weight):
         ff_lep  = 1.0 
         ff_sign = -1.
-
-        leptons = self.store['muons']+self.store['electrons']+self.store['taus']
+        
+        leptons = []
+        for obj in ['muons','taus','electrons']:
+          if obj in self.exclude_obj: continue
+          leptons += self.store[obj]
         
         met = self.store["met_trk"].tlv.Pt() / GeV
         

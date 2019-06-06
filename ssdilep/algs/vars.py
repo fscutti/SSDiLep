@@ -284,7 +284,7 @@ class Particle(pyframe.core.ParticleProxy):
     #__________________________________________________________________________
     def isFailElectron(self):
       assert "el" in self.prefix, "ERROR: using wrong quality method" 
-      return not (bool(self.isIsolated_FCLoose) and bool(self.LHTight))
+      return not bool(self.isIsolated_FCLoose) and bool(self.LHLooseBL)
     #__________________________________________________________________________
     def isTrueNonIsoElectron(self):
       assert "el" in self.prefix, "ERROR: using wrong truth method" 
