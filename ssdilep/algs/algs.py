@@ -657,6 +657,55 @@ class CutAlg(pyframe.core.Algorithm):
 
 
 
+
+
+
+    #__________________________________________________________________________
+    def cut_AllPassLightLeptons(self):
+      
+      leptons = self.store['muons']+self.store['electrons']
+      
+      for lep in leptons:
+        if self.sampletype=="mc":
+          if lep.isFake(): return False
+        if lep.isFail(): return False
+      return True
+    #__________________________________________________________________________
+    def cut_AtLeastOneFailLightLepton(self):
+      
+      leptons = self.store['muons']+self.store['electrons']
+       
+      for lep in leptons:
+        if self.sampletype=="mc":
+            if lep.isTrue() and lep.isFail(): return True
+            else: continue
+        elif lep.isFail(): return True
+      return False
+
+
+    #__________________________________________________________________________
+    def cut_AllPassLightLeptonsNoFilter(self):
+      
+      leptons = self.store['muons']+self.store['electrons']
+      
+      for lep in leptons:
+        if lep.isFail(): return False
+      return True
+    #__________________________________________________________________________
+    def cut_AtLeastOneFailLightLeptonNoFilter(self):
+      
+      leptons = self.store['muons']+self.store['electrons']
+      
+      for lep in leptons:
+        if lep.isFail(): return True
+      return False
+
+
+
+
+
+
+
     #__________________________________________________________________________
     def cut_TauJetPtRatio30(self):
       return self.store['taujet_ptratio'] > 0.3

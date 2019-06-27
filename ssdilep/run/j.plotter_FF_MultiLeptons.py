@@ -239,7 +239,7 @@ def analyze(config):
                   ['AtLeastOneSSPairIsDF', None],
                   ['PairDR35', None],
                   ['LeadTauIsMedium', None],
-                  ['AllPassLeptons', None],
+                  ['AllPassLightLeptons', None],
                   ['%s'%vrCut, None],
                   ],
                 )
@@ -256,7 +256,7 @@ def analyze(config):
                   ['AtLeastOneSSPairIsDF', None],
                   ['PairDR35', None],
                   ['LeadTauIsMedium', None],
-                  ['AtLeastOneFailLepton', None],
+                  ['AtLeastOneFailLightLepton', None],
                   ['%s'%vrCut, ['FF']],
                   ],
                 )
@@ -273,7 +273,7 @@ def analyze(config):
                   ['AtLeastOneSSPairIsDF', None],
                   ['PairDR35', None],
                   ['LeadTauIsNotMedium', None],
-                  ['AllPassLeptons', None],
+                  ['AllPassLightLeptons', None],
                   ['%s'%vrCut, None],
                   ],
                 )
@@ -290,7 +290,7 @@ def analyze(config):
                   ['AtLeastOneSSPairIsDF', None],
                   ['PairDR35', None],
                   ['LeadTauIsNotMedium', None],
-                  ['AtLeastOneFailLepton', None],
+                  ['AtLeastOneFailLightLepton', None],
                   ['%s'%vrCut, ['FF']],
                   ],
                 )
@@ -313,7 +313,7 @@ def analyze(config):
                   ['AtLeastOneSSPairIsDF', None],
                   ['PairDR35', None],
                   ['LeadTauIsMedium', None],
-                  ['AllPassLeptons', None],
+                  ['AllPassLightLeptons', None],
                   ['%s'%vrCut, None],
                   ],
                 )
@@ -330,7 +330,7 @@ def analyze(config):
                   ['AtLeastOneSSPairIsDF', None],
                   ['PairDR35', None],
                   ['LeadTauIsMedium', None],
-                  ['AtLeastOneFailLepton', None],
+                  ['AtLeastOneFailLightLepton', None],
                   ['%s'%vrCut, ['FF']],
                   ],
                 )
@@ -347,7 +347,7 @@ def analyze(config):
                   ['AtLeastOneSSPairIsDF', None],
                   ['PairDR35', None],
                   ['LeadTauIsNotMedium', None],
-                  ['AllPassLeptons', None],
+                  ['AllPassLightLeptons', None],
                   ['%s'%vrCut, None],
                   ],
                 )
@@ -364,7 +364,7 @@ def analyze(config):
                   ['AtLeastOneSSPairIsDF', None],
                   ['PairDR35', None],
                   ['LeadTauIsNotMedium', None],
-                  ['AtLeastOneFailLepton', None],
+                  ['AtLeastOneFailLightLepton', None],
                   ['%s'%vrCut, ['FF']],
                   ],
                 )
