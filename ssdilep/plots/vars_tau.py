@@ -390,7 +390,7 @@ vars_list = []
 # One tau
 # ---------------
 vars_list.append(taulead_pt)
-vars_list.append(jetlead_pt)
+#vars_list.append(jetlead_pt)
 """
 vars_list.append(taulead_eta)
 vars_list.append(taulead_phi)
@@ -398,8 +398,7 @@ vars_list.append(met_trk_et)
 vars_list.append(jetlead_eta)
 vars_list.append(jetlead_phi)
 """
-#"""
-vars_list.append(trigJetlead_pt)
+#vars_list.append(trigJetlead_pt)
 #vars_list.append(trigJetlead_eta)
 #vars_list.append(trigJetlead_phi)
 
@@ -407,7 +406,7 @@ vars_list.append(trigJetlead_pt)
 #vars_list.append(taujet_dphi)
 
 #vars_list.append(jetTrigJet_ptratio)
-vars_list.append(jetTrigJet_deltaR)
+#vars_list.append(jetTrigJet_deltaR)
 
 #vars_list.append(taulead_JetBDTScore)
 #vars_list.append(taulead_JetBDTScoreSigTrans)
@@ -418,7 +417,7 @@ vars_list.append(jetTrigJet_deltaR)
 #vars_list.append(taulead_truthOrigin)
 #vars_list.append(taulead_truthType)
 #"""
-vars_list.append(taulead_PartonTruthLabelID)
+#vars_list.append(taulead_PartonTruthLabelID)
 
 # ---------------
 # Muon+Tau
@@ -458,7 +457,7 @@ vars_list.append(taulead_angeec05)
 vars_list.append(taulead_angeec1)
 vars_list.append(taulead_tracksum)
 """
-#vars_list.append(taulead_seedjetwidth)
+vars_list.append(taulead_seedjetwidth)
 
 """
 vars_list.append(taulead_matchjetwidth)

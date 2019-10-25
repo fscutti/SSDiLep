@@ -335,11 +335,27 @@ class FakeFactor(pyframe.core.Algorithm):
         assert f_tau_3p, "Failed to open fake-factor config file: %s"%(self.config_file_tau_lepton[1])
         
         H_ff = dict()
+       
+        tau_ff_name_1p = ""
+        tau_ff_name_3p = ""
+
+        if "FFDijet" in self.key:
+          tau_ff_name_1p = "h_ff_1PMedium_F10"
+          tau_ff_name_3p = "h_ff_3PMedium_F10"
         
+        elif "FFMultilep2L" in self.key:
+          tau_ff_name_1p = "h_ff_taulead_pt_1DF2L_ANTIZVeto"
+          tau_ff_name_3p = "h_ff_taulead_pt_1DF2L_ANTIZVeto"
+        
+        elif "FFMultilep3L" in self.key:
+          tau_ff_name_1p = "h_ff_taulead_pt_1DF3L_ANTIZVeto"
+          tau_ff_name_3p = "h_ff_taulead_pt_1DF3L_ANTIZVeto"
+
+
         H_ff["muon"]   = f_lep.Get("m/highPt_anyjet/FF")
         H_ff["el"]     = f_lep.Get("e/highPt_anyjet/FF")
-        H_ff["tau_1p"] = f_tau_1p.Get("h_ff_1PMedium_F10")
-        H_ff["tau_3p"] = f_tau_3p.Get("h_ff_3PMedium_F10")
+        H_ff["tau_1p"] = f_tau_1p.Get(tau_ff_name_1p)
+        H_ff["tau_3p"] = f_tau_3p.Get(tau_ff_name_3p)
 
         assert H_ff["muon"],   "Failed to get 'H_ff_mu' from %s"%(self.config_file_light_lepton)
         assert H_ff["el"],     "Failed to get 'H_ff_el' from %s"%(self.config_file_light_lepton)

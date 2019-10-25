@@ -355,7 +355,16 @@ class Particle(pyframe.core.ParticleProxy):
       # according to pdg: http://pdg.lbl.gov/2007/reviews/montecarlorpp.pdf
       # d=1,u=2,s=3,c=4,b=5,t=6
       # -------------------------------------------------------------------
-      matchtype = self.PartonTruthLabelID in [1,2,3,4,5,6,7,8]
+      matchtype = self.PartonTruthLabelID in [1,2,3,4,6,8]
+      return matchtype
+    #__________________________________________________________________________
+    def isBFake(self):
+      assert "tau" in self.prefix, "ERROR: using wrong truth method" 
+      # -------------------------------------------------------------------
+      # according to pdg: http://pdg.lbl.gov/2007/reviews/montecarlorpp.pdf
+      # d=1,u=2,s=3,c=4,b=5,t=6
+      # -------------------------------------------------------------------
+      matchtype = self.PartonTruthLabelID in [5,7]
       return matchtype
     #__________________________________________________________________________
     def isGluonFake(self):
@@ -373,7 +382,7 @@ class Particle(pyframe.core.ParticleProxy):
       # tau fakes with most likely originate from pileup
       # -------------------------------------------------------------------
       #matchtype = self.PartonTruthLabelID in [0,-1]
-      matchtype = not (self.isQuarkFake() or self.isGluonFake())
+      matchtype = not (self.isQuarkFake() or self.isBFake() or self.isGluonFake() or self.isTrueHadTau())
       return matchtype
 
     #__________________________________________________________________________

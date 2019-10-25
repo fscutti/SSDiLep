@@ -10,7 +10,7 @@ ROOT.gStyle.SetOptStat(0000)
 # -------------------------------------------------------------------------------------
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesOneTau"
 
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesGroupV5"
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesFullRun2"
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWin"
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWinRed"
 
@@ -244,7 +244,7 @@ hdict["NOM"].SetStats(0)
 hdict["NOM"].SetLineWidth(2)
 hdict["NOM"].Draw()
 #l2.SetHeader("Systematics")  # for muons
-l2.SetHeader("N_{tracks}=1")  # for one taus
+l2.SetHeader("N_{tracks}=3")  # for one taus
 #l2.SetHeader("N_{tracks}=3")  # for one taus
 #l2.SetHeader("N_{#tau}=2")  # for two taus
 

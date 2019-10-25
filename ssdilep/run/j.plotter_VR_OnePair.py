@@ -164,7 +164,8 @@ def analyze(config):
     
     # not strictly necessary
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausBDT0005') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausVeryLoose') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausVeryLoose') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausLoose') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTauPt20') 
 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='BVeto') 
@@ -199,13 +200,30 @@ def analyze(config):
     loop += ssdilep.algs.ObjWeights.FakeFactor(
             config_file_light_lepton = os.path.join(main_path,'ssdilep/data/fake_factors.root'),
             config_file_tau_lepton   = [
-              os.path.join(main_path,'ssdilep/data/merged_Jun2_ff_taulead_pt_data_1PMedium_All_1PMedium.root'),
-              os.path.join(main_path,'ssdilep/data/merged_Jun2_ff_taulead_pt_data_3PMedium_All_3PMedium.root')],
-            key                      = 'FF',
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_taulead_pt_data_1PMedium_All_1PMedium.root'),
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_taulead_pt_data_3PMedium_All_3PMedium.root')],
+            key                      = 'FFDijet',
             scale                    = None,
             )
     
-    
+    loop += ssdilep.algs.ObjWeights.FakeFactor(
+            config_file_light_lepton = os.path.join(main_path,'ssdilep/data/fake_factors.root'),
+            config_file_tau_lepton   = [
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_1DF2L_taulead_pt_1P.root'),
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_1DF2L_taulead_pt_3P.root')],
+            key                      = 'FFMultilep2L',
+            scale                    = None,
+            )
+   
+    loop += ssdilep.algs.ObjWeights.FakeFactor(
+            config_file_light_lepton = os.path.join(main_path,'ssdilep/data/fake_factors.root'),
+            config_file_tau_lepton   = [
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_1DF3L_taulead_pt_1P.root'),
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_1DF3L_taulead_pt_3P.root')],
+            key                      = 'FFMultilep3L',
+            scale                    = None,
+            )
+
     
     ## configure histograms
     ## ---------------------------------------
@@ -213,6 +231,7 @@ def analyze(config):
     hist_list += ssdilep.hists.EVENT_hists.hist_list
     hist_list += ssdilep.hists.TAUS_hists.hist_list
     hist_list += ssdilep.hists.MET_hists.hist_list
+    hist_list += ssdilep.hists.ONEPAIR_hists.hist_list
     
     ##-------------------------------------------------------------------------
     ## make plots
@@ -249,7 +268,7 @@ def analyze(config):
                   ['TwoLeptons', None],
                   ['AtLeastOneSSPairIsSF', None],
                   ['AtLeastOneFailLepton', None],
-                  ['%s'%vrCut, ['FF']],
+                  ['%s'%vrCut, ['FFDijet']],
                   ],
                 )
        
@@ -276,7 +295,7 @@ def analyze(config):
                   ['TwoLeptons', None],
                   ['AtLeastOneSSPairIsDF', None],
                   ['AtLeastOneFailLepton', None],
-                  ['%s'%vrCut, ['FF']],
+                  ['%s'%vrCut, ['FFMultilep2L']],
                   ],
                 )
        
@@ -308,7 +327,7 @@ def analyze(config):
                   ['ThreeLeptons', None],
                   ['AtLeastOneSSPairIsSF', None],
                   ['AtLeastOneFailLepton', None],
-                  ['%s'%vrCut, ['FF']],
+                  ['%s'%vrCut, ['FFDijet']],
                   ],
                 )
        
@@ -340,7 +359,7 @@ def analyze(config):
                   ['ThreeLeptons', None],
                   ['AtLeastOneSSPairIsDF', None],
                   ['AtLeastOneFailLepton', None],
-                  ['%s'%vrCut, ['FF']],
+                  ['%s'%vrCut, ['FFMultilep3L']],
                   ],
                 )
        

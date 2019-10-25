@@ -32,7 +32,7 @@ def analyze(config):
     
     ## build chain
     chain = ROOT.TChain(config['tree'])
-    
+
     ## getting metadata histograms
     metadata_dict = {}
     
@@ -41,7 +41,7 @@ def analyze(config):
       if "MetaData" in obj.GetName():
         h = inf.Get(obj.GetName()).Clone()
         metadata_dict[h.GetName()] = h
-    
+
     for fn in config['input']: chain.Add(fn)
 
     ##-------------------------------------------------------------------------
@@ -156,13 +156,15 @@ def analyze(config):
 
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneSSPair') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TwoSSPairs') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='FourLeptons') 
     
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastOneTau') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTaus1OR3Prong') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausEleBDTLoose') 
     
-    # not strictly necessary
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausEleBDTLoose') 
+
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausBDT0005') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausLoose') 
 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='BVeto') 
@@ -174,11 +176,10 @@ def analyze(config):
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllElPt30') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllElEta247') 
 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='ZVeto') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PairPt150') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PairDR35') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='mTtot300') 
-
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='ZVeto') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='mTtot300') 
+    
+    
     ## weights configuration
     ## ---------------------------------------
     ## event
@@ -220,243 +221,135 @@ def analyze(config):
             key                      = 'FFMultilep3L',
             scale                    = None,
             )
-    
-    
-    
+
+
     ## configure histograms
     ## ---------------------------------------
     hist_list = []
     hist_list += ssdilep.hists.EVENT_hists.hist_list
     hist_list += ssdilep.hists.TAUS_hists.hist_list
     hist_list += ssdilep.hists.MET_hists.hist_list
-    hist_list += ssdilep.hists.ONEPAIR_hists.hist_list
+    hist_list += ssdilep.hists.MULTIPAIRS_hists.hist_list
     
     ##-------------------------------------------------------------------------
     ## make plots
     ##-------------------------------------------------------------------------
 
-    # two lepton regions
-    # ------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1SF2L_SignalRegionFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-DiTauTriggerMatch', None],
-              ['TwoLeptons', None],
-              ['AtLeastOneSSPairIsSF', None],
-              ['AllPassLeptons', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1SF2L_SideBandFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-DiTauTriggerMatch', None],
-              ['TwoLeptons', None],
-              ['AtLeastOneSSPairIsSF', None],
-              ['AtLeastOneFailLepton', ['FFDijet']],
-              ],
-            )
-
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1DF2L_SignalRegionFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['TwoLeptons', None],
-              ['AtLeastOneSSPairIsDF', None],
-              ['AllPassLeptons', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1DF2L_SideBandFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['TwoLeptons', None],
-              ['AtLeastOneSSPairIsDF', None],
-              ['AtLeastOneFailLepton', ['FFMultilep2L']],
-              ],
-            )
-
-
-    # three lepton regions
+    # four lepton regions
     # --------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1SF3L_SignalRegionFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['ThreeLeptons', None],
-              ['AtLeastOneSSPairIsSF', None],
-              ['AllPassLeptons', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1SF3L_SideBandFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['ThreeLeptons', None],
-              ['AtLeastOneSSPairIsSF', None],
-              ['AtLeastOneFailLepton', ['FFDijet']],
-              ],
-            )
+    for vrCut in ["ANTIZVeto","ANTImTtot300"]:
 
-
-
-
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1DF3L_SignalRegionFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['ThreeLeptons', None],
-              ['AtLeastOneSSPairIsDF', None],
-              ['AllPassLeptons', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1DF3L_SideBandFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['ThreeLeptons', None],
-              ['AtLeastOneSSPairIsDF', None],
-              ['AtLeastOneFailLepton', ['FFMultilep3L']],
-              ],
-            )
-   
-
-
-
-
-    """
-    # non filtered MC
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1SF2L_SignalRegionNonFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-DiTauTriggerMatch', None],
-              ['TwoLeptons', None],
-              ['AtLeastOneSSPairIsSF', None],
-              ['AllPassLeptonsNoFilter', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1SF2L_SideBandNonFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-DiTauTriggerMatch', None],
-              ['TwoLeptons', None],
-              ['AtLeastOneSSPairIsSF', None],
-              ['AtLeastOneFailLeptonNoFilter', None],
-              ],
-            )
-
-
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1DF2L_SignalRegionNonFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['TwoLeptons', None],
-              ['AtLeastOneSSPairIsDF', None],
-              ['AllPassLeptonsNoFilter', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1DF2L_SideBandNonFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['TwoLeptons', None],
-              ['AtLeastOneSSPairIsDF', None],
-              ['AtLeastOneFailLeptonNoFilter', None],
-              ],
-            )
-
-
-    # three lepton regions
-    # --------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1SF3L_SignalRegionNonFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['ThreeLeptons', None],
-              ['AtLeastOneSSPairIsSF', None],
-              ['AllPassLeptonsNoFilter', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1SF3L_SideBandNonFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['ThreeLeptons', None],
-              ['AtLeastOneSSPairIsSF', None],
-              ['AtLeastOneFailLeptonNoFilter', None],
-              ],
-            )
-
-
-
-
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1DF3L_SignalRegionNonFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['ThreeLeptons', None],
-              ['AtLeastOneSSPairIsDF', None],
-              ['AllPassLeptonsNoFilter', None],
-              ],
-            )
-    loop += ssdilep.algs.algs.PlotAlg(
-            region       = '1DF3L_SideBandNonFiltered',
-            plot_all     = False,
-            do_var_check = True,
-            hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-            cut_flow     = [
-              ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-              ['ThreeLeptons', None],
-              ['AtLeastOneSSPairIsDF', None],
-              ['AtLeastOneFailLeptonNoFilter', None],
-              ],
-            )
-    """
-
+         loop += ssdilep.algs.algs.PlotAlg(
+                 region       = '2SF4L_inv%s_ValRegionFiltered'%vrCut,
+                 plot_all     = False,
+                 do_var_check = True,
+                 hist_list    = hist_list + ssdilep.hists.MULTIPAIRS_hists.hist_list,
+                 cut_flow     = [
+                   ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                   ['AtLeastTwoTaus', None],
+                   ['AllSSPairsAreSF', None],
+                   ['AllPassLeptons', None],
+                   ['%s'%vrCut, None],
+                   ],
+                 )
+         
+         loop += ssdilep.algs.algs.PlotAlg(
+                 region       = '2SF4L_inv%s_SideBandFiltered'%vrCut,
+                 plot_all     = False,
+                 do_var_check = True,
+                 hist_list    = hist_list + ssdilep.hists.MULTIPAIRS_hists.hist_list,
+                 cut_flow     = [
+                   ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                   ['AtLeastTwoTaus', None],
+                   ['AllSSPairsAreSF', None],
+                   ['AtLeastOneFailLepton', None],
+                   ['%s'%vrCut, ['FFDijet']],
+                   ],
+                 )
+         
+         
+         
+         
+         loop += ssdilep.algs.algs.PlotAlg(
+                 region       = 'al1DF4L_inv%s_ValRegionFiltered'%vrCut,
+                 plot_all     = False,
+                 do_var_check = True,
+                 hist_list    = hist_list + ssdilep.hists.MULTIPAIRS_hists.hist_list,
+                 cut_flow     = [
+                   ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                   ['AtLeastOneSSPairIsDF', None],
+                   ['AllPassLeptons', None],
+                   ['%s'%vrCut, None],
+                   ],
+                 )
+         loop += ssdilep.algs.algs.PlotAlg(
+                 region       = 'al1DF4L_inv%s_SideBandFiltered'%vrCut,
+                 plot_all     = False,
+                 do_var_check = True,
+                 hist_list    = hist_list + ssdilep.hists.MULTIPAIRS_hists.hist_list,
+                 cut_flow     = [
+                   ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                   ['AtLeastOneSSPairIsDF', None],
+                   ['AtLeastOneFailLepton', None],
+                   ['%s'%vrCut, ['FFDijet']],
+                   ],
+                 )
+         
+         
+         """
+         # non filtered MC
+         loop += ssdilep.algs.algs.PlotAlg(
+                 region       = '2SF4L_ValRegionNonFiltered',
+                 plot_all     = False,
+                 do_var_check = True,
+                 hist_list    = hist_list + ssdilep.hists.MULTIPAIRS_hists.hist_list,
+                 cut_flow     = [
+                   ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                   ['AtLeastTwoTaus', None],
+                   ['AllSSPairsAreSF', None],
+                   ['AllPassLeptonsNoFilter', None],
+                   ],
+                 )
+         
+         loop += ssdilep.algs.algs.PlotAlg(
+                 region       = '2SF4L_SideBandNonFiltered',
+                 plot_all     = False,
+                 do_var_check = True,
+                 hist_list    = hist_list + ssdilep.hists.MULTIPAIRS_hists.hist_list,
+                 cut_flow     = [
+                   ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                   ['AtLeastTwoTaus', None],
+                   ['AllSSPairsAreSF', None],
+                   ['AtLeastOneFailLeptonNoFilter', None],
+                   ],
+                 )
+         
+         
+         
+         
+         loop += ssdilep.algs.algs.PlotAlg(
+                 region       = 'al1DF4L_ValRegionNonFiltered',
+                 plot_all     = False,
+                 do_var_check = True,
+                 hist_list    = hist_list + ssdilep.hists.MULTIPAIRS_hists.hist_list,
+                 cut_flow     = [
+                   ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                   ['AtLeastOneSSPairIsDF', None],
+                   ['AllPassLeptonsNoFilter', None],
+                   ],
+                 )
+         loop += ssdilep.algs.algs.PlotAlg(
+                 region       = 'al1DF4L_SideBandNonFiltered',
+                 plot_all     = False,
+                 do_var_check = True,
+                 hist_list    = hist_list + ssdilep.hists.MULTIPAIRS_hists.hist_list,
+                 cut_flow     = [
+                   ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                   ['AtLeastOneSSPairIsDF', None],
+                   ['AtLeastOneFailLeptonNoFilter', None],
+                   ],
+                 )
+         """
 
     loop += pyframe.algs.HistCopyAlg()
 

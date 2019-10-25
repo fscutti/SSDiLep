@@ -15,38 +15,26 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-indir    = 'HistVROnePairNewFF'
-outdir   = 'PlotsVROnePairNewFF'
+#indir    = 'HistFFMultilepSepTalk'
+#outdir   = 'PlotsFFMultilepSepTalk'
 
-#indir    = 'HistSRTwoPairs'
-#outdir   = 'PlotsSRTwoPairs'
+#indir    = 'HistFFDijetSepTalk'
+#outdir   = 'PlotsFFDijetSepTalk'
 
-#indir    = 'HistFILTEROnePair'
-#outdir   = 'PlotsFILTEROnePair'
+#indir    = 'HistVROnePairSepTalk'
+#outdir   = 'PlotsVROnePairSepTalk'
 
-#indir    = 'HistFILTERTwoPairs'
-#outdir   = 'PlotsFILTERTwoPairs'
+#indir    = 'HistVRTwoPairsSepTalkNewSet'
+#outdir   = 'PlotsVRTwoPairsSepTalkNewSet'
 
-#indir    = 'HistCF3May'
-#outdir   = 'PlotsCF3May'
+#indir    = 'HistSROnePairSepTalk'
+#outdir   = 'PlotsSROnePairSepTalk'
 
-#indir    = 'HistBASETwoPairs'
-#outdir   = 'PlotsBASETwoPairs'
+#indir    = 'HistSRTwoPairsSepTalk'
+#outdir   = 'PlotsSRTwoPairsSepTalk'
 
-#indir    = 'HistFFTracks'
-#outdir   = 'PlotsFFTracks'
-
-#indir    = 'HistFFComposition'
-#outdir   = 'PlotsFFComposition'
-
-#indir    = 'HistFF2Jun'
-#outdir   = 'PlotsFF2Jun'
-
-#indir    = 'HistSROnePairFullc'
-#outdir   = 'PlotsSROnePairFullc'
-
-#indir    = 'HistSRTwoPairsFullc'
-#outdir   = 'PlotsSRTwoPairsFullc'
+indir    = 'HistCFSepTalk'
+outdir   = 'PlotsCFSepTalk'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -107,20 +95,20 @@ regions["1SF3L_SignalRegionFiltered"]    = [3, "1SF3L_SignalRegionFiltered", "1S
 regions["1DF3L_SignalRegionFiltered"]    = [3, "1DF3L_SignalRegionFiltered", "1DF3L_SignalRegionFiltered"]
 
 
-regions["1SF2L_SignalRegionNonFiltered"]    = [3, "1SF2L_SignalRegionNonFiltered", "1SF2L_SignalRegionNonFiltered"]
-regions["1DF2L_SignalRegionNonFiltered"]    = [3, "1DF2L_SignalRegionNonFiltered", "1DF2L_SignalRegionNonFiltered"]
+#regions["1SF2L_SignalRegionNonFiltered"]    = [3, "1SF2L_SignalRegionNonFiltered", "1SF2L_SignalRegionNonFiltered"]
+#regions["1DF2L_SignalRegionNonFiltered"]    = [3, "1DF2L_SignalRegionNonFiltered", "1DF2L_SignalRegionNonFiltered"]
 
-regions["1SF3L_SignalRegionNonFiltered"]    = [3, "1SF3L_SignalRegionNonFiltered", "1SF3L_SignalRegionNonFiltered"]
-regions["1DF3L_SignalRegionNonFiltered"]    = [3, "1DF3L_SignalRegionNonFiltered", "1DF3L_SignalRegionNonFiltered"]
+#regions["1SF3L_SignalRegionNonFiltered"]    = [3, "1SF3L_SignalRegionNonFiltered", "1SF3L_SignalRegionNonFiltered"]
+#regions["1DF3L_SignalRegionNonFiltered"]    = [3, "1DF3L_SignalRegionNonFiltered", "1DF3L_SignalRegionNonFiltered"]
 """
 
 """
 regions["2SF4L_SignalRegionFiltered"]    = [3, "2SF4L_SignalRegionFiltered", "2SF4L_SignalRegionFiltered"]
 regions["al1DF4L_SignalRegionFiltered"]  = [2, "al1DF4L_SignalRegionFiltered", "al1DF4L_SignalRegionFiltered"]
 
-regions["2SF4L_SignalRegionNonFiltered"]    = [3, "2SF4L_SignalRegionNonFiltered", "2SF4L_SignalRegionNonFiltered"]
-regions["al1DF4L_SignalRegionNonFiltered"]  = [2, "al1DF4L_SignalRegionNonFiltered", "al1DF4L_SignalRegionNonFiltered"]
-"""
+#regions["2SF4L_SignalRegionNonFiltered"]    = [3, "2SF4L_SignalRegionNonFiltered", "2SF4L_SignalRegionNonFiltered"]
+#regions["al1DF4L_SignalRegionNonFiltered"]  = [2, "al1DF4L_SignalRegionNonFiltered", "al1DF4L_SignalRegionNonFiltered"]
+#"""
 
 
 # ---------------------------
@@ -151,7 +139,7 @@ regions["1DF3L_SideBandNonFiltered"]    = [3, "1DF3L_SideBandNonFiltered", "1DF3
 # ---------------------------
 # Validation regions
 # ---------------------------
-#"""
+"""
 for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTIPairDR35","ANTImTtot300"]:
 
  regions["1SF2L_inv%s_ValRegionFiltered"%vrCut]    = [4, "1SF2L_inv%s_ValRegionFiltered"%vrCut, "1SF2L_inv%s_ValRegionFiltered"%vrCut]
@@ -165,7 +153,15 @@ for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTIPairDR35","ANTImTtot300"]:
  
  regions["1SF3L_inv%s_ValRegionNonFiltered"%vrCut]    = [4, "1SF3L_inv%s_ValRegionNonFiltered"%vrCut, "1SF3L_inv%s_ValRegionNonFiltered"%vrCut]
  regions["1DF3L_inv%s_ValRegionNonFiltered"%vrCut]    = [4, "1DF3L_inv%s_ValRegionNonFiltered"%vrCut, "1DF3L_inv%s_ValRegionNonFiltered"%vrCut]
-#"""
+"""
+
+"""
+for vrCut in ["ANTIZVeto","ANTImTtot300"]:
+
+ regions["2SF4L_inv%s_ValRegionFiltered"%vrCut]    = [4, "2SF4L_inv%s_ValRegionFiltered"%vrCut, "2SF4L_inv%s_ValRegionFiltered"%vrCut]
+ regions["al1DF4L_inv%s_ValRegionFiltered"%vrCut]    = [3, "al1DF4L_inv%s_ValRegionFiltered"%vrCut, "al1DF4L_inv%s_ValRegionFiltered"%vrCut]
+ 
+"""
 
 
 # ---------------------------
@@ -183,14 +179,15 @@ for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTIPairDR35","ANTImTtot300"]:
 #regions["FullOSTTBAR"] = [1, "OSTTBARalOneBJet", "taucf"]
 #regions["FullSSTTBAR"] = [1, "SSTTBARalOneBJet", "taucf"]
 
-"""
-regions["OSTTBAR_nofil"]         = [4, "OSTTBAR2BJets", "nofiltaucf"]
-regions["SSTTBAR_nofil"]         = [4, "SSTTBAR2BJets", "nofiltaucf"]
-regions["FullOSTTBAR_nofil"]     = [2, "OSTTBARalOneBJet", "nofiltaucf"]
-regions["FullSSTTBAR_nofil"]     = [2, "SSTTBARalOneBJet", "nofiltaucf"]
-regions["HiPtFullOSTTBAR_nofil"] = [4, "HiPtOSTTBARalOneBJet", "nofiltaucf"]
-regions["HiPtFullSSTTBAR_nofil"] = [4, "HiPtSSTTBARalOneBJet", "nofiltaucf"]
+#"""
+regions["OSTTBAR_CFRegionFiltered"]         = [4, "OSTTBAR2BJets", "filtered"]
+regions["SSTTBAR_CFRegionFiltered"]         = [4, "SSTTBAR2BJets", "filtered"]
+regions["FullOSTTBAR_CFRegionFiltered"]     = [2, "OSTTBARalOneBJet", "filtered"]
+regions["FullSSTTBAR_CFRegionFiltered"]     = [2, "SSTTBARalOneBJet", "filtered"]
+regions["HiPtFullOSTTBAR_CFRegionFiltered"] = [4, "HiPtOSTTBARalOneBJet", "filtered"]
+regions["HiPtFullSSTTBAR_CFRegionFiltered"] = [4, "HiPtSSTTBARalOneBJet", "filtered"]
 
+"""
 regions["OSTTBAR_fil"]         = [4, "OSTTBAR2BJets", "filtaucf"]
 regions["SSTTBAR_fil"]         = [4, "SSTTBAR2BJets", "filtaucf"]
 regions["FullOSTTBAR_fil"]     = [2, "OSTTBARalOneBJet", "filtaucf"]
@@ -227,22 +224,25 @@ regions["HiPtFullSSTTBAR_antifil"] = [4, "HiPtSSTTBARalOneBJet", "antifiltaucf"]
 #for wp in ["Loose","Medium","Tight"]:
 #for ptbin in ["All","2030","3040","4060","6090","90150","150inf"]:
 #for ptbin in ["All","2030","3040","4060","6090","90150","150inf"]:
+#for ptbin in ["All"]:
+
+#for ptbin in ["All","2030","3040","4060","6090","90150","150inf"]:
 """
 for prongs in ["1P","3P"]:
   for ptbin in ["All"]:
     
-    regions["FAKES_NOSEL_%sPass_%s_F0"%(prongs,ptbin)]   = [4,  "nosel", "%s_%s"%(prongs,ptbin)]
+    #regions["FAKES_NOSEL_%sPass_%s_F0"%(prongs,ptbin)]   = [4,  "nosel", "%s_%s"%(prongs,ptbin)]
     
     for wp in ["Medium"]:
       
-      regions["FAKES_NUM_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [5,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
-      regions["FAKES_DEN_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [5,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
+      regions["FAKES_NUM_%s%s_TrueTauHadFilter_%s_F1"%(prongs,wp,ptbin)]   = [6,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
+      regions["FAKES_DEN_%s%s_TrueTauHadFilter_%s_F1"%(prongs,wp,ptbin)]   = [6,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
      
       #regions["FAKES_NUM_%s%s_%s_F2"%(prongs,wp,ptbin)]   = [5,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
       #regions["FAKES_DEN_%s%s_%s_F2"%(prongs,wp,ptbin)]   = [5,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
 
-      regions["FAKES_NUM_%s%s_%s_F10"%(prongs,wp,ptbin)]   = [4,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
-      regions["FAKES_DEN_%s%s_%s_F10"%(prongs,wp,ptbin)]   = [4,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
+      regions["FAKES_NUM_%s%s_TrueTauHadFilter_%s_F10"%(prongs,wp,ptbin)]   = [5,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
+      regions["FAKES_DEN_%s%s_TrueTauHadFilter_%s_F10"%(prongs,wp,ptbin)]   = [5,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
      
       #regions["FAKES_NUM_%s%s_%s_F11"%(prongs,wp,ptbin)]   = [4,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
       #regions["FAKES_DEN_%s%s_%s_F11"%(prongs,wp,ptbin)]   = [4,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
@@ -256,7 +256,22 @@ for prongs in ["1P","3P"]:
       #regions["FAKES_UNUM_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [6,  "num", "%s%s_%s"%(prongs,wp,ptbin)]
       #regions["FAKES_UDEN_%s%s_%s_F1"%(prongs,wp,ptbin)]   = [6,  "den", "%s%s_%s"%(prongs,wp,ptbin)]
 """ 
-#"""
+
+"""
+for prongs in ["1P","3P"]:
+  for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTImTtot300"]: 
+      
+      regions["1DF2L_inv%s_TrueTauHadFilter_%s_PassTau_PassLeps"%(vrCut, prongs)]   = [8,  "ptau_pleps", "%s_%s"%(prongs,vrCut)]
+      regions["1DF2L_inv%s_TrueTauHadFilter_%s_PassTau_FailLeps"%(vrCut, prongs)]   = [8,  "ptau_fleps", "%s_%s"%(prongs,vrCut)]
+      regions["1DF2L_inv%s_TrueTauHadFilter_%s_FailTau_PassLeps"%(vrCut, prongs)]   = [8,  "ftau_pleps", "%s_%s"%(prongs,vrCut)]
+      regions["1DF2L_inv%s_TrueTauHadFilter_%s_FailTau_FailLeps"%(vrCut, prongs)]   = [8,  "ftau_fleps", "%s_%s"%(prongs,vrCut)]
+
+      regions["1DF3L_inv%s_TrueTauHadFilter_%s_PassTau_PassLeps"%(vrCut, prongs)]   = [8,  "ptau_pleps", "%s_%s"%(prongs,vrCut)]
+      regions["1DF3L_inv%s_TrueTauHadFilter_%s_PassTau_FailLeps"%(vrCut, prongs)]   = [8,  "ptau_fleps", "%s_%s"%(prongs,vrCut)]
+      regions["1DF3L_inv%s_TrueTauHadFilter_%s_FailTau_PassLeps"%(vrCut, prongs)]   = [8,  "ftau_pleps", "%s_%s"%(prongs,vrCut)]
+      regions["1DF3L_inv%s_TrueTauHadFilter_%s_FailTau_FailLeps"%(vrCut, prongs)]   = [8,  "ftau_fleps", "%s_%s"%(prongs,vrCut)]
+     
+"""
 
 
 """
@@ -468,7 +483,7 @@ m.communicate()[0]
 vars_list = []
 #vars_list += plots.vars_mumu.vars_list
 vars_list += plots.vars_tau.vars_list
-vars_list += plots.vars_onepair.vars_list
+#vars_list += plots.vars_onepair.vars_list
 #vars_list += plots.vars_multipairs.vars_list
 
 for REG,OPT in regions.iteritems():

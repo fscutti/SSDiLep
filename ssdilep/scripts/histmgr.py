@@ -102,6 +102,22 @@ class HistMgr():
            path_to_hist = ''
            
            if region:
+
+              # disgusting hack needed after intruduciton of filtered regions
+              if samplename == "data":
+              
+                if "TrueTauHadFilter" in region:
+                  region = region.replace("TrueTauHadFilter","PASS")
+                elif "QuarkFilter" in region:
+                  region = region.replace("QuarkFilter","PASS")
+                elif "BFilter" in region: 
+                  region = region.replace("BFilter","PASS")
+                elif "GluonFilter" in region: 
+                  region = region.replace("GluonFilter","PASS")
+                elif "UnknownFilter" in region:
+                  region = region.replace("UnknownFilter","PASS")
+
+
               path_to_hist = os.path.join('regions',region)
 
               ## check region exists

@@ -160,7 +160,7 @@ def analyze(config):
     
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausEleBDTLoose') 
 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausBDT0005') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausLoose') 
 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='BVeto') 
     
@@ -190,14 +190,40 @@ def analyze(config):
 
     ## objects
     ## +++++++++++++++++++++++++++++++++++++++
-    """
-    """ 
+    loop += ssdilep.algs.ObjWeights.FakeFactor(
+            config_file_light_lepton = os.path.join(main_path,'ssdilep/data/fake_factors.root'),
+            config_file_tau_lepton   = [
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_taulead_pt_data_1PMedium_All_1PMedium.root'),
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_taulead_pt_data_3PMedium_All_3PMedium.root')],
+            key                      = 'FFDijet',
+            scale                    = None,
+            )
+    
+    loop += ssdilep.algs.ObjWeights.FakeFactor(
+            config_file_light_lepton = os.path.join(main_path,'ssdilep/data/fake_factors.root'),
+            config_file_tau_lepton   = [
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_1DF2L_taulead_pt_1P.root'),
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_1DF2L_taulead_pt_3P.root')],
+            key                      = 'FFMultilep2L',
+            scale                    = None,
+            )
+   
+    loop += ssdilep.algs.ObjWeights.FakeFactor(
+            config_file_light_lepton = os.path.join(main_path,'ssdilep/data/fake_factors.root'),
+            config_file_tau_lepton   = [
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_1DF3L_taulead_pt_1P.root'),
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_1DF3L_taulead_pt_3P.root')],
+            key                      = 'FFMultilep3L',
+            scale                    = None,
+            )
+    
     ## configure histograms
     ## ---------------------------------------
     hist_list = []
     hist_list += ssdilep.hists.EVENT_hists.hist_list
     hist_list += ssdilep.hists.TAUS_hists.hist_list
     hist_list += ssdilep.hists.MET_hists.hist_list
+    hist_list += ssdilep.hists.MULTIPAIRS_hists.hist_list
     
     ##-------------------------------------------------------------------------
     ## make plots
@@ -227,7 +253,7 @@ def analyze(config):
               ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
               ['AtLeastTwoTaus', None],
               ['AllSSPairsAreSF', None],
-              ['AtLeastOneFailLepton', None],
+              ['AtLeastOneFailLepton', ['FFDijet']],
               ],
             )
 
@@ -253,12 +279,12 @@ def analyze(config):
             cut_flow     = [
               ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-DiTauTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
               ['AtLeastOneSSPairIsDF', None],
-              ['AtLeastOneFailLepton', None],
+              ['AtLeastOneFailLepton', ['FFDijet']],
               ],
             )
 
 
-
+    """
     # non filtered MC
     loop += ssdilep.algs.algs.PlotAlg(
             region       = '2SF4L_SignalRegionNonFiltered',
@@ -311,6 +337,7 @@ def analyze(config):
               ['AtLeastOneFailLeptonNoFilter', None],
               ],
             )
+    """
 
     loop += pyframe.algs.HistCopyAlg()
 

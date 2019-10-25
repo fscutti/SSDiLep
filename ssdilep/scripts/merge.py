@@ -129,7 +129,7 @@ fake_subtraction_regions = []
 reg_prefix, reg_suffix = funcs.get_pref_and_suff(options.region)
 
 
-if reg_suffix == "ValRegionFiltered" or reg_suffix == "SignalRegionFiltered":
+if reg_suffix == "ValRegionFiltered" or reg_suffix == "SignalRegionFiltered" or reg_suffix == "CFRegionFiltered":
   
   # including all regions for fake-factor method
   # ---------------------------------------------
@@ -158,10 +158,10 @@ fakes.estimator = histmgr.AddRegEstimator(
       sample              = fakes,
       data_sample         = data,
       mc_samples          = mc_bkg, 
-      addition_regions    = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in fake_addition_regions],
-      subtraction_regions = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in fake_subtraction_regions]
-      #addition_regions    = fake_addition_regions,
-      #subtraction_regions = fake_subtraction_regions
+      #addition_regions    = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in fake_addition_regions],
+      #subtraction_regions = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in fake_subtraction_regions]
+      addition_regions    = fake_addition_regions,
+      subtraction_regions = fake_subtraction_regions
       )
 
 for s in recom_mc_bkg + [recom_data]:
@@ -170,8 +170,8 @@ for s in recom_mc_bkg + [recom_data]:
       sample           = s,
       data_sample      = data,
       mc_samples       = mc_bkg, 
-      addition_regions = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in main_addition_regions]
-      #addition_regions = main_addition_regions
+      #addition_regions = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in main_addition_regions]
+      addition_regions = main_addition_regions
       )
 """
 if options.fakest in ["Simulation"]:
@@ -251,9 +251,6 @@ refregion       = options.region
 overlay_samples = [refsample]
 
 
-
-
-
 if options.makeplot == "True":
  funcs.plot_hist(
     backgrounds   = plot_ord_bkg,
@@ -270,12 +267,12 @@ if options.makeplot == "True":
     icut          = ncuts,
     sys_dict      = sys_dict,
     #sys_dict      = None,
-    do_ratio_plot = False,
+    do_ratio_plot = True,
     invert_z      = vardict[options.vname]['invert_z'],
     do_z_plot     = False,
     save_eps      = True,
     plotsfile     = plotsfile,
-    sig_rescale   = "B/S"
+    #sig_rescale   = "B/S"
     )
 
 elif options.makeplot == "False" and options.makeoverlay=="False":

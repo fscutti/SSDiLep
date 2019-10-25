@@ -532,6 +532,27 @@ class CutAlg(pyframe.core.Algorithm):
       return True
 
 
+    #__________________________________________________________________________
+    def cut_TauOriginFilter(self):
+      """
+      This cut assumes that the identity of the sample
+      is contained in its name.
+      """
+      taus = self.store['taus']
+
+      if self.sampletype == "mc":
+
+        for tau in taus:
+          if "qfakes" in self.samplename:
+            if tau.isQuarkFake():  return True
+          elif "bfakes" in self.samplename:
+            if tau.isBFake():      return True
+          elif "gfakes" in self.samplename:
+            if tau.isGluonFake():  return True
+          else:
+            if not tau.isTrueHadTau(): return False
+
+      return True
 
     #__________________________________________________________________________
     def cut_TrueTauHadFilter(self):
@@ -545,22 +566,29 @@ class CutAlg(pyframe.core.Algorithm):
       taus = self.store['taus']
       if self.sampletype=="mc":
         for tau in taus:
-          if not tau.isGluonFake(): return False
-      return True
+          if tau.isGluonFake(): return True
+      return False
     #__________________________________________________________________________
     def cut_QuarkFilter(self):
       taus = self.store['taus']
       if self.sampletype=="mc":
         for tau in taus:
-          if not tau.isQuarkFake(): return False
-      return True
+          if tau.isQuarkFake(): return True
+      return False
+    #__________________________________________________________________________
+    def cut_BFilter(self):
+      taus = self.store['taus']
+      if self.sampletype=="mc":
+        for tau in taus:
+          if tau.isBFake(): return True
+      return False
     #__________________________________________________________________________
     def cut_UnknownFilter(self):
       taus = self.store['taus']
       if self.sampletype=="mc":
         for tau in taus:
-          if not tau.isUnknownFake(): return False
-      return True
+          if tau.isUnknownFake(): return True
+      return False
 
 
     #__________________________________________________________________________
@@ -1420,6 +1448,27 @@ class CutAlg(pyframe.core.Algorithm):
       
       return True
 
+    
+    #__________________________________________________________________________
+    def cut_mTtot200(self):
+      nleptons = self.chain.nmuon + self.chain.nel + self.chain.ntau
+      
+      if nleptons == 4 and 'sspairs_mTtot' in self.store:
+        return self.store['sspairs_mTtot'] > 200 * GeV
+      elif nleptons < 4 and 'leadsspair_mTtot' in self.store:
+        return self.store['leadsspair_mTtot'] > 200 * GeV
+      
+      return True
+    #__________________________________________________________________________
+    def cut_ANTImTtot200(self):
+      nleptons = self.chain.nmuon + self.chain.nel + self.chain.ntau
+      
+      if nleptons == 4 and 'sspairs_mTtot' in self.store:
+        return self.store['sspairs_mTtot'] < 200 * GeV
+      elif nleptons < 4 and 'leadsspair_mTtot' in self.store:
+        return self.store['leadsspair_mTtot'] < 200 * GeV
+      
+      return True
 
 
 

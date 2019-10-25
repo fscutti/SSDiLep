@@ -87,18 +87,19 @@ def analyze(config):
     ## build and pt-sort objects
     ## ---------------------------------------
     loop += pyframe.algs.ListBuilder(
-        prefixes = ['tau_','jet_','muon_'],
-        keys = ['taus','jets','muons'],
+        prefixes = ['tau_','jet_','muon_','el_'],
+        keys = ['taus','jets','muons','electrons'],
         )
     loop += pyframe.algs.AttachTLVs(
-        keys = ['taus','jets','muons'],
+        keys = ['taus','jets','muons','electrons'],
         )
     # just a decoration of particles ...
     loop += ssdilep.algs.vars.ParticlesBuilder(key='taus')
     loop += ssdilep.algs.vars.ParticlesBuilder(key='muons')
+    loop += ssdilep.algs.vars.ParticlesBuilder(key='electrons')
 
     # building pairs with combinations of leptons
-    loop += ssdilep.algs.vars.PairsBuilder(key=['taus','muons'])
+    loop += ssdilep.algs.vars.PairsBuilder(key=['taus','muons','electrons'])
 
     # build tight jets here !!!
 
@@ -121,14 +122,14 @@ def analyze(config):
     ## initialize and/or decorate objects
     ## ---------------------------------------
     loop += ssdilep.algs.vars.JetsBuilder()
+    #loop += ssdilep.algs.vars.PairsVars() 
 
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneTau') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneMuon') 
     
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='LeadTauIsVeryLoose')
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausMedium')
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausLoose')
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTausEleBDTLoose')
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllTauPt20') 
 
@@ -193,9 +194,9 @@ def analyze(config):
             exclude_obj              = ['electrons'],
             config_file_light_lepton = os.path.join(main_path,'ssdilep/data/fake_factors.root'),
             config_file_tau_lepton   = [
-              os.path.join(main_path,'ssdilep/data/merged_May23_ff_taulead_pt_data_1PMedium_All_1PMedium.root'),
-              os.path.join(main_path,'ssdilep/data/merged_May23_ff_taulead_pt_data_3PMedium_All_3PMedium.root')],
-            key                      = 'FF',
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_1DF2L_taulead_pt_1P.root'),
+              os.path.join(main_path,'ssdilep/data/merged_SepTalk_ff_1DF2L_taulead_pt_3P.root')],
+            key                      = 'FFMultilep2L',
             scale                    = None,
             )
 
@@ -203,6 +204,9 @@ def analyze(config):
     ## ---------------------------------------
     hist_list = []
     hist_list += ssdilep.hists.MuTauVR_hists.hist_list
+    hist_list += ssdilep.hists.EVENT_hists.hist_list
+    hist_list += ssdilep.hists.TAUS_hists.hist_list
+    hist_list += ssdilep.hists.MET_hists.hist_list
     
     
     ##-------------------------------------------------------------------------
@@ -213,175 +217,260 @@ def analyze(config):
     # -----------------
 
 
-    for name,cut in {"nofil":"PASS","fil":"TrueLeptonFilter","antifil":"FakeLeptonFilter"}.iteritems():
+    #for name,cut in {"nofil":"PASS","fil":"TrueLeptonFilter","antifil":"FakeLeptonFilter"}.iteritems():
 
-      """ 
-      loop += ssdilep.algs.algs.PlotAlg(
-              region       = 'BASELINE'+name,
-              plot_all     = False,
-              do_var_check = True,
-              hist_list    = hist_list,
-              cut_flow     = [
-                ['PASS', None],
-                [cut, None],
-                ],
-              )
-      ## OS Z
-      ## ---------------------------------------
-      loop += ssdilep.algs.algs.PlotAlg(
-              region       = 'OSZ'+name,
-              plot_all     = False,
-              do_var_check = True,
-              hist_list    = hist_list,
-              cut_flow     = [
-                ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
-                ['MuTauSumCosDphi05',None],
-                ['mTMu50',None],
-                ['MuTauZwin',None],
-                [cut, None],
-                ],
-              )
-      ## SS Z
-      ## ---------------------------------------
-      loop += ssdilep.algs.algs.PlotAlg(
-              region       = 'SSZ'+name,
-              plot_all     = False,
-              do_var_check = True,
-              hist_list    = hist_list,
-              cut_flow     = [
-                ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
-                ['MuTauSumCosDphi05',None],
-                ['mTMu50',None],
-                ['MuTauZwin',None],
-                [cut, None],
-                ],
-              )
+    """ 
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'BASELINE'+name,
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['PASS', None],
+              [cut, None],
+              ],
+            )
+    ## OS Z
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'OSZ'+name,
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['MuTauSumCosDphi05',None],
+              ['mTMu50',None],
+              ['MuTauZwin',None],
+              [cut, None],
+              ],
+            )
+    ## SS Z
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'SSZ'+name,
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['MuTauSumCosDphi05',None],
+              ['mTMu50',None],
+              ['MuTauZwin',None],
+              [cut, None],
+              ],
+            )
     
     
-      ## full OS Z
-      ## ---------------------------------------
-      loop += ssdilep.algs.algs.PlotAlg(
-              region       = 'FullOSZ'+name,
-              plot_all     = False,
-              do_var_check = True,
-              hist_list    = hist_list,
-              cut_flow     = [
-                ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
-                ['MuTauSumCosDphi05',None],
-                ['mTMu50',None],
-                [cut, None],
-                ],
-              )
-      ## full SS Z
-      ## ---------------------------------------
-      loop += ssdilep.algs.algs.PlotAlg(
-              region       = 'FullSSZ'+name,
-              plot_all     = False,
-              do_var_check = True,
-              hist_list    = hist_list,
-              cut_flow     = [
-                ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
-                ['MuTauSumCosDphi05',None],
-                ['mTMu50',None],
-                [cut, None],
-                ],
-              )
-      """ 
+    ## full OS Z
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FullOSZ'+name,
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['MuTauSumCosDphi05',None],
+              ['mTMu50',None],
+              [cut, None],
+              ],
+            )
+    ## full SS Z
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FullSSZ'+name,
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['MuTauSumCosDphi05',None],
+              ['mTMu50',None],
+              [cut, None],
+              ],
+            )
+    """ 
     
-      ## OS TTBAR
-      ## ---------------------------------------
-      loop += ssdilep.algs.algs.PlotAlg(
-              region       = 'OSTTBAR_'+name,
-              plot_all     = False,
-              do_var_check = True,
-              hist_list    = hist_list,
-              cut_flow     = [
-                ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
-                ['AtLeastTwoBjets',None],
-                ['AllTauPt50',None],
-                ['AllMuPt50',None],
-                [cut, None],
-                ],
-              )
-      ## SS TTBAR
-      ## ---------------------------------------
-      loop += ssdilep.algs.algs.PlotAlg(
-              region       = 'SSTTBAR_'+name,
-              plot_all     = False,
-              do_var_check = True,
-              hist_list    = hist_list,
-              cut_flow     = [
-                ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
-                ['AtLeastTwoBjets',None],
-                ['AllTauPt50',None],
-                ['AllMuPt50',None],
-                [cut, None],
-                ],
-              )
-   
-
-
-      ## full OS TTBAR
-      ## ---------------------------------------
-      loop += ssdilep.algs.algs.PlotAlg(
-              region       = 'FullOSTTBAR_'+name,
-              plot_all     = False,
-              do_var_check = True,
-              hist_list    = hist_list,
-              cut_flow     = [
-                ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
-                ['AtLeastOneBjet',None],
-                [cut, None],
-                ],
-              )
-      ## full SS TTBAR
-      ## ---------------------------------------
-      loop += ssdilep.algs.algs.PlotAlg(
-              region       = 'FullSSTTBAR_'+name,
-              plot_all     = False,
-              do_var_check = True,
-              hist_list    = hist_list,
-              cut_flow     = [
-                ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
-                ['AtLeastOneBjet',None],
-                [cut, None],
-                ],
-              )
+    ## OS TTBAR
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'OSTTBAR_CFRegionFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastTwoBjets',None],
+              ['AllTauPt50',None],
+              ['AllMuPt50',None],
+              ['AllPassLeptons',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'OSTTBAR_CFSideBandFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastTwoBjets',None],
+              ['AllTauPt50',None],
+              ['AllMuPt50',None],
+              ['AtLeastOneFailLepton',['FFMultilep2L']],
+              ],
+            )
 
 
 
-      ## hi-pt full OS TTBAR
-      ## ---------------------------------------
-      loop += ssdilep.algs.algs.PlotAlg(
-              region       = 'HiPtFullOSTTBAR_'+name,
-              plot_all     = False,
-              do_var_check = True,
-              hist_list    = hist_list,
-              cut_flow     = [
-                ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
-                ['AtLeastOneBjet',None],
-                ['AllTauPt50',None],
-                ['AllMuPt50',None],
-                [cut, None],
-                ],
-              )
-      ## hi-pt full SS TTBAR
-      ## ---------------------------------------
-      loop += ssdilep.algs.algs.PlotAlg(
-              region       = 'HiPtFullSSTTBAR_'+name,
-              plot_all     = False,
-              do_var_check = True,
-              hist_list    = hist_list,
-              cut_flow     = [
-                ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
-                ['AtLeastOneBjet',None],
-                ['AllTauPt50',None],
-                ['AllMuPt50',None],
-                [cut, None],
-                ],
-              )
+
+    ## SS TTBAR
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'SSTTBAR_CFRegionFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastTwoBjets',None],
+              ['AllTauPt50',None],
+              ['AllMuPt50',None],
+              ['AllPassLeptons',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'SSTTBAR_CFSideBandFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastTwoBjets',None],
+              ['AllTauPt50',None],
+              ['AllMuPt50',None],
+              ['AtLeastOneFailLepton',['FFMultilep2L']],
+              ],
+            )
 
 
+
+
+
+    ## full OS TTBAR
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FullOSTTBAR_CFRegionFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastOneBjet',None],
+              ['AllPassLeptons',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FullOSTTBAR_CFSideBandFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastOneBjet',None],
+              ['AtLeastOneFailLepton',['FFMultilep2L']],
+              ],
+            )
+
+
+
+
+
+    ## full SS TTBAR
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FullSSTTBAR_CFRegionFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastOneBjet',None],
+              ['AllPassLeptons',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FullSSTTBAR_CFSideBandFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastOneBjet',None],
+              ['AtLeastOneFailLepton',['FFMultilep2L']],
+              ],
+            )
+
+
+
+    ## hi-pt full OS TTBAR
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'HiPtFullOSTTBAR_CFRegionFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastOneBjet',None],
+              ['AllTauPt50',None],
+              ['AllMuPt50',None],
+              ['AllPassLeptons',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'HiPtFullOSTTBAR_CFSideBandFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneOSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastOneBjet',None],
+              ['AllTauPt50',None],
+              ['AllMuPt50',None],
+              ['AtLeastOneFailLepton',['FFMultilep2L']],
+              ],
+            )
+
+
+    ## hi-pt full SS TTBAR
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'HiPtFullSSTTBAR_CFRegionFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastOneBjet',None],
+              ['AllTauPt50',None],
+              ['AllMuPt50',None],
+              ['AllPassLeptons',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'HiPtFullSSTTBAR_CFSideBandFiltered',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['OneSSPair', ['MuSFFCTightTrackOnlyMedium','MuTrigSFMedium','Tau0AllSF']],
+              ['AtLeastOneBjet',None],
+              ['AllTauPt50',None],
+              ['AllMuPt50',None],
+              ['AtLeastOneFailLepton',['FFMultilep2L']],
+              ],
+            )
 
     loop += pyframe.algs.HistCopyAlg()
 

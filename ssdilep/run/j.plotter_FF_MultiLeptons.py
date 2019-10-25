@@ -223,151 +223,160 @@ def analyze(config):
     # two lepton regions
     # ------------------
 
+    for tauProngs in ["1P","3P"]:
 
-    #for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTIPairDR35","ANTImTtot300"]:
-    for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTImTtot300"]:
-
-      filter_list = ["TrueTauHadFilter","QuarkFilter","BFilter","GluonFilter","UnknownFilter"]
-
-      if config['sampletype'] == "mc":     filters = filter_list
-      elif config['sampletype'] == "data": filters = ["PASS"]
-
-      for filterType in filters:
-
-        loop += ssdilep.algs.algs.PlotAlg(
-                region       = '1DF2L_inv%s_%s_PassTau_PassLeps'%(vrCut,filterType),
-                plot_all     = False,
-                do_var_check = True,
-                hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-                cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-                  ['TwoLeptons', None],
-                  ['%s'%filterType, None],
-                  ['AtLeastOneSSPairIsDF', None],
-                  ['PairDR35', None],
-                  ['LeadTauIsMedium', None],
-                  ['AllPassLightLeptons', None],
-                  ['%s'%vrCut, None],
-                  ],
-                )
-        loop += ssdilep.algs.algs.PlotAlg(
-                region       = '1DF2L_inv%s_%s_PassTau_FailLeps'%(vrCut,filterType),
-                plot_all     = False,
-                do_var_check = True,
-                hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-                cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-                  ['TwoLeptons', None],
-                  ['%s'%filterType, None],
-                  ['AtLeastOneSSPairIsDF', None],
-                  ['PairDR35', None],
-                  ['LeadTauIsMedium', None],
-                  ['AtLeastOneFailLightLepton', None],
-                  ['%s'%vrCut, ['FF']],
-                  ],
-                )
-        loop += ssdilep.algs.algs.PlotAlg(
-                region       = '1DF2L_inv%s_%s_FailTau_PassLeps'%(vrCut,filterType),
-                plot_all     = False,
-                do_var_check = True,
-                hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-                cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-                  ['TwoLeptons', None],
-                  ['%s'%filterType, None],
-                  ['AtLeastOneSSPairIsDF', None],
-                  ['PairDR35', None],
-                  ['LeadTauIsNotMedium', None],
-                  ['AllPassLightLeptons', None],
-                  ['%s'%vrCut, None],
-                  ],
-                )
-        loop += ssdilep.algs.algs.PlotAlg(
-                region       = '1DF2L_inv%s_%s_FailTau_FailLeps'%(vrCut,filterType),
-                plot_all     = False,
-                do_var_check = True,
-                hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-                cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-                  ['TwoLeptons', None],
-                  ['%s'%filterType, None],
-                  ['AtLeastOneSSPairIsDF', None],
-                  ['PairDR35', None],
-                  ['LeadTauIsNotMedium', None],
-                  ['AtLeastOneFailLightLepton', None],
-                  ['%s'%vrCut, ['FF']],
-                  ],
-                )
-
-
-
-        # three lepton regions
-        # --------------------
-       
-        loop += ssdilep.algs.algs.PlotAlg(
-                region       = '1DF3L_inv%s_%s_PassTau_PassLeps'%(vrCut,filterType),
-                plot_all     = False,
-                do_var_check = True,
-                hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-                cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-                  ['ThreeLeptons', None],
-                  ['%s'%filterType, None],
-                  ['AtLeastOneSSPairIsDF', None],
-                  ['PairDR35', None],
-                  ['LeadTauIsMedium', None],
-                  ['AllPassLightLeptons', None],
-                  ['%s'%vrCut, None],
-                  ],
-                )
-        loop += ssdilep.algs.algs.PlotAlg(
-                region       = '1DF3L_inv%s_%s_PassTau_FailLeps'%(vrCut,filterType),
-                plot_all     = False,
-                do_var_check = True,
-                hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-                cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-                  ['ThreeLeptons', None],
-                  ['%s'%filterType, None],
-                  ['AtLeastOneSSPairIsDF', None],
-                  ['PairDR35', None],
-                  ['LeadTauIsMedium', None],
-                  ['AtLeastOneFailLightLepton', None],
-                  ['%s'%vrCut, ['FF']],
-                  ],
-                )
-        loop += ssdilep.algs.algs.PlotAlg(
-                region       = '1DF3L_inv%s_%s_FailTau_PassLeps'%(vrCut,filterType),
-                plot_all     = False,
-                do_var_check = True,
-                hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-                cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-                  ['ThreeLeptons', None],
-                  ['%s'%filterType, None],
-                  ['AtLeastOneSSPairIsDF', None],
-                  ['PairDR35', None],
-                  ['LeadTauIsNotMedium', None],
-                  ['AllPassLightLeptons', None],
-                  ['%s'%vrCut, None],
-                  ],
-                )
-        loop += ssdilep.algs.algs.PlotAlg(
-                region       = '1DF3L_inv%s_%s_FailTau_FailLeps'%(vrCut,filterType),
-                plot_all     = False,
-                do_var_check = True,
-                hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
-                cut_flow     = [
-                  ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
-                  ['ThreeLeptons', None],
-                  ['%s'%filterType, None],
-                  ['AtLeastOneSSPairIsDF', None],
-                  ['PairDR35', None],
-                  ['LeadTauIsNotMedium', None],
-                  ['AtLeastOneFailLightLepton', None],
-                  ['%s'%vrCut, ['FF']],
-                  ],
-                )
+        #for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTIPairDR35","ANTImTtot300"]:
+        for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTImTtot300"]:
+        
+          filter_list = ["TrueTauHadFilter","QuarkFilter","BFilter","GluonFilter","UnknownFilter"]
+        
+          if config['sampletype'] == "mc":     filters = filter_list
+          elif config['sampletype'] == "data": filters = ["PASS"]
+        
+          for filterType in filters:
+        
+            loop += ssdilep.algs.algs.PlotAlg(
+                    region       = '1DF2L_inv%s_%s_%s_PassTau_PassLeps'%(vrCut,filterType,tauProngs),
+                    plot_all     = False,
+                    do_var_check = True,
+                    hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
+                    cut_flow     = [
+                      ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                      ['TwoLeptons', None],
+                      ['%s'%filterType, None],
+                      ['AtLeastOneSSPairIsDF', None],
+                      ['PairDR35', None],
+                      ['LeadTauIsMedium', None],
+                      ['One%sTau'%tauProngs, None],
+                      ['AllPassLightLeptons', None],
+                      ['%s'%vrCut, None],
+                      ],
+                    )
+            loop += ssdilep.algs.algs.PlotAlg(
+                    region       = '1DF2L_inv%s_%s_%s_PassTau_FailLeps'%(vrCut,filterType,tauProngs),
+                    plot_all     = False,
+                    do_var_check = True,
+                    hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
+                    cut_flow     = [
+                      ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                      ['TwoLeptons', None],
+                      ['%s'%filterType, None],
+                      ['AtLeastOneSSPairIsDF', None],
+                      ['PairDR35', None],
+                      ['LeadTauIsMedium', None],
+                      ['One%sTau'%tauProngs, None],
+                      ['AtLeastOneFailLightLepton', None],
+                      ['%s'%vrCut, ['FF']],
+                      ],
+                    )
+            loop += ssdilep.algs.algs.PlotAlg(
+                    region       = '1DF2L_inv%s_%s_%s_FailTau_PassLeps'%(vrCut,filterType,tauProngs),
+                    plot_all     = False,
+                    do_var_check = True,
+                    hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
+                    cut_flow     = [
+                      ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                      ['TwoLeptons', None],
+                      ['%s'%filterType, None],
+                      ['AtLeastOneSSPairIsDF', None],
+                      ['PairDR35', None],
+                      ['LeadTauIsNotMedium', None],
+                      ['One%sTau'%tauProngs, None],
+                      ['AllPassLightLeptons', None],
+                      ['%s'%vrCut, None],
+                      ],
+                    )
+            loop += ssdilep.algs.algs.PlotAlg(
+                    region       = '1DF2L_inv%s_%s_%s_FailTau_FailLeps'%(vrCut,filterType,tauProngs),
+                    plot_all     = False,
+                    do_var_check = True,
+                    hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
+                    cut_flow     = [
+                      ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                      ['TwoLeptons', None],
+                      ['%s'%filterType, None],
+                      ['AtLeastOneSSPairIsDF', None],
+                      ['PairDR35', None],
+                      ['LeadTauIsNotMedium', None],
+                      ['One%sTau'%tauProngs, None],
+                      ['AtLeastOneFailLightLepton', None],
+                      ['%s'%vrCut, ['FF']],
+                      ],
+                    )
+        
+        
+        
+            # three lepton regions
+            # --------------------
+           
+            loop += ssdilep.algs.algs.PlotAlg(
+                    region       = '1DF3L_inv%s_%s_%s_PassTau_PassLeps'%(vrCut,filterType,tauProngs),
+                    plot_all     = False,
+                    do_var_check = True,
+                    hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
+                    cut_flow     = [
+                      ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                      ['ThreeLeptons', None],
+                      ['%s'%filterType, None],
+                      ['AtLeastOneSSPairIsDF', None],
+                      ['PairDR35', None],
+                      ['LeadTauIsMedium', None],
+                      ['One%sTau'%tauProngs, None],
+                      ['AllPassLightLeptons', None],
+                      ['%s'%vrCut, None],
+                      ],
+                    )
+            loop += ssdilep.algs.algs.PlotAlg(
+                    region       = '1DF3L_inv%s_%s_%s_PassTau_FailLeps'%(vrCut,filterType,tauProngs),
+                    plot_all     = False,
+                    do_var_check = True,
+                    hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
+                    cut_flow     = [
+                      ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                      ['ThreeLeptons', None],
+                      ['%s'%filterType, None],
+                      ['AtLeastOneSSPairIsDF', None],
+                      ['PairDR35', None],
+                      ['LeadTauIsMedium', None],
+                      ['One%sTau'%tauProngs, None],
+                      ['AtLeastOneFailLightLepton', None],
+                      ['%s'%vrCut, ['FF']],
+                      ],
+                    )
+            loop += ssdilep.algs.algs.PlotAlg(
+                    region       = '1DF3L_inv%s_%s_%s_FailTau_PassLeps'%(vrCut,filterType,tauProngs),
+                    plot_all     = False,
+                    do_var_check = True,
+                    hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
+                    cut_flow     = [
+                      ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                      ['ThreeLeptons', None],
+                      ['%s'%filterType, None],
+                      ['AtLeastOneSSPairIsDF', None],
+                      ['PairDR35', None],
+                      ['LeadTauIsNotMedium', None],
+                      ['One%sTau'%tauProngs, None],
+                      ['AllPassLightLeptons', None],
+                      ['%s'%vrCut, None],
+                      ],
+                    )
+            loop += ssdilep.algs.algs.PlotAlg(
+                    region       = '1DF3L_inv%s_%s_%s_FailTau_FailLeps'%(vrCut,filterType,tauProngs),
+                    plot_all     = False,
+                    do_var_check = True,
+                    hist_list    = hist_list + ssdilep.hists.ONEPAIR_hists.hist_list,
+                    cut_flow     = [
+                      ['SingleTauTriggerMatch-OR-SingleElTriggerMatch-OR-SingleMuTriggerMatch-OR-MuTauTriggerMatch-OR-ElTauTriggerMatch', None],
+                      ['ThreeLeptons', None],
+                      ['%s'%filterType, None],
+                      ['AtLeastOneSSPairIsDF', None],
+                      ['PairDR35', None],
+                      ['LeadTauIsNotMedium', None],
+                      ['One%sTau'%tauProngs, None],
+                      ['AtLeastOneFailLightLepton', None],
+                      ['%s'%vrCut, ['FF']],
+                      ],
+                    )
 
     loop += pyframe.algs.HistCopyAlg()
 

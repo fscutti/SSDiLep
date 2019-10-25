@@ -692,6 +692,65 @@ getFiltered(dijet, "ufakes")
 
 
 #-------------------------------------------------------------------------------
+# Here we put filtered samples in the global dictionary filtered 
+#-------------------------------------------------------------------------------
+
+SUSY3_list = [
+              dijet,
+              Wtaunu,
+              ttbar,
+              ttV,
+              Zmumu,
+              Ztautau,
+              diboson,
+              Zee,
+              singletop,
+              Wmunu,
+              Wenu,
+             ]
+
+SUSY11_list = [
+               dijet,
+               Wtaunu,
+               ttbar,
+              ]
+
+#daughters_list = SUSY11_list
+daughters_list = SUSY3_list
+
+qfakes = Sample( name =   'qfakes',
+                  tlatex = 'quark fakes',
+                  fill_color = ROOT.kRed+1,
+                  line_color =  ROOT.kRed+2,
+                  marker_color =  ROOT.kRed+2,
+                  daughters = daughters_list,
+                ) 
+
+bfakes = Sample( name =   'bfakes',
+                  tlatex = 'b-jet fakes',
+                  fill_color = ROOT.kOrange+1,
+                  line_color =  ROOT.kOrange+2,
+                  marker_color =  ROOT.kOrange+2,
+                  daughters = daughters_list,
+                ) 
+
+gfakes = Sample( name =   'gfakes',
+                  tlatex = 'gluon fakes',
+                  fill_color = ROOT.kBlue+1,
+                  line_color =  ROOT.kBlue+2,
+                  marker_color =  ROOT.kBlue+2,
+                  daughters = daughters_list,
+                ) 
+
+ufakes = Sample( name =   'ufakes',
+                  tlatex = 'unident. fakes',
+                  fill_color = ROOT.kGray+1,
+                  line_color =  ROOT.kGray+2,
+                  marker_color =  ROOT.kGray+2,
+                  daughters = daughters_list,
+                ) 
+
+#-------------------------------------------------------------------------------
 # Collections 
 #-------------------------------------------------------------------------------
 
@@ -719,6 +778,11 @@ all_mc += [singletop]
 all_mc += [ttV]
 #"""
 all_mc += [ttbar]
+
+#all_mc += [qfakes]
+#all_mc += [bfakes]
+#all_mc += [gfakes]
+#all_mc += [ufakes]
 
 #all_mc += samples_DCH.root_AtLeastOneTauFilter_DCH
 #"""
@@ -748,7 +812,7 @@ all_mc += [Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W]
 #---------------------------------
 
 mc_bkg = []
-"""
+#"""
 mc_bkg.append( singletop )
 
 mc_bkg.append( Wenu )
@@ -758,11 +822,11 @@ mc_bkg.append( Zee )
 mc_bkg.append( Zmumu )
 mc_bkg.append( Ztautau )
 
-"""
-#mc_bkg.append( diboson )
+#"""
+mc_bkg.append( diboson )
 mc_bkg.append( Wtaunu )
 mc_bkg.append( ttbar )
-#mc_bkg.append( ttV )
+mc_bkg.append( ttV )
 
 
 #mc_bkg.append( dijet )

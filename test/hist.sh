@@ -20,14 +20,14 @@ INSCRIPT="../ssdilep/run"
 # migrated to read v3 ntuples
 # ---------------------------
 #SCRIPT="j.plotter_FF_OneTau.py"
-#SCRIPT="j.plotter_SR_OnePair.py"
+SCRIPT="j.plotter_SR_OnePair.py"
 #SCRIPT="j.plotter_VR_OnePair.py"
+#SCRIPT="j.plotter_VR_TwoPairs.py"
 #SCRIPT="j.plotter_CF_MuTau.py"
-SCRIPT="j.plotter_FF_MultiLeptons.py"
+#SCRIPT="j.plotter_FF_MultiLeptons.py"
 
 #SCRIPT="j.plotter_SIG_OnePair.py"
 #SCRIPT="j.plotter_SIG_TwoPairs.py"
-#SCRIPT="j.plotter_SR_TwoPairs.py"
 #SCRIPT="j.plotter_TEST.py"
 
 # ---------------------------
@@ -43,7 +43,9 @@ SCRIPT="j.plotter_FF_MultiLeptons.py"
 
 #python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/data.root --sampletype="data" --samplename="data"  --minentry=0 --maxentry=200000  #--config="sys:FF_DN" 
 
-python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/Wtaunu.root --sampletype="mc" --samplename="Wtaunu" --minentry=0 --maxentry=200000   #--config="sys:FF_DN" 
+#python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/Wtaunu.root --sampletype="mc" --samplename="Wtaunu" --minentry=0 --maxentry=200000   #--config="sys:FF_DN" 
+python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/ttbar.root --sampletype="mc" --samplename="ttbar" --minentry=0 --maxentry=200000   #--config="sys:FF_DN" 
+
 
 #python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/data15_13TeV_periodD.root --sampletype="data" --samplename="data15_13TeV_periodD"  --minentry=0 --maxentry=10000  #--config="sys:FF_DN" 
 #python ${INSCRIPT}/${SCRIPT} --input ${INPATH}/data17_13TeV_periodK.root --sampletype="data" --samplename="data17_13TeV_periodK"  --minentry=0 --maxentry=5000  #--config="sys:FF_DN" 

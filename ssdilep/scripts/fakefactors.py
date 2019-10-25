@@ -14,7 +14,7 @@ from array import array
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWin"
 #indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesTau3PWinRed"
 
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesGroupV5"
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakeFactorsDijetSepTalk"
 
 wp = "Medium"
 
@@ -53,7 +53,7 @@ new_bins = array('d', [-2.5, -2.0, -1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.
 var       = "mulead_eta"
 '''
 
-infile    = "hists_"+var+"_FAKES_%s_"+tauType+"_All_F%s_"+tag+".root"
+infile    = "hists_"+var+"_FAKES_%s_"+tauType+"_TrueTauHadFilter_All_F%s_"+tag+".root"
 outfile   = "ff_"+var+"_"+name+"_"+tag+"_"+tauType+"_All_F%s_%s.root"
 outmerged = "merged_ff_"+var+"_"+name+"_"+tag+"_"+tauType+".root"
 
@@ -104,17 +104,17 @@ samples =  ["fakes"]
 
 merged_ff_file = ROOT.TFile.Open(os.path.join(indir,outmerged),"UPDATE")
 
-#for i in [1,10]:
-#for i in xrange(1,10):
 #for i in xrange(1,2):
-for i in [1,2,10,11]:
+#for i in [1,2,10,11]:
 #for i in xrange(1,12):
+#for i in xrange(1,10):
+for i in [1,10]:
   for s in samples:
     num_file = ROOT.TFile.Open(os.path.join(indir,infile%("NUM",i)),"READ")
     den_file = ROOT.TFile.Open(os.path.join(indir,infile%("DEN",i)),"READ")
 
-    h_num_name = "h_FAKES_NUM_"+tauType+"_All_F%s_nominal_%s"%(i,s)
-    h_den_name = "h_FAKES_DEN_"+tauType+"_All_F%s_nominal_%s"%(i,s)
+    h_num_name = "h_FAKES_NUM_"+tauType+"_TrueTauHadFilter_All_F%s_nominal_%s"%(i,s)
+    h_den_name = "h_FAKES_DEN_"+tauType+"_TrueTauHadFilter_All_F%s_nominal_%s"%(i,s)
 
     print h_num_name
     print h_den_name
