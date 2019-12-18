@@ -26,14 +26,23 @@
 
 
 
-
-
-
 # ----------
 # VALIDATION
 # ----------
-python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FullSSTTBAR_One1PTau_CFRegionFiltered" --lab="FullSSTTBAR_One1PTau_CFRegionFiltered" --tag="1p_fullssttbar" --icut="3" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebug24Nov" --output="./" --makeplot=True --fakest="AllRegions"
-                                                                                   
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FullSSTTBAR_One1PTau_CFRegionFiltered" --lab="FullSSTTBAR_One1PTau_CFRegionFiltered" --tag="1p_fullssttbar" --icut="3" --input="/coepp/cephfs/mel/fscutti/ssdilep//coepp/cephfs/mel/fscutti/ssdilep/HistCFiTHEPHY" --output="./" --makeplot=True --fakest="AllRegions"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FullOSTTBAR_One1PTau_CFRegionFiltered" --lab="FullOSTTBAR_One1PTau_CFRegionFiltered" --tag="1p_fullosttbar" --icut="3" --input="/coepp/cephfs/mel/fscutti/ssdilep//coepp/cephfs/mel/fscutti/ssdilep/HistCFiTHEPHY" --output="./" --makeplot=True --fakest="AllRegions"
+
+
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="SSTTBAR_One1PTau_CFRegionFiltered" --lab="SSTTBAR_One1PTau_CFRegionFiltered" --tag="1p_ssttbar" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep//coepp/cephfs/mel/fscutti/ssdilep/HistCFiTHEPHY" --output="./" --makeplot=True --fakest="AllRegions"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="OSTTBAR_One1PTau_CFRegionFiltered" --lab="OSTTBAR_One1PTau_CFRegionFiltered" --tag="1p_osttbar" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep//coepp/cephfs/mel/fscutti/ssdilep/HistCFiTHEPHY" --output="./" --makeplot=True --fakest="AllRegions"
+
+
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="HiPtFullSSTTBAR_One1PTau_CFRegionFiltered" --lab="HiPtFullSSTTBAR_One1PTau_CFRegionFiltered" --tag="1p_hiptfullssttbar" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep//coepp/cephfs/mel/fscutti/ssdilep/HistCFiTHEPHY" --output="./" --makeplot=True --fakest="AllRegions"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="HiPtFullOSTTBAR_One1PTau_CFRegionFiltered" --lab="HiPtFullOSTTBAR_One1PTau_CFRegionFiltered" --tag="1p_hiptfullosttbar" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep//coepp/cephfs/mel/fscutti/ssdilep/HistCFiTHEPHY" --output="./" --makeplot=True --fakest="AllRegions"
+
+
+
+
 
 #python ../ssdilep/scripts/merge.py --var="leadsspair_mTtot" --reg="1DF2L_invNPairPt150_ValRegionFiltered" --lab="1DF2L_invNPairPt150_ValRegionFiltered" --tag="1df2l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebugEB" --output="./" --makeplot=True --fakest="AllRegions"
 
