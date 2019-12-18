@@ -91,12 +91,14 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_AtLeastOneSSPairIsSF(self):
       for c in self.store['pairs']:
-        if c.isSF() and c.isSS(): return True
+        if c.isSF() and c.isSS(): 
+          return True
       return False
     #__________________________________________________________________________
     def cut_AtLeastOneSSPairIsDF(self):
       for c in self.store['pairs']:
-        if c.isDF() and c.isSS(): return True
+        if c.isDF() and c.isSS(): 
+          return True
       return False
     #__________________________________________________________________________
     def cut_AllSSPairsAreSF(self):
@@ -1381,14 +1383,14 @@ class CutAlg(pyframe.core.Algorithm):
           if abs(p.mVis()/GeV - mZ) < 10.: return False
       return True
     #__________________________________________________________________________
-    def cut_ANTIZVeto(self):
-      # adjust for tau cases
-      mZ = 91.1876
-      pairs = self.store["pairs"]
-      for p in pairs:
-        if p.isOS() and p.isSF(): 
-          if abs(p.mVis()/GeV - mZ) > 10.: return False
-      return True
+    #def cut_ANTIZVeto(self):
+    #  # adjust for tau cases
+    #  mZ = 91.1876
+    #  pairs = self.store["pairs"]
+    #  for p in pairs:
+    #    if p.isOS() and p.isSF(): 
+    #      if abs(p.mVis()/GeV - mZ) > 10.: return False
+    #  return True
 
 
 
@@ -1400,12 +1402,12 @@ class CutAlg(pyframe.core.Algorithm):
           return False
       return True
     #__________________________________________________________________________
-    def cut_ANTIPairPt150(self):
-      pairs = self.store["pairs"]
-      for p in pairs:
-        if p.isSS() and p.Pt()/GeV > 150.: 
-          return False
-      return True
+    #def cut_ANTIPairPt150(self):
+    #  pairs = self.store["pairs"]
+    #  for p in pairs:
+    #    if p.isSS() and p.Pt()/GeV > 150.: 
+    #      return False
+    #  return True
 
 
 
@@ -1417,61 +1419,24 @@ class CutAlg(pyframe.core.Algorithm):
           return False
       return True
     #__________________________________________________________________________
-    def cut_ANTIPairDR35(self):
-      pairs = self.store["pairs"]
-      for p in pairs:
-        if p.isSS() and p.DeltaR() < 3.5: 
-          return False
-      return True
-
-
+    #def cut_ANTIPairDR35(self):
+    #  pairs = self.store["pairs"]
+    #  for p in pairs:
+    #    if p.isSS() and p.DeltaR() < 3.5: 
+    #      return False
+    #  return True
 
 
     #__________________________________________________________________________
-    def cut_mTtot300(self):
-      nleptons = self.chain.nmuon + self.chain.nel + self.chain.ntau
-      
-      if nleptons == 4 and 'sspairs_mTtot' in self.store:
-        return self.store['sspairs_mTtot'] > 300 * GeV
-      elif nleptons < 4 and 'leadsspair_mTtot' in self.store:
-        return self.store['leadsspair_mTtot'] > 300 * GeV
-      
-      return True
-    #__________________________________________________________________________
-    def cut_ANTImTtot300(self):
-      nleptons = self.chain.nmuon + self.chain.nel + self.chain.ntau
-      
-      if nleptons == 4 and 'sspairs_mTtot' in self.store:
-        return self.store['sspairs_mTtot'] < 300 * GeV
-      elif nleptons < 4 and 'leadsspair_mTtot' in self.store:
-        return self.store['leadsspair_mTtot'] < 300 * GeV
-      
-      return True
+    def cut_mTtot300OnePair(self):
+      return self.store['leadsspair_mTtot'] > 300 * GeV
 
+    #__________________________________________________________________________
+    def cut_mTtot300TwoPairs(self):
+      return self.store['sspairs_mTtot'] > 300 * GeV
     
-    #__________________________________________________________________________
-    def cut_mTtot200(self):
-      nleptons = self.chain.nmuon + self.chain.nel + self.chain.ntau
-      
-      if nleptons == 4 and 'sspairs_mTtot' in self.store:
-        return self.store['sspairs_mTtot'] > 200 * GeV
-      elif nleptons < 4 and 'leadsspair_mTtot' in self.store:
-        return self.store['leadsspair_mTtot'] > 200 * GeV
-      
-      return True
-    #__________________________________________________________________________
-    def cut_ANTImTtot200(self):
-      nleptons = self.chain.nmuon + self.chain.nel + self.chain.ntau
-      
-      if nleptons == 4 and 'sspairs_mTtot' in self.store:
-        return self.store['sspairs_mTtot'] < 200 * GeV
-      elif nleptons < 4 and 'leadsspair_mTtot' in self.store:
-        return self.store['leadsspair_mTtot'] < 200 * GeV
-      
-      return True
-
-
-
+    
+    
 
     #__________________________________________________________________________
     def cut_PASS(self):
@@ -1595,7 +1560,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
             if cn == 'ALL': continue
 
             if cn.startswith('!'):
-                cut_passed = not self.apply_cut(cn[1:])
+                cut_passed = not self.apply_cut(cn[1:]) and cut_passed
             else:
                 cut_passed = self.apply_cut(cn) and cut_passed
         return cut_passed

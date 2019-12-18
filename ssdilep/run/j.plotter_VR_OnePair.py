@@ -177,10 +177,10 @@ def analyze(config):
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllElPt40') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllElEta247') 
 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='ZVeto') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='ZVeto') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PairDR35') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='mTtot300OnePair') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PairPt150') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PairDR35') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='mTtot300') 
 
     ## weights configuration
     ## ---------------------------------------
@@ -241,7 +241,7 @@ def analyze(config):
     # ------------------
 
 
-    for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTIPairDR35","ANTImTtot300"]:
+    for vrCut in ["!PairPt150"]:
 
         loop += ssdilep.algs.algs.PlotAlg(
                 region       = '1SF2L_inv%s_ValRegionFiltered'%vrCut,
@@ -271,7 +271,6 @@ def analyze(config):
                   ['%s'%vrCut, ['FFDijet']],
                   ],
                 )
-       
         loop += ssdilep.algs.algs.PlotAlg(
                 region       = '1DF2L_inv%s_ValRegionFiltered'%vrCut,
                 plot_all     = False,

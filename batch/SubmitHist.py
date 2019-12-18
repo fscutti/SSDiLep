@@ -43,8 +43,10 @@ RESUBMIT  = False
 #RUN = "HistFFDijetSepTalk"
 #RUN = "HistFFMultilepSepTalk"
 #RUN = "HistCFSepTalk"
-#RUN = "HistSROnePairSepTalk"
-RUN = "HistSRTwoPairsSepTalk"
+#RUN = "HistVROnePairDebugEB"
+#RUN = "HistSRTwoPairsSepTalk"
+#RUN = "HistVROnePairDebug24Nov"
+RUN = "HistCFiTHEPHY"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 
@@ -52,7 +54,7 @@ OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) #
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
 
 # pick your script!!!
-#SCRIPT="./ssdilep/run/j.plotter_CF_MuTau.py"  
+SCRIPT="./ssdilep/run/j.plotter_CF_MuTau.py"  
 #SCRIPT="./ssdilep/run/j.plotter_QG_OneTau.py"  
 #SCRIPT="./ssdilep/run/j.plotter_VR_OnePair.py"  
 #SCRIPT="./ssdilep/run/j.plotter_VR_TwoPairs.py"  
@@ -63,7 +65,7 @@ QUEUE="long"                        # length of pbs queue (short, long, extralon
 #SCRIPT="./ssdilep/run/j.plotter_SIG_TwoPairs.py"  
 
 #SCRIPT="./ssdilep/run/j.plotter_SR_OnePair.py"  
-SCRIPT="./ssdilep/run/j.plotter_SR_TwoPairs.py"  
+#SCRIPT="./ssdilep/run/j.plotter_SR_TwoPairs.py"  
 
 #SCRIPT="./ssdilep/run/j.plotter_FF_TwoTau.py"  
 

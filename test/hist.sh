@@ -20,10 +20,10 @@ INSCRIPT="../ssdilep/run"
 # migrated to read v3 ntuples
 # ---------------------------
 #SCRIPT="j.plotter_FF_OneTau.py"
-SCRIPT="j.plotter_SR_OnePair.py"
+#SCRIPT="j.plotter_SR_OnePair.py"
 #SCRIPT="j.plotter_VR_OnePair.py"
 #SCRIPT="j.plotter_VR_TwoPairs.py"
-#SCRIPT="j.plotter_CF_MuTau.py"
+SCRIPT="j.plotter_CF_MuTau.py"
 #SCRIPT="j.plotter_FF_MultiLeptons.py"
 
 #SCRIPT="j.plotter_SIG_OnePair.py"

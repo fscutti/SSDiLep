@@ -172,7 +172,7 @@ def analyze(config):
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllElEta247') 
 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='ZVeto') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='mTtot300') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='mTtot300TwoPairs') 
     
     
     ## weights configuration

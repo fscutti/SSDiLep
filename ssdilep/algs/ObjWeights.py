@@ -344,12 +344,12 @@ class FakeFactor(pyframe.core.Algorithm):
           tau_ff_name_3p = "h_ff_3PMedium_F10"
         
         elif "FFMultilep2L" in self.key:
-          tau_ff_name_1p = "h_ff_taulead_pt_1DF2L_ANTIZVeto"
-          tau_ff_name_3p = "h_ff_taulead_pt_1DF2L_ANTIZVeto"
+          tau_ff_name_1p = "h_ff_taulead_pt_1DF2L_ANTImTtot300"
+          tau_ff_name_3p = "h_ff_taulead_pt_1DF2L_ANTImTtot300"
         
         elif "FFMultilep3L" in self.key:
-          tau_ff_name_1p = "h_ff_taulead_pt_1DF3L_ANTIZVeto"
-          tau_ff_name_3p = "h_ff_taulead_pt_1DF3L_ANTIZVeto"
+          tau_ff_name_1p = "h_ff_taulead_pt_1DF3L_ANTImTtot300"
+          tau_ff_name_3p = "h_ff_taulead_pt_1DF3L_ANTImTtot300"
 
 
         H_ff["muon"]   = f_lep.Get("m/highPt_anyjet/FF")
@@ -413,4 +413,4 @@ class FakeFactor(pyframe.core.Algorithm):
         return True
 
 
-# EOF
+#EOF

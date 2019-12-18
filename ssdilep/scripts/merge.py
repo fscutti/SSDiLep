@@ -205,7 +205,7 @@ vardict = {}
 #vardict  = vars_mumu.vars_dict
 vardict.update(vars_tau.vars_dict)
 vardict.update(vars_onepair.vars_dict)
-vardict.update(vars_multipairs.vars_dict)
+#vardict.update(vars_multipairs.vars_dict)
 
 
 #-----------------

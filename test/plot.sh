@@ -32,18 +32,41 @@
 # ----------
 # VALIDATION
 # ----------
-#python ../ssdilep/scripts/merge.py --var="leadsspair_mVis" --reg="1DF2L_invANTIPairPt150_ValRegionFiltered" --lab="1DF2L_invANTIPairPt150_ValRegionFiltered" --tag="1df2l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairSepTalk" --output="./" --makeplot=True --fakest="AllRegions"
+python ../ssdilep/scripts/merge.py --var="taulead_pt" --reg="FullSSTTBAR_One1PTau_CFRegionFiltered" --lab="FullSSTTBAR_One1PTau_CFRegionFiltered" --tag="1p_fullssttbar" --icut="3" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebug24Nov" --output="./" --makeplot=True --fakest="AllRegions"
+                                                                                   
+
+#python ../ssdilep/scripts/merge.py --var="leadsspair_mTtot" --reg="1DF2L_invNPairPt150_ValRegionFiltered" --lab="1DF2L_invNPairPt150_ValRegionFiltered" --tag="1df2l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebugEB" --output="./" --makeplot=True --fakest="AllRegions"
+
+#python ../ssdilep/scripts/merge.py --var="leadsspair_mTtot" --reg="1SF2L_invNPairPt150_ValRegionFiltered" --lab="1SF2L_invNPairPt150_ValRegionFiltered" --tag="1sf2l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebugEB" --output="./" --makeplot=True --fakest="AllRegions"
+
+#python ../ssdilep/scripts/merge.py --var="leadsspair_mTtot" --reg="1DF3L_invNPairPt150_ValRegionFiltered" --lab="1DF3L_invNPairPt150_ValRegionFiltered" --tag="1df3l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebugEB" --output="./" --makeplot=True --fakest="AllRegions"
+
+#python ../ssdilep/scripts/merge.py --var="leadsspair_mTtot" --reg="1SF3L_invNPairPt150_ValRegionFiltered" --lab="1SF3L_invNPairPt150_ValRegionFiltered" --tag="1sf3l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebugEB" --output="./" --makeplot=True --fakest="AllRegions"
+
+
+#python ../ssdilep/scripts/merge.py --var="leadsspair_DR" --reg="1DF2L_invNPairPt150_ValRegionFiltered" --lab="1DF2L_invNPairPt150_ValRegionFiltered" --tag="1df2l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebug24Nov" --output="./" --makeplot=True --fakest="AllRegions"
+#                                                                                   
+#python ../ssdilep/scripts/merge.py --var="leadsspair_DR" --reg="1SF2L_invNPairPt150_ValRegionFiltered" --lab="1SF2L_invNPairPt150_ValRegionFiltered" --tag="1sf2l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebug24Nov" --output="./" --makeplot=True --fakest="AllRegions"
+#                                                                                   
+#python ../ssdilep/scripts/merge.py --var="leadsspair_DR" --reg="1DF3L_invNPairPt150_ValRegionFiltered" --lab="1DF3L_invNPairPt150_ValRegionFiltered" --tag="1df3l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebug24Nov" --output="./" --makeplot=True --fakest="AllRegions"
+                                                                                   
+#python ../ssdilep/scripts/merge.py --var="leadsspair_DR" --reg="1SF3L_invNPairPt150_ValRegionFiltered" --lab="1SF3L_invNPairPt150_ValRegionFiltered" --tag="1sf3l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebug24Nov" --output="./" --makeplot=True --fakest="AllRegions"
+
+
+#python ../ssdilep/scripts/merge.py --var="leadsspair_DR" --reg="1DF2L_invNZVeto_ValRegionFiltered" --lab="1DF2L_invNZVeto_ValRegionFiltered" --tag="1df2l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebugEB" --output="./" --makeplot=True --fakest="AllRegions"
+                                                                                                                         
+#python ../ssdilep/scripts/merge.py --var="leadsspair_DR" --reg="1SF2L_invNZVeto_ValRegionFiltered" --lab="1SF2L_invNZVeto_ValRegionFiltered" --tag="1sf2l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebugEB" --output="./" --makeplot=True --fakest="AllRegions"
+                                                                                                                         
+#python ../ssdilep/scripts/merge.py --var="leadsspair_DR" --reg="1DF3L_invNZVeto_ValRegionFiltered" --lab="1DF3L_invNZVeto_ValRegionFiltered" --tag="1df3l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebugEB" --output="./" --makeplot=True --fakest="AllRegions"
+                                                                                                                         
+#python ../ssdilep/scripts/merge.py --var="leadsspair_DR" --reg="1SF3L_invNZVeto_ValRegionFiltered" --lab="1SF3L_invNZVeto_ValRegionFiltered" --tag="1sf3l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairDebugEB" --output="./" --makeplot=True --fakest="AllRegions"
+
+
+
 
 #python ../ssdilep/scripts/merge.py --var="leadsspair_mVis" --reg="1SF2L_invANTIZVeto_ValRegionFiltered" --lab="1SF2L_invANTIZVeto_ValRegionFiltered" --tag="1sf2l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairSepTalk" --output="./" --makeplot=True --fakest="AllRegions"
 
 #python ../ssdilep/scripts/merge.py --var="leadsspair_mVis" --reg="1SF3L_invANTIZVeto_ValRegionFiltered" --lab="1SF3L_invANTIZVeto_ValRegionFiltered" --tag="1sf3l_vrfiltered" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistVROnePairSepTalk" --output="./" --makeplot=True --fakest="AllRegions"
-
-
-
-
-
-
-
 
 #python ../ssdilep/scripts/merge.py --var="leadsspair_mVis" --reg="1DF2L_SignalRegionFiltered" --lab="1DF2L_SignalRegionFiltered" --tag="1df2l_srfiltered" --icut="3" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSROnePairSepTalk" --output="./" --makeplot=True --fakest="AllRegions"
 
@@ -60,7 +83,7 @@
 
 #python ../ssdilep/scripts/merge.py --var="sspairs_mTtot" --reg="2SF4L_SideBandFiltered" --lab="2SF4L_SideBandFiltered" --tag="2sf4l_filter" --icut="3" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSRTwoPairsLumi" --output="./" --makeplot=True --fakest="NoFakes"
 
-python ../ssdilep/scripts/merge.py --var="sspairs_mTtot" --reg="2SF4L_SideBandFiltered" --lab="2SF4L_SideBandFiltered" --tag="2sf4l_filter" --icut="3" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSRTwoPairsSepTalk" --output="./" --makeplot=True --fakest="AllRegions"
+#python ../ssdilep/scripts/merge.py --var="sspairs_mTtot" --reg="2SF4L_SideBandFiltered" --lab="2SF4L_SideBandFiltered" --tag="2sf4l_filter" --icut="3" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSRTwoPairsSepTalk" --output="./" --makeplot=True --fakest="AllRegions"
 
 
 #python ../ssdilep/scripts/merge.py --var="leadsspair_mTtot" --reg="1SF2L_SideBandFiltered" --lab="1SF2L_SideBandFiltered" --tag="1sf2l_filter" --icut="3" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistSROnePairLumi" --output="./" --makeplot=True --fakest="NoFakes"

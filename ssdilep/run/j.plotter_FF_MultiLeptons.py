@@ -180,7 +180,7 @@ def analyze(config):
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='ZVeto') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PairPt150') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PairDR35') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='mTtot300') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='mTtot300OnePair') 
 
     ## weights configuration
     ## ---------------------------------------
@@ -226,9 +226,10 @@ def analyze(config):
     for tauProngs in ["1P","3P"]:
 
         #for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTIPairDR35","ANTImTtot300"]:
-        for vrCut in ["ANTIZVeto","ANTIPairPt150","ANTImTtot300"]:
+        for vrCut in ["!ZVeto","!PairPt150","!PairPt150","!mTtot300OnePair"]:
         
-          filter_list = ["TrueTauHadFilter","QuarkFilter","BFilter","GluonFilter","UnknownFilter"]
+          #filter_list = ["TrueTauHadFilter","QuarkFilter","BFilter","GluonFilter","UnknownFilter"]
+          filter_list = ["TrueTauHadFilter"]
         
           if config['sampletype'] == "mc":     filters = filter_list
           elif config['sampletype'] == "data": filters = ["PASS"]

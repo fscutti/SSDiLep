@@ -177,7 +177,7 @@ def analyze(config):
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllElEta247') 
 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='ZVeto') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='mTtot300') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='mTtot300TwoPairs') 
     
     
     ## weights configuration
@@ -237,7 +237,7 @@ def analyze(config):
 
     # four lepton regions
     # --------------------
-    for vrCut in ["ANTIZVeto","ANTImTtot300"]:
+    for vrCut in ["!ZVeto","!mTtot300TwoPairs"]:
 
          loop += ssdilep.algs.algs.PlotAlg(
                  region       = '2SF4L_inv%s_ValRegionFiltered'%vrCut,
